@@ -1,0 +1,66 @@
+{
+  "seo": {
+    "homeTitle": "SenseBy CBD | Premium CBD-producten voor pijnverlichting en welzijn",
+    "homeDescription": "Ontdek premium CBD-producten ontworpen om pijn te verlichten en uw algehele welzijn te verbeteren. Hoogwaardige, in het laboratorium geteste CBD-oliën, crèmes en meer.",
+    "homeKeywords": "CBD, CBD-olie, pijnverlichting, welzijn, angstvermindering, slaapverbetering, premium CBD, biologische CBD"
+  },
+  "navigation": {
+    "home": "Home",
+    "products": "Producten",
+    "about": "Over Ons",
+    "blog": "Blog",
+    "contact": "Contact",
+    "account": "Mijn Account",
+    "cart": "Winkelwagen"
+  },
+  "hero": {
+    "title": "Natuurlijke verlichting voor beter leven",
+    "subtitle": "Premium CBD-producten om uw levenskwaliteit te verbeteren",
+    "cta": "Nu Winkelen"
+  },
+  "categories": {
+    "title": "Onze Producten",
+    "oils": "CBD Oliën",
+    "topicals": "Topicals",
+    "edibles": "Eetbare CBD",
+    "capsules": "Capsules",
+    "pets": "CBD voor Huisdieren"
+  },
+  "benefits": {
+    "title": "Voordelen van CBD",
+    "painRelief": "Pijnverlichting",
+    "painReliefDesc": "Natuurlijke verlichting van chronische pijn en ontstekingen",
+    "anxiety": "Angstvermindering",
+    "anxietyDesc": "Helpt stress- en angstsymptomen te verminderen",
+    "sleep": "Betere Slaap",
+    "sleepDesc": "Bevordert ontspanning en verbetert de slaapkwaliteit",
+    "wellness": "Algemeen Welzijn",
+    "wellnessDesc": "Ondersteunt de natuurlijke balans van uw lichaam"
+  },
+  "testimonials": {
+    "title": "Wat Onze Klanten Zeggen",
+    "readMore": "Lees Meer"
+  },
+  "newsletter": {
+    "title": "Blijf op de Hoogte",
+    "subtitle": "Abonneer u op onze nieuwsbrief voor de nieuwste producten en CBD-nieuws",
+    "placeholder": "Uw e-mailadres",
+    "button": "Abonneren",
+    "success": "Bedankt voor uw aanmelding!",
+    "error": "Er is iets misgegaan. Probeer het opnieuw."
+  },
+  "footer": {
+    "company": "Bedrijf",
+    "about": "Over Ons",
+    "blog": "Blog",
+    "careers": "Carrières",
+    "contact": "Contact",
+    "help": "Help",
+    "faq": "FAQ",
+    "shipping": "Verzending",
+    "returns": "Retourneren",
+    "terms": "Algemene Voorwaarden",
+    "privacy": "Privacybeleid",
+    "copyright": "© 2025 SenseBy CBD. Alle rechten voorbehouden."
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "seo": {
+    "homeTitle": "SenseBy CBD | Premium CBD-Produkte für Schmerzlinderung und Wohlbefinden",
+    "homeDescription": "Entdecken Sie Premium-CBD-Produkte, die entwickelt wurden, um Schmerzen zu lindern und Ihr allgemeines Wohlbefinden zu verbessern. Hochwertige, im Labor getestete CBD-Öle, Cremes und mehr.",
+    "homeKeywords": "CBD, CBD-Öl, Schmerzlinderung, Wohlbefinden, Angstlinderung, Schlafverbesserung, Premium-CBD, Bio-CBD"
+  },
+  "navigation": {
+    "home": "Startseite",
+    "products": "Produkte",
+    "about": "Über Uns",
+    "blog": "Blog",
+    "contact": "Kontakt",
+    "account": "Mein Konto",
+    "cart": "Warenkorb"
+  },
+  "hero": {
+    "title": "Natürliche Linderung für ein besseres Leben",
+    "subtitle": "Premium-CBD-Produkte zur Verbesserung Ihrer Lebensqualität",
+    "cta": "Jetzt Einkaufen"
+  },
+  "categories": {
+    "title": "Unsere Produkte",
+    "oils": "CBD-Öle",
+    "topicals": "Topische Produkte",
+    "edibles": "Essbare Produkte",
+    "capsules": "Kapseln",
+    "pets": "CBD für Haustiere"
+  },
+  "benefits": {
+    "title": "Vorteile von CBD",
+    "painRelief": "Schmerzlinderung",
+    "painReliefDesc": "Natürliche Linderung von chronischen Schmerzen und Entzündungen",
+    "anxiety": "Angstreduktion",
+    "anxietyDesc": "Hilft, Stress- und Angstsymptome zu reduzieren",
+    "sleep": "Besserer Schlaf",
+    "sleepDesc": "Fördert die Entspannung und verbessert die Schlafqualität",
+    "wellness": "Allgemeines Wohlbefinden",
+    "wellnessDesc": "Unterstützt das natürliche Gleichgewicht Ihres Körpers"
+  },
+  "testimonials": {
+    "title": "Was Unsere Kunden Sagen",
+    "readMore": "Mehr Lesen"
+  },
+  "newsletter": {
+    "title": "Bleiben Sie Informiert",
+    "subtitle": "Abonnieren Sie unseren Newsletter für die neuesten Produkte und CBD-Nachrichten",
+    "placeholder": "Ihre E-Mail-Adresse",
+    "button": "Abonnieren",
+    "success": "Vielen Dank für Ihr Abonnement!",
+    "error": "Etwas ist schiefgelaufen. Bitte versuchen Sie es erneut."
+  },
+  "footer": {
+    "company": "Unternehmen",
+    "about": "Über Uns",
+    "blog": "Blog",
+    "careers": "Karriere",
+    "contact": "Kontakt",
+    "help": "Hilfe",
+    "faq": "FAQ",
+    "shipping": "Versand",
+    "returns": "Rücksendungen",
+    "terms": "AGB",
+    "privacy": "Datenschutzrichtlinie",
+    "copyright": "© 2025 SenseBy CBD. Alle Rechte vorbehalten."
+  }
+}

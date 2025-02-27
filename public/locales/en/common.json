@@ -1,0 +1,66 @@
+{
+  "seo": {
+    "homeTitle": "SenseBy CBD | Premium CBD Products for Pain Relief and Wellness",
+    "homeDescription": "Discover premium CBD products designed to alleviate pain and improve your overall wellness. High-quality, lab-tested CBD oils, creams, and more.",
+    "homeKeywords": "CBD, CBD oil, pain relief, wellness, anxiety relief, sleep improvement, premium CBD, organic CBD"
+  },
+  "navigation": {
+    "home": "Home",
+    "products": "Products",
+    "about": "About Us",
+    "blog": "Blog",
+    "contact": "Contact",
+    "account": "My Account",
+    "cart": "Cart"
+  },
+  "hero": {
+    "title": "Natural Relief for Better Living",
+    "subtitle": "Premium CBD products to improve your quality of life",
+    "cta": "Shop Now"
+  },
+  "categories": {
+    "title": "Our Products",
+    "oils": "CBD Oils",
+    "topicals": "Topicals",
+    "edibles": "Edibles",
+    "capsules": "Capsules",
+    "pets": "Pet CBD"
+  },
+  "benefits": {
+    "title": "Benefits of CBD",
+    "painRelief": "Pain Relief",
+    "painReliefDesc": "Natural relief from chronic pain and inflammation",
+    "anxiety": "Anxiety Reduction",
+    "anxietyDesc": "Helps reduce stress and anxiety symptoms",
+    "sleep": "Better Sleep",
+    "sleepDesc": "Promotes relaxation and improves sleep quality",
+    "wellness": "Overall Wellness",
+    "wellnessDesc": "Supports your body's natural balance"
+  },
+  "testimonials": {
+    "title": "What Our Customers Say",
+    "readMore": "Read More"
+  },
+  "newsletter": {
+    "title": "Stay Updated",
+    "subtitle": "Subscribe to our newsletter for the latest products and CBD news",
+    "placeholder": "Your email address",
+    "button": "Subscribe",
+    "success": "Thank you for subscribing!",
+    "error": "Something went wrong. Please try again."
+  },
+  "footer": {
+    "company": "Company",
+    "about": "About Us",
+    "blog": "Blog",
+    "careers": "Careers",
+    "contact": "Contact Us",
+    "help": "Help",
+    "faq": "FAQ",
+    "shipping": "Shipping",
+    "returns": "Returns",
+    "terms": "Terms & Conditions",
+    "privacy": "Privacy Policy",
+    "copyright": "© 2025 SenseBy CBD. All rights reserved."
+  }
+}
