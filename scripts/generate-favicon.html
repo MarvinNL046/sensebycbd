@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Generate Favicon</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin: 20px 0;
+    }
+    .controls {
+      margin-bottom: 20px;
+    }
+    button {
+      padding: 8px 16px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .preview {
+      display: flex;
+      align-items: center;
+      margin-top: 20px;
+    }
+    .preview img {
+      margin-right: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Generate Green "S" Favicon</h1>
+  
+  <div class="controls">
+    <label for="backgroundColor">Background Color:</label>
+    <input type="color" id="backgroundColor" value="#ffffff">
+    
+    <label for="textColor">Text Color:</label>
+    <input type="color" id="textColor" value="#4CAF50">
+    
+    <label for="fontSize">Font Size:</label>
+    <input type="range" id="fontSize" min="20" max="48" value="32">
+    
+    <label for="fontFamily">Font:</label>
+    <select id="fontFamily">
+      <option value="Arial, sans-serif">Arial</option>
+      <option value="'Times New Roman', serif">Times New Roman</option>
+      <option value="'Courier New', monospace">Courier New</option>
+      <option value="Georgia, serif">Georgia</option>
+      <option value="'Arial Black', sans-serif">Arial Black</option>
+      <option value="Impact, sans-serif">Impact</option>
+      <option value="'Trebuchet MS', sans-serif">Trebuchet MS</option>
+      <option value="'Verdana', sans-serif">Verdana</option>
+    </select>
+    
+    <button id="generateBtn">Generate Favicon</button>
+    <button id="downloadBtn">Download Favicon</button>
+  </div>
+  
+  <canvas id="faviconCanvas" width="64" height="64"></canvas>
+  
+  <div class="preview">
+    <div>
+      <p>Preview (16x16):</p>
+      <img id="preview16" width="16" height="16">
+    </div>
+    <div>
+      <p>Preview (32x32):</p>
+      <img id="preview32" width="32" height="32">
+    </div>
+    <div>
+      <p>Preview (64x64):</p>
+      <img id="preview64" width="64" height="64">
+    </div>
+  </div>
+  
+  <p>Instructions:</p>
+  <ol>
+    <li>Adjust the colors, font size, and font family as desired</li>
+    <li>Click "Generate Favicon" to see the result</li>
+    <li>Click "Download Favicon" to download the favicon.ico file</li>
+    <li>Replace the existing favicon.ico in the public folder of your project</li>
+  </ol>
+
+  <script>
+    const canvas = document.getElementById('faviconCanvas');
+    const ctx = canvas.getContext('2d');
+    const generateBtn = document.getElementById('generateBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+    const preview16 = document.getElementById('preview16');
+    const preview32 = document.getElementById('preview32');
+    const preview64 = document.getElementById('preview64');
+    
+    // Generate favicon on page load
+    window.addEventListener('load', generateFavicon);
+    
+    // Generate favicon when button is clicked
+    generateBtn.addEventListener('click', generateFavicon);
+    
+    // Download favicon when button is clicked
+    downloadBtn.addEventListener('click', downloadFavicon);
+    
+    function generateFavicon() {
+      const backgroundColor = document.getElementById('backgroundColor').value;
+      const textColor = document.getElementById('textColor').value;
+      const fontSize = document.getElementById('fontSize').value;
+      const fontFamily = document.getElementById('fontFamily').value;
+      
+      // Clear canvas
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw background
+      ctx.fillStyle = backgroundColor;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      
+      // Draw letter S
+      ctx.fillStyle = textColor;
+      ctx.font = `bold ${fontSize}px ${fontFamily}`;
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('S', canvas.width / 2, canvas.height / 2);
+      
+      // Update previews
+      updatePreviews();
+    }
+    
+    function updatePreviews() {
+      const dataUrl = canvas.toDataURL('image/png');
+      preview16.src = dataUrl;
+      preview32.src = dataUrl;
+      preview64.src = dataUrl;
+    }
+    
+    function downloadFavicon() {
+      // Create a link element
+      const link = document.createElement('a');
+      
+      // Convert canvas to blob
+      canvas.toBlob(function(blob) {
+        // Create a URL for the blob
+        const url = URL.createObjectURL(blob);
+        
+        // Set link attributes
+        link.href = url;
+        link.download = 'favicon.ico';
+        
+        // Append link to body
+        document.body.appendChild(link);
+        
+        // Click the link
+        link.click();
+        
+        // Remove link
+        document.body.removeChild(link);
+        
+        // Release the URL
+        URL.revokeObjectURL(url);
+      });
+    }
+  </script>
+</body>
+</html>

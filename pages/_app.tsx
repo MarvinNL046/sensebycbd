@@ -1,13 +1,21 @@
 import { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
+import { useEffect } from 'react';
 import { Layout } from '../components/layout/Layout';
 import { AuthProvider } from '../lib/auth-context';
+import { CartProvider } from '../lib/cart-context';
+import { measureWebVitals } from '../lib/utils/analytics';
 import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
   const { locale } = router;
+  
+  // Initialize web vitals tracking
+  useEffect(() => {
+    measureWebVitals();
+  }, []);
 
   return (
     <>
@@ -16,9 +24,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AuthProvider>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
+        <CartProvider>
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </CartProvider>
       </AuthProvider>
     </>
   );

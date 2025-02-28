@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useTranslation } from '../../lib/i18n/useTranslation';
 import { useAuth } from '../../lib/auth-context';
+import { useCart } from '../../lib/cart-context';
 
 /**
  * Header component with navigation and language switcher
@@ -10,6 +11,8 @@ export const Header = () => {
   const router = useRouter();
   const { t, locale } = useTranslation();
   const { user, loading } = useAuth();
+  const { openCart, getCartCount } = useCart();
+  const cartCount = getCartCount();
   
   // Handle language change
   const handleLanguageChange = (newLocale: string) => {
@@ -60,9 +63,18 @@ export const Header = () => {
             </select>
             
             {/* Cart Icon */}
-            <Link href="/cart" className="text-primary-dark hover:text-primary">
+            <button 
+              onClick={openCart}
+              className="text-primary-dark hover:text-primary relative"
+              aria-label="Open cart"
+            >
               <span className="material-icons">shopping_cart</span>
-            </Link>
+              {cartCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-primary text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  {cartCount}
+                </span>
+              )}
+            </button>
             
             {/* Account Icon - Show different icon if logged in */}
             <Link 

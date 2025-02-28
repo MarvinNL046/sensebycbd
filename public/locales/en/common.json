@@ -2,7 +2,14 @@
   "seo": {
     "homeTitle": "SenseBy CBD | Premium CBD Products for Pain Relief and Wellness",
     "homeDescription": "Discover premium CBD products designed to alleviate pain and improve your overall wellness. High-quality, lab-tested CBD oils, creams, and more.",
-    "homeKeywords": "CBD, CBD oil, pain relief, wellness, anxiety relief, sleep improvement, premium CBD, organic CBD"
+    "homeKeywords": "CBD, CBD oil, pain relief, wellness, anxiety relief, sleep improvement, premium CBD, organic CBD",
+    "productsTitle": "Shop CBD Products | SenseBy CBD",
+    "productsDescription": "Browse our selection of premium CBD products including oils, topicals, edibles, and more. Lab-tested, high-quality CBD for wellness and relief.",
+    "productsKeywords": "buy CBD, CBD shop, CBD products, CBD oil, CBD cream, CBD edibles, CBD capsules",
+    "productTitle": "{productName} | SenseBy CBD",
+    "productDescription": "Shop {productName} from SenseBy CBD. Premium quality, lab-tested CBD product for natural relief and wellness.",
+    "categoryTitle": "{categoryName} | SenseBy CBD Products",
+    "categoryDescription": "Browse our selection of premium {categoryName} products. High-quality, lab-tested CBD for natural relief and wellness."
   },
   "navigation": {
     "home": "Home",
@@ -62,5 +69,65 @@
     "terms": "Terms & Conditions",
     "privacy": "Privacy Policy",
     "copyright": "© 2025 SenseBy CBD. All rights reserved."
+  },
+  "products": {
+    "title": "All Products",
+    "filter": "Filter",
+    "sort": "Sort",
+    "search": "Search products...",
+    "noResults": "No products found. Try adjusting your filters.",
+    "price": "Price",
+    "category": "Category",
+    "cbdPercentage": "CBD Percentage",
+    "sortOptions": {
+      "newest": "Newest",
+      "priceAsc": "Price: Low to High",
+      "priceDesc": "Price: High to Low"
+    },
+    "filters": {
+      "apply": "Apply Filters",
+      "clear": "Clear Filters",
+      "close": "Close"
+    },
+    "priceRange": {
+      "min": "Min",
+      "max": "Max"
+    }
+  },
+  "product": {
+    "addToCart": "Add to Cart",
+    "quantity": "Quantity",
+    "inStock": "In Stock",
+    "lowStock": "Low Stock",
+    "outOfStock": "Out of Stock",
+    "description": "Description",
+    "specifications": "Specifications",
+    "reviews": "Reviews",
+    "relatedProducts": "You May Also Like",
+    "strength": "Strength",
+    "volume": "Volume",
+    "count": "Count",
+    "ingredients": "Ingredients",
+    "usage": "Usage Instructions",
+    "benefits": "Benefits",
+    "writeReview": "Write a Review",
+    "submitReview": "Submit Review",
+    "reviewPlaceholder": "Share your experience with this product...",
+    "rating": "Rating",
+    "noReviews": "No reviews yet. Be the first to review this product!",
+    "loginToReview": "Please log in to write a review",
+    "thankYouReview": "Thank you for your review!",
+    "productDetails": "Product Details"
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty",
+    "continueShopping": "Continue Shopping",
+    "subtotal": "Subtotal",
+    "shipping": "Shipping",
+    "total": "Total",
+    "checkout": "Checkout",
+    "remove": "Remove",
+    "update": "Update"
   }
 }
