@@ -5,7 +5,7 @@ import { ProductGallery } from '../../components/blocks/product/ProductGallery';
 import { ProductInfo } from '../../components/blocks/product/ProductInfo';
 import { ProductSpecifications } from '../../components/blocks/product/ProductSpecifications';
 import { RelatedProducts } from '../../components/blocks/product/RelatedProducts';
-import { getProductBySlug, getProducts, getProductReviews } from '../../lib/db';
+import { getProductBySlug, getProducts, getProductReviews } from '../../lib/mockDb';
 import { Product } from '../../types/product';
 import { getBaseProductSlug, getTranslatedProductSlug } from '../../lib/utils/slugs';
 import { useTranslation } from '../../lib/i18n/useTranslation';
@@ -115,7 +115,24 @@ export default function ProductPage({ product, reviews }: ProductPageProps) {
 }
 
 /**
- * Get static paths for all products
+ * Generate static params for all products (Next.js 13+ App Router compatibility)
+ * This function is used by the App Router to generate static pages at build time
+ */
+export async function generateStaticParams() {
+  const { data: products } = await getProducts();
+  
+  if (!products) return [];
+  
+  // For each product, generate params for each locale
+  return products.flatMap(product => 
+    ['en', 'nl', 'de', 'fr'].map(locale => ({
+      slug: getTranslatedProductSlug(product.slug, locale)
+    }))
+  );
+}
+
+/**
+ * Get static paths for all products (Next.js Pages Router)
  */
 export const getStaticPaths: GetStaticPaths = async ({ locales = ['en'] }) => {
   const { data: products } = await getProducts();

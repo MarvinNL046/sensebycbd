@@ -10,7 +10,13 @@
     "lint": "next lint",
     "lighthouse": "node scripts/lighthouse.js",
     "lighthouse:mobile": "node scripts/lighthouse.js --mobile",
-    "lighthouse:all": "npm run lighthouse && npm run lighthouse:mobile"
+    "lighthouse:all": "npm run lighthouse && npm run lighthouse:mobile",
+    "db:push": "supabase db push",
+    "db:diff": "supabase db diff -f",
+    "db:reset": "supabase db reset",
+    "db:new-migration": "supabase migration new",
+    "db:create-migration": "node scripts/create-migration.js",
+    "db:check-status": "node scripts/check-supabase-status.js"
   },
   "dependencies": {
     "@radix-ui/react-accordion": "^1.2.3",
@@ -40,5 +46,8 @@
     "tailwindcss": "^3.3.0",
     "typescript": "^5",
     "web-vitals": "^4.2.4"
+  },
+  "devDependencies": {
+    "supabase": "^2.15.8"
   }
 }

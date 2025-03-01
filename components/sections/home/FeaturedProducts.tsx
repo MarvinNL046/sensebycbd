@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { LazyImage } from '../../ui/LazyImage';
 import { useTranslation } from '../../../lib/i18n/useTranslation';
-import { getProducts } from '../../../lib/db';
+import { getProducts, getFeaturedProducts } from '../../../lib/mockDb';
 import { Card, CardContent, CardFooter } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import { Badge } from '../../../components/ui/badge';
@@ -34,10 +35,15 @@ export const FeaturedProducts = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [isAnimating, setIsAnimating] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true); // Set to true by default
   
   // Intersection observer to trigger animation when section is visible
   useEffect(() => {
+    // Set isVisible to true immediately to ensure content is visible
+    setIsVisible(true);
+    
+    // Original Intersection Observer code (commented out for now)
+    /*
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -53,6 +59,7 @@ export const FeaturedProducts = () => {
     }
     
     return () => observer.disconnect();
+    */
   }, []);
 
   // Fetch featured products from Supabase
@@ -60,13 +67,13 @@ export const FeaturedProducts = () => {
     const fetchFeaturedProducts = async () => {
       try {
         setLoading(true);
-        const { data, error } = await getProducts();
+        // Use the dedicated getFeaturedProducts function instead of filtering client-side
+        const { data, error } = await getFeaturedProducts();
         
         if (error) throw error;
         
-        // Filter featured products
-        const featuredProducts = data?.filter(product => product.is_featured) || [];
-        setProducts(featuredProducts as Product[]);
+        console.log('Featured products:', data); // Debug log
+        setProducts(data as Product[] || []);
       } catch (err: any) {
         console.error('Error fetching featured products:', err);
         setError(err.message || 'Failed to load products');
@@ -180,9 +187,10 @@ export const FeaturedProducts = () => {
               }`}
               style={{ transitionDelay: `${index * 100}ms` }}
             >
-              <div className="relative">
+              <Link href={`/products/${product.slug}`} className="cursor-pointer">
+                <div className="relative">
                 <div className="relative h-64 w-full overflow-hidden">
-                  <Image
+                  <LazyImage
                     src={product.image_url}
                     alt={product.name}
                     fill
@@ -249,6 +257,7 @@ export const FeaturedProducts = () => {
                   <span className="absolute inset-0 bg-primary-light transform scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-300"></span>
                 </Button>
               </CardFooter>
+              </Link>
             </Card>
           ))}
         </div>
@@ -263,9 +272,10 @@ export const FeaturedProducts = () => {
               {products.map((product, index) => (
                 <div key={product.id} className="w-full flex-shrink-0 px-4">
                   <Card className="overflow-hidden">
+                    <Link href={`/products/${product.slug}`} className="cursor-pointer">
                     <div className="relative">
                       <div className="relative h-64 w-full overflow-hidden">
-                        <Image
+                        <LazyImage
                           src={product.image_url}
                           alt={product.name}
                           fill
@@ -320,6 +330,7 @@ export const FeaturedProducts = () => {
                         Add to Cart
                       </Button>
                     </CardFooter>
+                    </Link>
                   </Card>
                 </div>
               ))}

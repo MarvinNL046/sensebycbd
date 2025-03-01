@@ -2,7 +2,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { SEO } from '../../../lib/seo/SEO';
-import { getCategoryBySlug, getCategories, getProducts } from '../../../lib/db';
+import { getCategoryBySlug, getCategories, getProducts } from '../../../lib/mockDb';
 import { Category, Product, ProductFilter } from '../../../types/product';
 import { getBaseCategorySlug, getTranslatedCategorySlug } from '../../../lib/utils/slugs';
 import { useTranslation } from '../../../lib/i18n/useTranslation';
@@ -166,7 +166,24 @@ export default function CategoryPage({ category, products: initialProducts }: Ca
 }
 
 /**
- * Get static paths for all categories
+ * Generate static params for all categories (Next.js 13+ App Router compatibility)
+ * This function is used by the App Router to generate static pages at build time
+ */
+export async function generateStaticParams() {
+  const { data: categories } = await getCategories();
+  
+  if (!categories) return [];
+  
+  // For each category, generate params for each locale
+  return categories.flatMap(category => 
+    ['en', 'nl', 'de', 'fr'].map(locale => ({
+      slug: getTranslatedCategorySlug(category.slug, locale)
+    }))
+  );
+}
+
+/**
+ * Get static paths for all categories (Next.js Pages Router)
  */
 export const getStaticPaths: GetStaticPaths = async ({ locales = ['en'] }) => {
   const { data: categories } = await getCategories();

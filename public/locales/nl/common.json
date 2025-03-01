@@ -2,7 +2,14 @@
   "seo": {
     "homeTitle": "SenseBy CBD | Premium CBD-producten voor pijnverlichting en welzijn",
     "homeDescription": "Ontdek premium CBD-producten ontworpen om pijn te verlichten en uw algehele welzijn te verbeteren. Hoogwaardige, in het laboratorium geteste CBD-oliën, crèmes en meer.",
-    "homeKeywords": "CBD, CBD-olie, pijnverlichting, welzijn, angstvermindering, slaapverbetering, premium CBD, biologische CBD"
+    "homeKeywords": "CBD, CBD-olie, pijnverlichting, welzijn, angstvermindering, slaapverbetering, premium CBD, biologische CBD",
+    "productsTitle": "Shop CBD-producten | SenseBy CBD",
+    "productsDescription": "Bekijk onze selectie premium CBD-producten, waaronder oliën, topicals, eetbare CBD en meer. In het laboratorium geteste, hoogwaardige CBD voor welzijn en verlichting.",
+    "productsKeywords": "koop CBD, CBD-winkel, CBD-producten, CBD-olie, CBD-crème, eetbare CBD, CBD-capsules",
+    "productTitle": "{productName} | SenseBy CBD",
+    "productDescription": "Koop {productName} van SenseBy CBD. Premium kwaliteit, in het laboratorium geteste CBD-product voor natuurlijke verlichting en welzijn.",
+    "categoryTitle": "{categoryName} | SenseBy CBD-producten",
+    "categoryDescription": "Bekijk onze selectie premium {categoryName} producten. Hoogwaardige, in het laboratorium geteste CBD voor natuurlijke verlichting en welzijn."
   },
   "navigation": {
     "home": "Home",
@@ -55,12 +62,78 @@
     "blog": "Blog",
     "careers": "Carrières",
     "contact": "Contact",
+    "account": "Mijn Account",
     "help": "Help",
     "faq": "FAQ",
     "shipping": "Verzending",
     "returns": "Retourneren",
     "terms": "Algemene Voorwaarden",
     "privacy": "Privacybeleid",
+    "shop": "Winkel",
+    "products": "Alle Producten",
+    "categories": "Categorieën",
+    "cart": "Winkelwagen",
+    "checkout": "Afrekenen",
     "copyright": "© 2025 SenseBy CBD. Alle rechten voorbehouden."
+  },
+  "products": {
+    "title": "Alle Producten",
+    "filter": "Filter",
+    "sort": "Sorteren",
+    "search": "Zoek producten...",
+    "noResults": "Geen producten gevonden. Probeer uw filters aan te passen.",
+    "price": "Prijs",
+    "category": "Categorie",
+    "cbdPercentage": "CBD Percentage",
+    "sortOptions": {
+      "newest": "Nieuwste",
+      "priceAsc": "Prijs: Laag naar Hoog",
+      "priceDesc": "Prijs: Hoog naar Laag"
+    },
+    "filters": {
+      "apply": "Filters Toepassen",
+      "clear": "Filters Wissen",
+      "close": "Sluiten"
+    },
+    "priceRange": {
+      "min": "Min",
+      "max": "Max"
+    }
+  },
+  "product": {
+    "addToCart": "In Winkelwagen",
+    "quantity": "Aantal",
+    "inStock": "Op Voorraad",
+    "lowStock": "Bijna Uitverkocht",
+    "outOfStock": "Uitverkocht",
+    "description": "Beschrijving",
+    "specifications": "Specificaties",
+    "reviews": "Beoordelingen",
+    "relatedProducts": "U Vindt Dit Misschien Ook Leuk",
+    "strength": "Sterkte",
+    "volume": "Volume",
+    "count": "Aantal",
+    "ingredients": "Ingrediënten",
+    "usage": "Gebruiksaanwijzing",
+    "benefits": "Voordelen",
+    "writeReview": "Schrijf een Beoordeling",
+    "submitReview": "Beoordeling Indienen",
+    "reviewPlaceholder": "Deel uw ervaring met dit product...",
+    "rating": "Beoordeling",
+    "noReviews": "Nog geen beoordelingen. Wees de eerste om dit product te beoordelen!",
+    "loginToReview": "Log in om een beoordeling te schrijven",
+    "thankYouReview": "Bedankt voor uw beoordeling!",
+    "productDetails": "Productdetails"
+  },
+  "cart": {
+    "title": "Uw Winkelwagen",
+    "empty": "Uw winkelwagen is leeg",
+    "continueShopping": "Verder Winkelen",
+    "subtotal": "Subtotaal",
+    "shipping": "Verzending",
+    "total": "Totaal",
+    "checkout": "Afrekenen",
+    "remove": "Verwijderen",
+    "update": "Bijwerken"
   }
 }

@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next';
 import { useState, useEffect } from 'react';
 import { SEO } from '../../lib/seo/SEO';
-import { getProducts, getCategories, extractCbdPercentages } from '../../lib/db';
+import { getProducts, getCategories, extractCbdPercentages } from '../../lib/mockDb';
 import { Product, Category, ProductFilter } from '../../types/product';
 import { useTranslation } from '../../lib/i18n/useTranslation';
 import { Card, CardContent, CardFooter } from '../../components/ui/card';
@@ -495,6 +495,12 @@ export default function ProductsPage({
     </>
   );
 }
+
+/**
+ * Note: generateStaticParams is not needed for this page since it's not a dynamic route.
+ * For non-dynamic routes, Next.js automatically generates the static page at build time
+ * using getStaticProps.
+ */
 
 /**
  * Get static props for the products page

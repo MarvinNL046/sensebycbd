@@ -1,8 +1,15 @@
 {
   "seo": {
     "homeTitle": "SenseBy CBD | Premium CBD-Produkte für Schmerzlinderung und Wohlbefinden",
-    "homeDescription": "Entdecken Sie Premium-CBD-Produkte, die entwickelt wurden, um Schmerzen zu lindern und Ihr allgemeines Wohlbefinden zu verbessern. Hochwertige, im Labor getestete CBD-Öle, Cremes und mehr.",
-    "homeKeywords": "CBD, CBD-Öl, Schmerzlinderung, Wohlbefinden, Angstlinderung, Schlafverbesserung, Premium-CBD, Bio-CBD"
+    "homeDescription": "Entdecken Sie Premium-CBD-Produkte, die entwickelt wurden, um Schmerzen zu lindern und Ihr allgemeines Wohlbefinden zu verbessern. Hochwertige, laborgetestete CBD-Öle, Cremes und mehr.",
+    "homeKeywords": "CBD, CBD-Öl, Schmerzlinderung, Wohlbefinden, Angstlinderung, Schlafverbesserung, Premium-CBD, Bio-CBD",
+    "productsTitle": "CBD-Produkte kaufen | SenseBy CBD",
+    "productsDescription": "Durchstöbern Sie unsere Auswahl an Premium-CBD-Produkten, darunter Öle, Topicals, Esswaren und mehr. Laborgetestetes, hochwertiges CBD für Wohlbefinden und Linderung.",
+    "productsKeywords": "CBD kaufen, CBD-Shop, CBD-Produkte, CBD-Öl, CBD-Creme, CBD-Esswaren, CBD-Kapseln",
+    "productTitle": "{productName} | SenseBy CBD",
+    "productDescription": "Kaufen Sie {productName} von SenseBy CBD. Premium-Qualität, laborgetestetes CBD-Produkt für natürliche Linderung und Wohlbefinden.",
+    "categoryTitle": "{categoryName} | SenseBy CBD-Produkte",
+    "categoryDescription": "Durchstöbern Sie unsere Auswahl an Premium-{categoryName}-Produkten. Hochwertiges, laborgetestetes CBD für natürliche Linderung und Wohlbefinden."
   },
   "navigation": {
     "home": "Startseite",
@@ -55,12 +62,78 @@
     "blog": "Blog",
     "careers": "Karriere",
     "contact": "Kontakt",
+    "account": "Mein Konto",
     "help": "Hilfe",
     "faq": "FAQ",
     "shipping": "Versand",
     "returns": "Rücksendungen",
     "terms": "AGB",
-    "privacy": "Datenschutzrichtlinie",
+    "privacy": "Datenschutz",
+    "shop": "Shop",
+    "products": "Alle Produkte",
+    "categories": "Kategorien",
+    "cart": "Warenkorb",
+    "checkout": "Zur Kasse",
     "copyright": "© 2025 SenseBy CBD. Alle Rechte vorbehalten."
+  },
+  "products": {
+    "title": "Alle Produkte",
+    "filter": "Filter",
+    "sort": "Sortieren",
+    "search": "Produkte suchen...",
+    "noResults": "Keine Produkte gefunden. Versuchen Sie, Ihre Filter anzupassen.",
+    "price": "Preis",
+    "category": "Kategorie",
+    "cbdPercentage": "CBD-Prozentsatz",
+    "sortOptions": {
+      "newest": "Neueste",
+      "priceAsc": "Preis: Niedrig zu Hoch",
+      "priceDesc": "Preis: Hoch zu Niedrig"
+    },
+    "filters": {
+      "apply": "Filter anwenden",
+      "clear": "Filter löschen",
+      "close": "Schließen"
+    },
+    "priceRange": {
+      "min": "Min",
+      "max": "Max"
+    }
+  },
+  "product": {
+    "addToCart": "In den Warenkorb",
+    "quantity": "Menge",
+    "inStock": "Auf Lager",
+    "lowStock": "Niedriger Bestand",
+    "outOfStock": "Ausverkauft",
+    "description": "Beschreibung",
+    "specifications": "Spezifikationen",
+    "reviews": "Bewertungen",
+    "relatedProducts": "Das könnte Ihnen auch gefallen",
+    "strength": "Stärke",
+    "volume": "Volumen",
+    "count": "Anzahl",
+    "ingredients": "Inhaltsstoffe",
+    "usage": "Anwendungshinweise",
+    "benefits": "Vorteile",
+    "writeReview": "Bewertung schreiben",
+    "submitReview": "Bewertung abschicken",
+    "reviewPlaceholder": "Teilen Sie Ihre Erfahrung mit diesem Produkt...",
+    "rating": "Bewertung",
+    "noReviews": "Noch keine Bewertungen. Seien Sie der Erste, der dieses Produkt bewertet!",
+    "loginToReview": "Bitte melden Sie sich an, um eine Bewertung zu schreiben",
+    "thankYouReview": "Vielen Dank für Ihre Bewertung!",
+    "productDetails": "Produktdetails"
+  },
+  "cart": {
+    "title": "Ihr Warenkorb",
+    "empty": "Ihr Warenkorb ist leer",
+    "continueShopping": "Weiter einkaufen",
+    "subtotal": "Zwischensumme",
+    "shipping": "Versand",
+    "total": "Gesamtsumme",
+    "checkout": "Zur Kasse",
+    "remove": "Entfernen",
+    "update": "Aktualisieren"
   }
 }

@@ -9,11 +9,11 @@ WHERE email = 'admin@sensebycbd.com';
 -- Insert sample categories
 INSERT INTO public.categories (name, slug, description, image_url)
 VALUES
-  ('CBD Oils', 'cbd-oils', 'Premium CBD oils for daily use', 'https://images.unsplash.com/photo-1556762132-6e482339a69d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'),
-  ('Topicals', 'topicals', 'Creams and balms for targeted relief', 'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'),
-  ('Edibles', 'edibles', 'Delicious CBD-infused edibles', 'https://images.unsplash.com/photo-1621363542567-31027c772ebb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'),
-  ('Capsules', 'capsules', 'Easy-to-take CBD capsules', 'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60'),
-  ('Pet CBD', 'pet-cbd', 'CBD products for your furry friends', 'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60');
+  ('CBD Oils', 'cbd-oils', 'Premium CBD oils for daily use', 'https://picsum.photos/id/1/800/600'),
+  ('Topicals', 'topicals', 'Creams and balms for targeted relief', 'https://picsum.photos/id/2/800/600'),
+  ('Edibles', 'edibles', 'Delicious CBD-infused edibles', 'https://picsum.photos/id/3/800/600'),
+  ('Capsules', 'capsules', 'Easy-to-take CBD capsules', 'https://picsum.photos/id/4/800/600'),
+  ('Pet CBD', 'pet-cbd', 'CBD products for your furry friends', 'https://picsum.photos/id/5/800/600');
 
 -- Insert sample products
 INSERT INTO public.products (category_id, name, slug, description, price, sale_price, stock, image_url, specifications, is_featured)
@@ -27,7 +27,7 @@ VALUES
     89.99,
     NULL,
     50,
-    'https://images.unsplash.com/photo-1556762132-6e482339a69d?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+    'https://picsum.photos/id/10/800/600',
     '{"strength": "1000mg", "volume": "30ml", "ingredients": "Hemp extract, MCT oil", "usage": "Place 1ml under tongue and hold for 60 seconds before swallowing"}',
     true
   ),
@@ -39,7 +39,7 @@ VALUES
     59.99,
     49.99,
     75,
-    'https://images.unsplash.com/photo-1585870720145-3360a1bc3bcc?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+    'https://picsum.photos/id/11/800/600',
     '{"strength": "500mg", "volume": "30ml", "ingredients": "Hemp extract, MCT oil", "usage": "Place 0.5ml under tongue and hold for 60 seconds before swallowing"}',
     true
   ),
@@ -53,7 +53,7 @@ VALUES
     39.99,
     NULL,
     100,
-    'https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+    'https://picsum.photos/id/12/800/600',
     '{"strength": "250mg", "volume": "60ml", "ingredients": "Hemp extract, Shea butter, Aloe vera, Essential oils", "usage": "Apply a small amount to affected area and massage gently"}',
     true
   ),
@@ -65,7 +65,7 @@ VALUES
     49.99,
     NULL,
     60,
-    'https://images.unsplash.com/photo-1620916566398-39f1143ab7be?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+    'https://picsum.photos/id/13/800/600',
     '{"strength": "500mg", "volume": "100ml", "ingredients": "Hemp extract, Jojoba oil, Lavender essential oil", "usage": "Apply liberally to skin and massage"}',
     false
   ),
@@ -79,7 +79,7 @@ VALUES
     29.99,
     NULL,
     120,
-    'https://images.unsplash.com/photo-1621363542567-31027c772ebb?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+    'https://picsum.photos/id/14/800/600',
     '{"strength": "300mg", "count": "30 gummies", "ingredients": "Hemp extract, Sugar, Corn syrup, Gelatin", "usage": "Take 1-2 gummies daily"}',
     true
   ),
@@ -93,7 +93,7 @@ VALUES
     54.99,
     NULL,
     90,
-    'https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+    'https://picsum.photos/id/15/800/600',
     '{"strength": "750mg", "count": "30 capsules", "ingredients": "Hemp extract, MCT oil, Vegetable cellulose", "usage": "Take 1 capsule daily with water"}',
     false
   ),
@@ -107,7 +107,7 @@ VALUES
     44.99,
     39.99,
     80,
-    'https://images.unsplash.com/photo-1583337130417-3346a1be7dee?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=60',
+    'https://picsum.photos/id/16/800/600',
     '{"strength": "250mg", "volume": "30ml", "ingredients": "Hemp extract, MCT oil", "usage": "Add to pet food or directly into mouth. See dosing chart for weight-based dosing."}',
     true
   );

@@ -2,7 +2,14 @@
   "seo": {
     "homeTitle": "SenseBy CBD | Produits CBD Premium pour le Soulagement de la Douleur et le Bien-être",
     "homeDescription": "Découvrez des produits CBD premium conçus pour soulager la douleur et améliorer votre bien-être général. Huiles CBD, crèmes et plus, de haute qualité et testées en laboratoire.",
-    "homeKeywords": "CBD, huile CBD, soulagement de la douleur, bien-être, soulagement de l'anxiété, amélioration du sommeil, CBD premium, CBD biologique"
+    "homeKeywords": "CBD, huile CBD, soulagement de la douleur, bien-être, soulagement de l'anxiété, amélioration du sommeil, CBD premium, CBD biologique",
+    "productsTitle": "Acheter des Produits CBD | SenseBy CBD",
+    "productsDescription": "Parcourez notre sélection de produits CBD premium, y compris des huiles, des topiques, des comestibles et plus encore. CBD de haute qualité testé en laboratoire pour le bien-être et le soulagement.",
+    "productsKeywords": "acheter CBD, boutique CBD, produits CBD, huile CBD, crème CBD, comestibles CBD, capsules CBD",
+    "productTitle": "{productName} | SenseBy CBD",
+    "productDescription": "Achetez {productName} de SenseBy CBD. Produit CBD de qualité premium, testé en laboratoire pour un soulagement naturel et le bien-être.",
+    "categoryTitle": "{categoryName} | Produits SenseBy CBD",
+    "categoryDescription": "Parcourez notre sélection de produits {categoryName} premium. CBD de haute qualité testé en laboratoire pour un soulagement naturel et le bien-être."
   },
   "navigation": {
     "home": "Accueil",
@@ -55,12 +62,78 @@
     "blog": "Blog",
     "careers": "Carrières",
     "contact": "Contact",
+    "account": "Mon Compte",
     "help": "Aide",
     "faq": "FAQ",
     "shipping": "Expédition",
     "returns": "Retours",
     "terms": "Conditions Générales",
     "privacy": "Politique de Confidentialité",
+    "shop": "Boutique",
+    "products": "Tous les Produits",
+    "categories": "Catégories",
+    "cart": "Panier",
+    "checkout": "Commander",
     "copyright": "© 2025 SenseBy CBD. Tous droits réservés."
+  },
+  "products": {
+    "title": "Tous les Produits",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "search": "Rechercher des produits...",
+    "noResults": "Aucun produit trouvé. Essayez d'ajuster vos filtres.",
+    "price": "Prix",
+    "category": "Catégorie",
+    "cbdPercentage": "Pourcentage de CBD",
+    "sortOptions": {
+      "newest": "Plus récents",
+      "priceAsc": "Prix: Croissant",
+      "priceDesc": "Prix: Décroissant"
+    },
+    "filters": {
+      "apply": "Appliquer les Filtres",
+      "clear": "Effacer les Filtres",
+      "close": "Fermer"
+    },
+    "priceRange": {
+      "min": "Min",
+      "max": "Max"
+    }
+  },
+  "product": {
+    "addToCart": "Ajouter au Panier",
+    "quantity": "Quantité",
+    "inStock": "En Stock",
+    "lowStock": "Stock Limité",
+    "outOfStock": "Rupture de Stock",
+    "description": "Description",
+    "specifications": "Spécifications",
+    "reviews": "Avis",
+    "relatedProducts": "Vous Aimerez Aussi",
+    "strength": "Concentration",
+    "volume": "Volume",
+    "count": "Quantité",
+    "ingredients": "Ingrédients",
+    "usage": "Mode d'Emploi",
+    "benefits": "Avantages",
+    "writeReview": "Écrire un Avis",
+    "submitReview": "Soumettre l'Avis",
+    "reviewPlaceholder": "Partagez votre expérience avec ce produit...",
+    "rating": "Évaluation",
+    "noReviews": "Pas encore d'avis. Soyez le premier à évaluer ce produit!",
+    "loginToReview": "Veuillez vous connecter pour écrire un avis",
+    "thankYouReview": "Merci pour votre avis!",
+    "productDetails": "Détails du Produit"
+  },
+  "cart": {
+    "title": "Votre Panier",
+    "empty": "Votre panier est vide",
+    "continueShopping": "Continuer les Achats",
+    "subtotal": "Sous-total",
+    "shipping": "Livraison",
+    "total": "Total",
+    "checkout": "Commander",
+    "remove": "Supprimer",
+    "update": "Mettre à Jour"
   }
 }

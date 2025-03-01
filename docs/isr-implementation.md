@@ -15,6 +15,7 @@ The product detail pages (`pages/products/[slug].tsx`) use ISR with the followin
 - `fallback: true` in `getStaticPaths` - This allows pages to be generated on-demand when a user visits a product page that wasn't pre-rendered at build time.
 - `revalidate: 600` in `getStaticProps` - This means that product pages will be regenerated in the background at most once every 10 minutes if they receive traffic.
 - Enhanced fallback UI - A skeleton loading state is shown while the page is being generated on-demand.
+- `generateStaticParams` function - Added for Next.js 13+ App Router compatibility, which will be used when migrating to the App Router in the future.
 
 ### 2. Category Pages
 
@@ -23,6 +24,7 @@ The category pages (`pages/products/category/[slug].tsx`) use ISR with the follo
 - `fallback: true` in `getStaticPaths` - This allows pages to be generated on-demand when a user visits a category page that wasn't pre-rendered at build time.
 - `revalidate: 1800` in `getStaticProps` - This means that category pages will be regenerated in the background at most once every 30 minutes if they receive traffic.
 - Enhanced fallback UI - A skeleton loading state is shown while the page is being generated on-demand.
+- `generateStaticParams` function - Added for Next.js 13+ App Router compatibility, which will be used when migrating to the App Router in the future.
 
 ### 3. Products Index Page
 
@@ -69,6 +71,18 @@ We've implemented a tiered revalidation strategy based on the importance and fre
 3. **Category Pages** - Revalidate every 30 minutes (1800 seconds)
    - These pages change less frequently than individual product pages.
 
+## App Router Compatibility
+
+We've added support for the Next.js App Router by implementing the `generateStaticParams` function in our dynamic routes. This function serves the same purpose as `getStaticPaths` but is used by the App Router instead of the Pages Router.
+
+The implementation includes:
+
+1. **Product Pages** - `generateStaticParams` function that generates parameters for all products in all supported languages.
+2. **Category Pages** - `generateStaticParams` function that generates parameters for all categories in all supported languages.
+3. **Products Index Page** - No `generateStaticParams` needed as this is not a dynamic route.
+
+This dual implementation ensures that our site will be ready for migration to the App Router in the future, while still maintaining compatibility with the current Pages Router.
+
 ## Benefits of ISR
 
 1. **Fast Initial Page Load** - Pages are served as static HTML, providing optimal performance.
@@ -76,6 +90,7 @@ We've implemented a tiered revalidation strategy based on the importance and fre
 3. **Improved SEO** - Static pages are fully rendered and indexable by search engines.
 4. **Reduced Database Load** - Pages are only regenerated periodically, reducing the load on your database.
 5. **Graceful Fallbacks** - Users see a loading state while pages are being generated on-demand.
+6. **Future-Proof** - Our implementation supports both the Pages Router and the App Router, making future migrations easier.
 
 ## Troubleshooting
 

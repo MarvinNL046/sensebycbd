@@ -62,12 +62,18 @@
     "blog": "Blog",
     "careers": "Careers",
     "contact": "Contact Us",
+    "account": "My Account",
     "help": "Help",
     "faq": "FAQ",
     "shipping": "Shipping",
     "returns": "Returns",
     "terms": "Terms & Conditions",
     "privacy": "Privacy Policy",
+    "shop": "Shop",
+    "products": "All Products",
+    "categories": "Categories",
+    "cart": "Cart",
+    "checkout": "Checkout",
     "copyright": "© 2025 SenseBy CBD. All rights reserved."
   },
   "products": {

@@ -1,8 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { LazyImage } from '../../ui/LazyImage';
 import { useTranslation } from '../../../lib/i18n/useTranslation';
-import { getCategories } from '../../../lib/db';
+import { getCategories } from '../../../lib/mockDb';
 import { Badge } from '../../../components/ui/badge';
 import { Card } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
@@ -28,11 +29,16 @@ export const CategoriesGrid = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState('all');
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true); // Set to true by default
   const sectionRef = useRef<HTMLDivElement>(null);
   
   // Intersection observer to trigger animation when section is visible
   useEffect(() => {
+    // Set isVisible to true immediately to ensure content is visible
+    setIsVisible(true);
+    
+    // Original Intersection Observer code (commented out for now)
+    /*
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -48,6 +54,7 @@ export const CategoriesGrid = () => {
     }
     
     return () => observer.disconnect();
+    */
   }, []);
 
   // Fetch categories from Supabase
@@ -261,7 +268,7 @@ export const CategoriesGrid = () => {
                   <div className="relative">
                     {category.image_url ? (
                       <div className="relative h-48 w-full overflow-hidden">
-                        <Image
+                        <LazyImage
                           src={category.image_url}
                           alt={category.name}
                           fill

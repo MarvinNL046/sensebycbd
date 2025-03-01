@@ -4,7 +4,7 @@ This directory contains SQL migration scripts for the Supabase database.
 
 ## How to Run Migrations
 
-### Option 1: Using the Supabase Dashboard
+### Option 1: Using the Supabase Dashboard (Manual Method)
 
 1. Log in to your Supabase dashboard at https://app.supabase.io
 2. Navigate to your project
@@ -13,15 +13,27 @@ This directory contains SQL migration scripts for the Supabase database.
 5. Paste it into the SQL Editor
 6. Click "Run" to execute the migration
 
-### Option 2: Using the Supabase CLI
+### Option 2: Using the Supabase CLI (Recommended)
 
-If you have the Supabase CLI installed, you can run migrations using the following command:
+We've now integrated the Supabase CLI into the project as a dev dependency, making it easier to manage database migrations directly from VS Code.
+
+You can run migrations using the following npm scripts:
 
 ```bash
-supabase db push
+# Create a new migration file
+npm run db:new-migration migration_name
+
+# Generate a migration from database changes
+npm run db:diff migration_name
+
+# Push all migrations to your Supabase database
+npm run db:push
+
+# Reset your database (use with caution)
+npm run db:reset
 ```
 
-This will apply all migrations in the migrations directory to your Supabase database.
+For detailed instructions on how to use these commands and set up the Supabase CLI, please refer to the [Supabase Management Documentation](../docs/supabase-management.md).
 
 ## Migration Files
 
@@ -30,3 +42,8 @@ This will apply all migrations in the migrations directory to your Supabase data
   - Adds `shipping_info` and `payment_info` JSONB columns
   - Adds `loyalty_points_earned` column
   - Removes `shipping_address` and `payment_id` columns
+
+- `example_migration.sql`: An example migration file that demonstrates the recommended format and structure.
+  - This is for reference only and should not be applied to the database
+  - Shows how to create tables, indexes, RLS policies, functions, and triggers
+  - Includes detailed comments explaining each section
