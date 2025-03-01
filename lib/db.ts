@@ -1,6 +1,7 @@
 import { supabase } from './supabase';
 import { CartItem } from '../types/cart';
 import { ProductFilter } from '../types/product';
+import { BlogFilter } from '../types/blog';
 
 /**
  * Product related database functions
@@ -314,4 +315,124 @@ export async function createReview(review: {
   return supabase
     .from('reviews')
     .insert([review]);
+}
+
+/**
+ * Blog related database functions
+ */
+export async function getBlogPosts(filters?: BlogFilter) {
+  let query = supabase
+    .from('blog_posts')
+    .select(`
+      *,
+      author:users(id, full_name),
+      category:blog_categories(id, name, slug),
+      tags:blog_posts_tags(tag:blog_tags(id, name, slug))
+    `)
+    .eq('published', true)
+    .order('published_at', { ascending: false });
+    
+  if (filters) {
+    // Category filter
+    if (filters.category) {
+      query = query.eq('category.slug', filters.category);
+    }
+    
+    // Tag filter
+    if (filters.tag) {
+      query = query.contains('tags.tag.slug', [filters.tag]);
+    }
+    
+    // Author filter
+    if (filters.author) {
+      query = query.eq('author_id', filters.author);
+    }
+    
+    // Search filter
+    if (filters.search) {
+      query = query.or(`title.ilike.%${filters.search}%,content.ilike.%${filters.search}%`);
+    }
+    
+    // Pagination
+    if (filters.limit !== undefined && filters.offset !== undefined) {
+      query = query.range(filters.offset, filters.offset + filters.limit - 1);
+    } else if (filters.limit !== undefined) {
+      query = query.limit(filters.limit);
+    }
+  }
+  
+  return query;
+}
+
+export async function getBlogPostBySlug(slug: string) {
+  return supabase
+    .from('blog_posts')
+    .select(`
+      *,
+      author:users(id, full_name),
+      category:blog_categories(id, name, slug),
+      tags:blog_posts_tags(tag:blog_tags(id, name, slug))
+    `)
+    .eq('slug', slug)
+    .single();
+}
+
+export async function getBlogCategories() {
+  return supabase
+    .from('blog_categories')
+    .select('*')
+    .order('name');
+}
+
+export async function getBlogCategoryBySlug(slug: string) {
+  return supabase
+    .from('blog_categories')
+    .select('*')
+    .eq('slug', slug)
+    .single();
+}
+
+export async function getBlogTags() {
+  return supabase
+    .from('blog_tags')
+    .select('*')
+    .order('name');
+}
+
+export async function getBlogComments(postId: string) {
+  return supabase
+    .from('blog_comments')
+    .select('*, user:users(id, full_name)')
+    .eq('post_id', postId)
+    .eq('approved', true)
+    .order('created_at', { ascending: true });
+}
+
+export async function createBlogComment(comment: {
+  post_id: string;
+  user_id?: string;
+  name?: string;
+  email?: string;
+  content: string;
+}) {
+  return supabase
+    .from('blog_comments')
+    .insert([comment]);
+}
+
+export async function getRecentBlogPosts(limit: number = 5) {
+  return supabase
+    .from('blog_posts')
+    .select(`
+      id,
+      title,
+      slug,
+      excerpt,
+      featured_image,
+      published_at,
+      category:blog_categories(id, name, slug)
+    `)
+    .eq('published', true)
+    .order('published_at', { ascending: false })
+    .limit(limit);
 }

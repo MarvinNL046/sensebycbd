@@ -9,7 +9,14 @@
     "productTitle": "{productName} | SenseBy CBD",
     "productDescription": "Achetez {productName} de SenseBy CBD. Produit CBD de qualité premium, testé en laboratoire pour un soulagement naturel et le bien-être.",
     "categoryTitle": "{categoryName} | Produits SenseBy CBD",
-    "categoryDescription": "Parcourez notre sélection de produits {categoryName} premium. CBD de haute qualité testé en laboratoire pour un soulagement naturel et le bien-être."
+    "categoryDescription": "Parcourez notre sélection de produits {categoryName} premium. CBD de haute qualité testé en laboratoire pour un soulagement naturel et le bien-être.",
+    "blogTitle": "Blog CBD | SenseBy CBD",
+    "blogDescription": "Lisez les derniers articles sur les bienfaits du CBD, la recherche et les guides de produits. Restez informé avec le blog éducatif de SenseBy CBD.",
+    "blogKeywords": "blog CBD, articles CBD, recherche CBD, bienfaits CBD, guides CBD",
+    "blogPostTitle": "{postTitle} | Blog SenseBy CBD",
+    "blogPostDescription": "Lisez à propos de {postTitle} dans notre blog éducatif sur le CBD. Apprenez-en plus sur les bienfaits du CBD, la recherche et les informations sur les produits.",
+    "blogCategoryTitle": "Articles sur {categoryName} | Blog SenseBy CBD",
+    "blogCategoryDescription": "Parcourez notre collection d'articles sur {categoryName}. Contenu éducatif sur les bienfaits du CBD, la recherche et les informations sur les produits."
   },
   "navigation": {
     "home": "Accueil",
@@ -135,5 +142,30 @@
     "checkout": "Commander",
     "remove": "Supprimer",
     "update": "Mettre à Jour"
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Lire Plus",
+    "by": "Par",
+    "categories": "Catégories",
+    "tags": "Tags",
+    "recentPosts": "Articles Récents",
+    "relatedPosts": "Articles Connexes",
+    "noPosts": "Aucun article de blog trouvé.",
+    "comments": "Commentaires",
+    "leaveComment": "Laisser un Commentaire",
+    "yourName": "Votre Nom",
+    "yourEmail": "Votre Email",
+    "commentPlaceholder": "Votre commentaire...",
+    "submitComment": "Soumettre le Commentaire",
+    "loginToComment": "Veuillez vous connecter pour laisser un commentaire",
+    "thankYouComment": "Merci pour votre commentaire ! Il sera visible après approbation.",
+    "noComments": "Pas encore de commentaires. Soyez le premier à commenter !",
+    "search": "Rechercher dans le blog...",
+    "searchResults": "Résultats de Recherche",
+    "noSearchResults": "Aucun résultat trouvé pour votre recherche.",
+    "backToBlog": "Retour au Blog",
+    "publishedOn": "Publié le",
+    "share": "Partager"
   }
 }

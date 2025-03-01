@@ -9,7 +9,14 @@
     "productTitle": "{productName} | SenseBy CBD",
     "productDescription": "Kaufen Sie {productName} von SenseBy CBD. Premium-Qualität, laborgetestetes CBD-Produkt für natürliche Linderung und Wohlbefinden.",
     "categoryTitle": "{categoryName} | SenseBy CBD-Produkte",
-    "categoryDescription": "Durchstöbern Sie unsere Auswahl an Premium-{categoryName}-Produkten. Hochwertiges, laborgetestetes CBD für natürliche Linderung und Wohlbefinden."
+    "categoryDescription": "Durchstöbern Sie unsere Auswahl an Premium-{categoryName}-Produkten. Hochwertiges, laborgetestetes CBD für natürliche Linderung und Wohlbefinden.",
+    "blogTitle": "CBD Blog | SenseBy CBD",
+    "blogDescription": "Lesen Sie die neuesten Artikel über CBD-Vorteile, Forschung und Produktführer. Bleiben Sie informiert mit dem Bildungsblog von SenseBy CBD.",
+    "blogKeywords": "CBD Blog, CBD Artikel, CBD Forschung, CBD Vorteile, CBD Ratgeber",
+    "blogPostTitle": "{postTitle} | SenseBy CBD Blog",
+    "blogPostDescription": "Lesen Sie über {postTitle} in unserem CBD-Bildungsblog. Erfahren Sie mehr über CBD-Vorteile, Forschung und Produktinformationen.",
+    "blogCategoryTitle": "{categoryName} Artikel | SenseBy CBD Blog",
+    "blogCategoryDescription": "Durchstöbern Sie unsere Sammlung von Artikeln über {categoryName}. Bildungsinhalte über CBD-Vorteile, Forschung und Produktinformationen."
   },
   "navigation": {
     "home": "Startseite",
@@ -135,5 +142,30 @@
     "checkout": "Zur Kasse",
     "remove": "Entfernen",
     "update": "Aktualisieren"
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Weiterlesen",
+    "by": "Von",
+    "categories": "Kategorien",
+    "tags": "Tags",
+    "recentPosts": "Neueste Beiträge",
+    "relatedPosts": "Verwandte Beiträge",
+    "noPosts": "Keine Blogbeiträge gefunden.",
+    "comments": "Kommentare",
+    "leaveComment": "Kommentar hinterlassen",
+    "yourName": "Ihr Name",
+    "yourEmail": "Ihre E-Mail",
+    "commentPlaceholder": "Ihr Kommentar...",
+    "submitComment": "Kommentar abschicken",
+    "loginToComment": "Bitte melden Sie sich an, um einen Kommentar zu hinterlassen",
+    "thankYouComment": "Vielen Dank für Ihren Kommentar! Er wird nach der Genehmigung sichtbar sein.",
+    "noComments": "Noch keine Kommentare. Seien Sie der Erste, der kommentiert!",
+    "search": "Blog durchsuchen...",
+    "searchResults": "Suchergebnisse",
+    "noSearchResults": "Keine Ergebnisse für Ihre Suche gefunden.",
+    "backToBlog": "Zurück zum Blog",
+    "publishedOn": "Veröffentlicht am",
+    "share": "Teilen"
   }
 }

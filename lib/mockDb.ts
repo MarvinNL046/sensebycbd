@@ -1,160 +1,175 @@
 import { CartItem } from '../types/cart';
 import { ProductFilter } from '../types/product';
+import { BlogFilter, BlogPost, BlogCategory, BlogTag, BlogComment } from '../types/blog';
 import { 
-  mockProducts, 
-  mockCategories, 
-  getProducts as getMockProducts,
-  getProductBySlug as getMockProductBySlug,
-  getFeaturedProducts as getMockFeaturedProducts,
-  getProductsByCategory as getMockProductsByCategory,
-  searchProducts as searchMockProducts
+  mockBlogPosts,
+  mockBlogCategories,
+  mockBlogTags,
+  mockBlogComments
 } from './mockData';
+
+/**
+ * Blog related database functions
+ */
+export async function getBlogPosts(filters?: BlogFilter) {
+  let posts = [...mockBlogPosts];
+  
+  if (filters) {
+    // Category filter
+    if (filters.category) {
+      posts = posts.filter(post => 
+        post.category?.slug === filters.category
+      );
+    }
+    
+    // Tag filter
+    if (filters.tag) {
+      posts = posts.filter(post => 
+        post.tags?.some(tagObj => tagObj.tag.slug === filters.tag)
+      );
+    }
+    
+    // Author filter
+    if (filters.author) {
+      posts = posts.filter(post => post.author_id === filters.author);
+    }
+    
+    // Search filter
+    if (filters.search) {
+      const searchLower = filters.search.toLowerCase();
+      posts = posts.filter(post => 
+        post.title.toLowerCase().includes(searchLower) || 
+        post.content.toLowerCase().includes(searchLower)
+      );
+    }
+    
+    // Pagination
+    if (filters.limit !== undefined) {
+      const offset = filters.offset || 0;
+      posts = posts.slice(offset, offset + filters.limit);
+    }
+  }
+  
+  // Only return published posts
+  posts = posts.filter(post => post.published);
+  
+  // Sort by published_at date (newest first)
+  posts.sort((a, b) => 
+    new Date(b.published_at || b.created_at).getTime() - 
+    new Date(a.published_at || a.created_at).getTime()
+  );
+  
+  return { data: posts, error: null };
+}
+
+export async function getBlogPostBySlug(slug: string) {
+  const post = mockBlogPosts.find(post => post.slug === slug);
+  return { 
+    data: post || null, 
+    error: post ? null : new Error('Blog post not found') 
+  };
+}
+
+export async function getBlogCategories() {
+  return { data: mockBlogCategories, error: null };
+}
+
+export async function getBlogCategoryBySlug(slug: string) {
+  const category = mockBlogCategories.find(category => category.slug === slug);
+  return { 
+    data: category || null, 
+    error: category ? null : new Error('Blog category not found') 
+  };
+}
+
+export async function getBlogTags() {
+  return { data: mockBlogTags, error: null };
+}
+
+export async function getBlogComments(postId: string) {
+  const comments = mockBlogComments.filter(
+    comment => comment.post_id === postId && comment.approved
+  );
+  
+  return { data: comments, error: null };
+}
+
+export async function createBlogComment(comment: {
+  post_id: string;
+  user_id?: string;
+  name?: string;
+  email?: string;
+  content: string;
+}) {
+  // Mock create comment
+  const newComment: BlogComment = {
+    id: `comment-${Date.now()}`,
+    post_id: comment.post_id,
+    user_id: comment.user_id,
+    name: comment.name,
+    email: comment.email,
+    content: comment.content,
+    approved: false, // New comments require approval
+    created_at: new Date().toISOString()
+  };
+  
+  return { data: newComment, error: null };
+}
+
+export async function getRecentBlogPosts(limit: number = 5) {
+  const posts = mockBlogPosts
+    .filter(post => post.published)
+    .sort((a, b) => 
+      new Date(b.published_at || b.created_at).getTime() - 
+      new Date(a.published_at || a.created_at).getTime()
+    )
+    .slice(0, limit)
+    .map(post => ({
+      id: post.id,
+      title: post.title,
+      slug: post.slug,
+      excerpt: post.excerpt,
+      featured_image: post.featured_image,
+      published_at: post.published_at,
+      category: post.category
+    }));
+  
+  return { data: posts, error: null };
+}
 
 /**
  * Product related database functions
  */
 export async function getProducts(filters?: ProductFilter) {
-  let { data: products, error } = await getMockProducts();
-  
-  if (error || !products) {
-    return { data: [], error };
-  }
-  
-  if (filters) {
-    // Category filter
-    if (filters.category) {
-      const { data: categoryProducts, error: categoryError } = await getMockProductsByCategory(filters.category);
-      if (!categoryError) {
-        products = categoryProducts;
-      }
-    }
-    
-    // Price range filter
-    if (filters.minPrice !== undefined) {
-      products = products.filter(product => 
-        (product.sale_price || product.price) >= filters.minPrice!
-      );
-    }
-    
-    if (filters.maxPrice !== undefined) {
-      products = products.filter(product => 
-        (product.sale_price || product.price) <= filters.maxPrice!
-      );
-    }
-    
-    // CBD percentage filter
-    if (filters.cbdPercentage && filters.cbdPercentage.length > 0) {
-      products = products.filter(product => {
-        const strength = product.specifications?.strength;
-        if (!strength) return false;
-        
-        return filters.cbdPercentage!.some(percentage => 
-          strength.includes(percentage)
-        );
-      });
-    }
-    
-    // Search filter
-    if (filters.search) {
-      const { data: searchResults, error: searchError } = await searchMockProducts(filters.search);
-      if (!searchError) {
-        products = searchResults;
-      }
-    }
-    
-    // Sorting
-    if (filters.sort) {
-      switch (filters.sort) {
-        case 'price_asc':
-          products.sort((a, b) => 
-            (a.sale_price || a.price) - (b.sale_price || b.price)
-          );
-          break;
-        case 'price_desc':
-          products.sort((a, b) => 
-            (b.sale_price || b.price) - (a.sale_price || a.price)
-          );
-          break;
-        case 'newest':
-          products.sort((a, b) => 
-            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-          );
-          break;
-      }
-    } else {
-      // Default sorting
-      products.sort((a, b) => 
-        new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
-      );
-    }
-  }
-  
-  return { data: products, error: null };
+  // Return empty products for now
+  return { data: [], error: null };
 }
 
 export async function getProductBySlug(slug: string) {
-  return getMockProductBySlug(slug);
+  return { data: null, error: new Error('Product not found') };
 }
 
 export async function getFeaturedProducts() {
-  return getMockFeaturedProducts();
+  return { data: [], error: null };
 }
 
 export async function getRelatedProducts(productId: string, categoryId: string, limit: number = 4) {
-  const { data: products, error } = await getMockProducts();
-  
-  if (error || !products) {
-    return { data: [], error };
-  }
-  
-  const relatedProducts = products
-    .filter(product => 
-      product.category_id === categoryId && product.id !== productId
-    )
-    .slice(0, limit);
-  
-  return { data: relatedProducts, error: null };
+  return { data: [], error: null };
 }
 
 export async function extractCbdPercentages() {
-  const { data: products, error } = await getMockProducts();
-  
-  if (error || !products) {
-    return { data: [], error };
-  }
-  
-  // Extract unique CBD percentages from specifications
-  const percentages = new Set<string>();
-  
-  products.forEach(product => {
-    if (product.specifications && product.specifications.strength) {
-      const strength = product.specifications.strength;
-      // Extract percentage values (e.g., "500mg" -> we don't add it, "5%" -> we add "5%")
-      if (strength.includes('%')) {
-        percentages.add(strength);
-      }
-    }
-  });
-  
-  return { 
-    data: Array.from(percentages).sort(), 
-    error: null 
-  };
+  return { data: [], error: null };
 }
 
 /**
  * Category related database functions
  */
 export async function getCategories() {
-  return { data: mockCategories, error: null };
+  return { data: [], error: null };
 }
 
 export async function getCategoryBySlug(slug: string) {
-  const category = mockCategories.find(category => category.slug === slug);
-  return { 
-    data: category || null, 
-    error: category ? null : new Error('Category not found') 
-  };
+  return { data: null, error: new Error('Category not found') };
 }
 
 /**
@@ -176,7 +191,6 @@ export async function getUserProfile(userId: string) {
 }
 
 export async function updateUserProfile(userId: string, data: any) {
-  // Mock update user profile
   return { data: null, error: null };
 }
 
@@ -184,17 +198,14 @@ export async function updateUserProfile(userId: string, data: any) {
  * Loyalty points related functions
  */
 export async function getLoyaltyPoints(userId: string) {
-  // Mock loyalty points
   return { data: 100, error: null };
 }
 
 export async function addLoyaltyPoints(userId: string, points: number) {
-  // Mock add loyalty points
   return { data: null, error: null };
 }
 
 export async function useLoyaltyPoints(userId: string, points: number) {
-  // Mock use loyalty points
   return { data: null, error: null };
 }
 
@@ -208,7 +219,6 @@ export async function createOrder(
   paymentInfo: any,
   totalAmount: number
 ) {
-  // Mock create order
   const orderId = `order-${Date.now()}`;
   
   return { 
@@ -227,12 +237,10 @@ export async function createOrder(
 }
 
 export async function getUserOrders(userId: string) {
-  // Mock user orders
   return { data: [], error: null };
 }
 
 export async function getOrderById(orderId: string) {
-  // Mock order by ID
   return { 
     data: {
       id: orderId,
@@ -253,7 +261,6 @@ export async function getOrderById(orderId: string) {
  * Review related database functions
  */
 export async function getProductReviews(productId: string) {
-  // Mock product reviews
   return { 
     data: [
       {
@@ -278,6 +285,5 @@ export async function createReview(review: {
   rating: number;
   comment?: string;
 }) {
-  // Mock create review
   return { data: null, error: null };
 }

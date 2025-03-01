@@ -1,0 +1,13 @@
+# *
+User-agent: *
+Allow: /
+Disallow: /account
+Disallow: /cart
+Disallow: /checkout
+
+# Host
+Host: https://sensebycbd.com
+
+# Sitemaps
+Sitemap: https://sensebycbd.com/sitemap.xml
+Sitemap: https://sensebycbd.com/server-sitemap.xml

@@ -5,7 +5,7 @@ import { ProductGallery } from '../../components/blocks/product/ProductGallery';
 import { ProductInfo } from '../../components/blocks/product/ProductInfo';
 import { ProductSpecifications } from '../../components/blocks/product/ProductSpecifications';
 import { RelatedProducts } from '../../components/blocks/product/RelatedProducts';
-import { getProductBySlug, getProducts, getProductReviews } from '../../lib/mockDb';
+import { getProductBySlug, getProducts, getProductReviews } from '../../lib/db';
 import { Product } from '../../types/product';
 import { getBaseProductSlug, getTranslatedProductSlug } from '../../lib/utils/slugs';
 import { useTranslation } from '../../lib/i18n/useTranslation';
@@ -121,14 +121,16 @@ export default function ProductPage({ product, reviews }: ProductPageProps) {
 export async function generateStaticParams() {
   const { data: products } = await getProducts();
   
-  if (!products) return [];
+  if (!products || products.length === 0) return [];
   
   // For each product, generate params for each locale
-  return products.flatMap(product => 
-    ['en', 'nl', 'de', 'fr'].map(locale => ({
+  return products.flatMap(product => {
+    if (!product || !product.slug) return [];
+    
+    return ['en', 'nl', 'de', 'fr'].map(locale => ({
       slug: getTranslatedProductSlug(product.slug, locale)
-    }))
-  );
+    }));
+  });
 }
 
 /**
@@ -138,14 +140,18 @@ export const getStaticPaths: GetStaticPaths = async ({ locales = ['en'] }) => {
   const { data: products } = await getProducts();
   
   // Generate paths for all products in all locales
-  const paths = products?.flatMap(product => 
-    locales.map(locale => ({
-      params: { 
-        slug: getTranslatedProductSlug(product.slug, locale) 
-      },
-      locale
-    }))
-  ) || [];
+  const paths = products && products.length > 0
+    ? products.flatMap(product => {
+        if (!product || !product.slug) return [];
+        
+        return locales.map(locale => ({
+          params: { 
+            slug: getTranslatedProductSlug(product.slug, locale) 
+          },
+          locale
+        }));
+      })
+    : [];
   
   return {
     paths,
@@ -166,15 +172,16 @@ export const getStaticProps: GetStaticProps<ProductPageProps> = async ({ params,
   const baseSlug = getBaseProductSlug(params.slug, locale);
   
   // Fetch product data
-  const { data: product, error } = await getProductBySlug(baseSlug);
+  const { data, error } = await getProductBySlug(baseSlug);
   
-  if (error || !product) {
+  if (error || !data) {
     return { notFound: true };
   }
   
   // Fetch product reviews if available
   let reviews = null; // Initialize as null instead of undefined
-  const { data: reviewsData } = await getProductReviews(product.id);
+  
+  const { data: reviewsData } = await getProductReviews(data.id);
   
   if (reviewsData && reviewsData.length > 0) {
     // Calculate average rating
@@ -189,7 +196,7 @@ export const getStaticProps: GetStaticProps<ProductPageProps> = async ({ params,
   
   return {
     props: {
-      product,
+      product: data,
       reviews, // This will now be null instead of undefined if there are no reviews
     },
     // Revalidate every 10 minutes (600 seconds) for product pages

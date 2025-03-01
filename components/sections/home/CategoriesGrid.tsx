@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { LazyImage } from '../../ui/LazyImage';
 import { useTranslation } from '../../../lib/i18n/useTranslation';
-import { getCategories } from '../../../lib/mockDb';
+import { getCategories } from '../../../lib/db';
 import { Badge } from '../../../components/ui/badge';
 import { Card } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';

@@ -9,7 +9,14 @@
     "productTitle": "{productName} | SenseBy CBD",
     "productDescription": "Koop {productName} van SenseBy CBD. Premium kwaliteit, in het laboratorium geteste CBD-product voor natuurlijke verlichting en welzijn.",
     "categoryTitle": "{categoryName} | SenseBy CBD-producten",
-    "categoryDescription": "Bekijk onze selectie premium {categoryName} producten. Hoogwaardige, in het laboratorium geteste CBD voor natuurlijke verlichting en welzijn."
+    "categoryDescription": "Bekijk onze selectie premium {categoryName} producten. Hoogwaardige, in het laboratorium geteste CBD voor natuurlijke verlichting en welzijn.",
+    "blogTitle": "CBD Blog | SenseBy CBD",
+    "blogDescription": "Lees de nieuwste artikelen over CBD-voordelen, onderzoek en productgidsen. Blijf geïnformeerd met de educatieve blog van SenseBy CBD.",
+    "blogKeywords": "CBD blog, CBD artikelen, CBD onderzoek, CBD voordelen, CBD gidsen",
+    "blogPostTitle": "{postTitle} | SenseBy CBD Blog",
+    "blogPostDescription": "Lees over {postTitle} in onze educatieve CBD-blog. Leer meer over CBD-voordelen, onderzoek en productinformatie.",
+    "blogCategoryTitle": "{categoryName} Artikelen | SenseBy CBD Blog",
+    "blogCategoryDescription": "Bekijk onze collectie artikelen over {categoryName}. Educatieve inhoud over CBD-voordelen, onderzoek en productinformatie."
   },
   "navigation": {
     "home": "Home",
@@ -135,5 +142,30 @@
     "checkout": "Afrekenen",
     "remove": "Verwijderen",
     "update": "Bijwerken"
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Lees Meer",
+    "by": "Door",
+    "categories": "Categorieën",
+    "tags": "Tags",
+    "recentPosts": "Recente Artikelen",
+    "relatedPosts": "Gerelateerde Artikelen",
+    "noPosts": "Geen blogartikelen gevonden.",
+    "comments": "Reacties",
+    "leaveComment": "Laat een Reactie Achter",
+    "yourName": "Uw Naam",
+    "yourEmail": "Uw E-mail",
+    "commentPlaceholder": "Uw reactie...",
+    "submitComment": "Reactie Plaatsen",
+    "loginToComment": "Log in om een reactie achter te laten",
+    "thankYouComment": "Bedankt voor uw reactie! Deze wordt zichtbaar na goedkeuring.",
+    "noComments": "Nog geen reacties. Wees de eerste om te reageren!",
+    "search": "Zoek in blog...",
+    "searchResults": "Zoekresultaten",
+    "noSearchResults": "Geen resultaten gevonden voor uw zoekopdracht.",
+    "backToBlog": "Terug naar Blog",
+    "publishedOn": "Gepubliceerd op",
+    "share": "Delen"
   }
 }

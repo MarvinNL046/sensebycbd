@@ -2,7 +2,7 @@ import { GetStaticProps, GetStaticPaths } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import { SEO } from '../../../lib/seo/SEO';
-import { getCategoryBySlug, getCategories, getProducts } from '../../../lib/mockDb';
+import { getCategoryBySlug, getCategories, getProducts } from '../../../lib/db';
 import { Category, Product, ProductFilter } from '../../../types/product';
 import { getBaseCategorySlug, getTranslatedCategorySlug } from '../../../lib/utils/slugs';
 import { useTranslation } from '../../../lib/i18n/useTranslation';
@@ -172,14 +172,16 @@ export default function CategoryPage({ category, products: initialProducts }: Ca
 export async function generateStaticParams() {
   const { data: categories } = await getCategories();
   
-  if (!categories) return [];
+  if (!categories || categories.length === 0) return [];
   
   // For each category, generate params for each locale
-  return categories.flatMap(category => 
-    ['en', 'nl', 'de', 'fr'].map(locale => ({
+  return categories.flatMap(category => {
+    if (!category || !category.slug) return [];
+    
+    return ['en', 'nl', 'de', 'fr'].map(locale => ({
       slug: getTranslatedCategorySlug(category.slug, locale)
-    }))
-  );
+    }));
+  });
 }
 
 /**
@@ -189,14 +191,18 @@ export const getStaticPaths: GetStaticPaths = async ({ locales = ['en'] }) => {
   const { data: categories } = await getCategories();
   
   // Generate paths for all categories in all locales
-  const paths = categories?.flatMap(category => 
-    locales.map(locale => ({
-      params: { 
-        slug: getTranslatedCategorySlug(category.slug, locale) 
-      },
-      locale
-    }))
-  ) || [];
+  const paths = categories && categories.length > 0
+    ? categories.flatMap(category => {
+        if (!category || !category.slug) return [];
+        
+        return locales.map(locale => ({
+          params: { 
+            slug: getTranslatedCategorySlug(category.slug, locale) 
+          },
+          locale
+        }));
+      })
+    : [];
   
   return {
     paths,
@@ -217,15 +223,15 @@ export const getStaticProps: GetStaticProps<CategoryPageProps> = async ({ params
   const baseSlug = getBaseCategorySlug(params.slug, locale);
   
   // Fetch category data
-  const { data: category, error: categoryError } = await getCategoryBySlug(baseSlug);
+  const { data, error: categoryError } = await getCategoryBySlug(baseSlug);
   
-  if (categoryError || !category) {
+  if (categoryError || !data) {
     return { notFound: true };
   }
   
   // Fetch products in this category
   const filter: ProductFilter = {
-    category: category.slug,
+    category: data.slug,
   };
   
   const { data: products, error: productsError } = await getProducts(filter);
@@ -236,7 +242,7 @@ export const getStaticProps: GetStaticProps<CategoryPageProps> = async ({ params
   
   return {
     props: {
-      category,
+      category: data,
       products: products || [],
     },
     // Revalidate every 30 minutes (1800 seconds) for category pages

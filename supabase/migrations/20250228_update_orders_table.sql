@@ -4,8 +4,16 @@
 ALTER TABLE IF EXISTS public.order_items DROP CONSTRAINT IF EXISTS order_items_order_id_fkey;
 DROP INDEX IF EXISTS idx_orders_user_id;
 
--- Rename total to total_amount
-ALTER TABLE public.orders RENAME COLUMN total TO total_amount;
+-- Rename total to total_amount (only if it exists)
+DO $$
+BEGIN
+    IF EXISTS (
+        SELECT FROM information_schema.columns 
+        WHERE table_name = 'orders' AND column_name = 'total'
+    ) THEN
+        ALTER TABLE public.orders RENAME COLUMN total TO total_amount;
+    END IF;
+END $$;
 
 -- Add missing columns
 ALTER TABLE public.orders ADD COLUMN IF NOT EXISTS shipping_info JSONB;

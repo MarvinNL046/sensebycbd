@@ -1,7 +1,7 @@
 import { GetStaticProps } from 'next';
 import { useState, useEffect } from 'react';
 import { SEO } from '../../lib/seo/SEO';
-import { getProducts, getCategories, extractCbdPercentages } from '../../lib/mockDb';
+import { getProducts, getCategories, extractCbdPercentages } from '../../lib/db';
 import { Product, Category, ProductFilter } from '../../types/product';
 import { useTranslation } from '../../lib/i18n/useTranslation';
 import { Card, CardContent, CardFooter } from '../../components/ui/card';

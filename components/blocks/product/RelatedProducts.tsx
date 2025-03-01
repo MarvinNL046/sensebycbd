@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useTranslation } from '../../../lib/i18n/useTranslation';
 import { Product } from '../../../types/product';
-import { getRelatedProducts } from '../../../lib/mockDb';
+import { getRelatedProducts } from '../../../lib/db';
 import { Card, CardContent, CardFooter } from '../../ui/card';
 import { Button } from '../../ui/button';
 import { LazyImage } from '../../ui/LazyImage';

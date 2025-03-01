@@ -9,7 +9,14 @@
     "productTitle": "{productName} | SenseBy CBD",
     "productDescription": "Shop {productName} from SenseBy CBD. Premium quality, lab-tested CBD product for natural relief and wellness.",
     "categoryTitle": "{categoryName} | SenseBy CBD Products",
-    "categoryDescription": "Browse our selection of premium {categoryName} products. High-quality, lab-tested CBD for natural relief and wellness."
+    "categoryDescription": "Browse our selection of premium {categoryName} products. High-quality, lab-tested CBD for natural relief and wellness.",
+    "blogTitle": "CBD Blog | SenseBy CBD",
+    "blogDescription": "Read the latest articles about CBD benefits, research, and product guides. Stay informed with SenseBy CBD's educational blog.",
+    "blogKeywords": "CBD blog, CBD articles, CBD research, CBD benefits, CBD guides",
+    "blogPostTitle": "{postTitle} | SenseBy CBD Blog",
+    "blogPostDescription": "Read about {postTitle} in our CBD educational blog. Learn more about CBD benefits, research, and product information.",
+    "blogCategoryTitle": "{categoryName} Articles | SenseBy CBD Blog",
+    "blogCategoryDescription": "Browse our collection of articles about {categoryName}. Educational content about CBD benefits, research, and product information."
   },
   "navigation": {
     "home": "Home",
@@ -135,5 +142,30 @@
     "checkout": "Checkout",
     "remove": "Remove",
     "update": "Update"
+  },
+  "blog": {
+    "title": "Blog",
+    "readMore": "Read More",
+    "by": "By",
+    "categories": "Categories",
+    "tags": "Tags",
+    "recentPosts": "Recent Posts",
+    "relatedPosts": "Related Posts",
+    "noPosts": "No blog posts found.",
+    "comments": "Comments",
+    "leaveComment": "Leave a Comment",
+    "yourName": "Your Name",
+    "yourEmail": "Your Email",
+    "commentPlaceholder": "Your comment...",
+    "submitComment": "Submit Comment",
+    "loginToComment": "Please log in to leave a comment",
+    "thankYouComment": "Thank you for your comment! It will be visible after approval.",
+    "noComments": "No comments yet. Be the first to comment!",
+    "search": "Search blog...",
+    "searchResults": "Search Results",
+    "noSearchResults": "No results found for your search.",
+    "backToBlog": "Back to Blog",
+    "publishedOn": "Published on",
+    "share": "Share"
   }
 }

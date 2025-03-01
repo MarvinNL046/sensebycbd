@@ -56,6 +56,35 @@ export default async function handler(
         // Continue with the response even if category revalidation fails
       }
     }
+    
+    // Revalidate blog-related pages
+    if (path.startsWith('/blog/')) {
+      // Revalidate the main blog page
+      await res.revalidate('/blog');
+      
+      // If it's a blog post, revalidate its category page
+      if (!path.includes('/category/')) {
+        try {
+          // Extract blog post slug
+          const blogSlug = path.replace('/blog/', '');
+          
+          // Import the getBlogPostBySlug function
+          const { getBlogPostBySlug } = await import('../../lib/db');
+          
+          // Get the blog post from the database
+          const { data: post } = await getBlogPostBySlug(blogSlug);
+          
+          // If the post has a category, revalidate the category page
+          if (post && post.category) {
+            await res.revalidate(`/blog/category/${post.category.slug}`);
+            console.log(`Revalidated blog category page: /blog/category/${post.category.slug}`);
+          }
+        } catch (blogCategoryError) {
+          console.error('Error revalidating blog category page:', blogCategoryError);
+          // Continue with the response even if category revalidation fails
+        }
+      }
+    }
 
     return res.json({ revalidated: true });
   } catch (err) {

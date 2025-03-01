@@ -13,7 +13,33 @@ const translations = {
 };
 
 // Define the type for the translations
-export type Translations = typeof en;
+export type Translations = typeof en & {
+  blog?: {
+    title: string;
+    readMore: string;
+    by: string;
+    categories: string;
+    tags: string;
+    recentPosts: string;
+    relatedPosts: string;
+    noPosts: string;
+    comments: string;
+    leaveComment: string;
+    yourName: string;
+    yourEmail: string;
+    commentPlaceholder: string;
+    submitComment: string;
+    loginToComment: string;
+    thankYouComment: string;
+    noComments: string;
+    search: string;
+    searchResults: string;
+    noSearchResults: string;
+    backToBlog: string;
+    publishedOn: string;
+    share: string;
+  };
+};
 
 /**
  * Custom hook for translations
