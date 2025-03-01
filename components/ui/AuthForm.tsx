@@ -3,10 +3,14 @@ import { signIn, signUp, SignInCredentials, SignUpCredentials } from '../../lib/
 
 type AuthMode = 'signin' | 'signup';
 
+interface AuthFormProps {
+  onSuccess?: () => void;
+}
+
 /**
  * Authentication form component for sign in and sign up
  */
-export const AuthForm = () => {
+export const AuthForm = ({ onSuccess }: AuthFormProps = {}) => {
   const [mode, setMode] = useState<AuthMode>('signin');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -35,6 +39,11 @@ export const AuthForm = () => {
         if (error) throw error;
         
         setSuccess('Successfully signed in!');
+        
+        // Call onSuccess callback if provided
+        if (onSuccess) {
+          setTimeout(onSuccess, 500); // Small delay to show success message
+        }
       } else {
         const credentials: SignUpCredentials = { email, password, full_name: fullName };
         const { data, error } = await signUp(credentials);
