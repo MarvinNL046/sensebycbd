@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -130,8 +130,8 @@ export default function AccountPage() {
     }
   };
 
-  // Fetch user profile from database
-  const fetchUserProfile = async () => {
+  // Fetch user profile from database - wrapped in useCallback to prevent infinite renders
+  const fetchUserProfile = useCallback(async () => {
     if (!user) return;
     
     setLoadingProfile(true);
@@ -148,10 +148,10 @@ export default function AccountPage() {
     } finally {
       setLoadingProfile(false);
     }
-  };
+  }, [user]); // Only depends on user
 
-  // Fetch user orders
-  const fetchUserOrders = async () => {
+  // Fetch user orders - wrapped in useCallback to prevent infinite renders
+  const fetchUserOrders = useCallback(async () => {
     if (!user) return;
     
     setLoadingOrders(true);
@@ -164,7 +164,7 @@ export default function AccountPage() {
     } finally {
       setLoadingOrders(false);
     }
-  };
+  }, [user]); // Only depends on user
 
   // Load user profile when user is authenticated or when the page is focused
   useEffect(() => {
