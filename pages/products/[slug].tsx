@@ -171,8 +171,8 @@ export const getStaticProps: GetStaticProps<ProductPageProps> = async ({ params,
   // Convert translated slug to base slug if needed
   const baseSlug = getBaseProductSlug(params.slug, locale);
   
-  // Fetch product data
-  const { data, error } = await getProductBySlug(baseSlug);
+  // Fetch product data with locale for translations
+  const { data, error } = await getProductBySlug(baseSlug, locale);
   
   if (error || !data) {
     return { notFound: true };

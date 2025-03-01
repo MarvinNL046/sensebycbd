@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SenseBy CBD Admin Helper</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 {
+      color: #2563eb;
+      margin-bottom: 20px;
+    }
+    .card {
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .info {
+      background-color: #f3f4f6;
+      border-left: 4px solid #2563eb;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+    }
+    .success {
+      background-color: #ecfdf5;
+      border-left: 4px solid #10b981;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      display: none;
+    }
+    .error {
+      background-color: #fef2f2;
+      border-left: 4px solid #ef4444;
+      padding: 15px;
+      margin-bottom: 20px;
+      border-radius: 4px;
+      display: none;
+    }
+    button {
+      background-color: #2563eb;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      margin-right: 10px;
+    }
+    button:hover {
+      background-color: #1d4ed8;
+    }
+    button:disabled {
+      background-color: #93c5fd;
+      cursor: not-allowed;
+    }
+    .user-info {
+      margin-top: 20px;
+      display: none;
+    }
+    .user-info table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .user-info table th, .user-info table td {
+      text-align: left;
+      padding: 8px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    .user-info table th {
+      background-color: #f9fafb;
+    }
+    .admin-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+    }
+    .admin-badge.yes {
+      background-color: #d1fae5;
+      color: #047857;
+    }
+    .admin-badge.no {
+      background-color: #fee2e2;
+      color: #b91c1c;
+    }
+    .loading {
+      display: inline-block;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(0, 0, 0, 0.1);
+      border-radius: 50%;
+      border-top-color: #2563eb;
+      animation: spin 1s ease-in-out infinite;
+      margin-left: 10px;
+      vertical-align: middle;
+      display: none;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .actions {
+      margin-top: 20px;
+    }
+    .back-link {
+      display: inline-block;
+      margin-top: 20px;
+      color: #2563eb;
+      text-decoration: none;
+    }
+    .back-link:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <h1>SenseBy CBD Admin Helper</h1>
+  
+  <div class="card">
+    <h2>Admin Status Tool</h2>
+    <p>This tool helps you check and update your admin status in the SenseBy CBD application.</p>
+    
+    <div class="info">
+      <p><strong>Note:</strong> You need to be logged in to the SenseBy CBD application for this tool to work.</p>
+    </div>
+    
+    <div id="successMessage" class="success">
+      <p><strong>Success!</strong> <span id="successText"></span></p>
+    </div>
+    
+    <div id="errorMessage" class="error">
+      <p><strong>Error!</strong> <span id="errorText"></span></p>
+    </div>
+    
+    <div class="actions">
+      <button id="checkStatusBtn">Check Admin Status</button>
+      <button id="makeAdminBtn">Make Me Admin</button>
+      <div id="loading" class="loading"></div>
+    </div>
+    
+    <div id="userInfo" class="user-info">
+      <h3>User Information</h3>
+      <table>
+        <tr>
+          <th>User ID</th>
+          <td id="userId"></td>
+        </tr>
+        <tr>
+          <th>Email</th>
+          <td id="userEmail"></td>
+        </tr>
+        <tr>
+          <th>Full Name</th>
+          <td id="userName"></td>
+        </tr>
+        <tr>
+          <th>Admin Status</th>
+          <td id="adminStatus"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+  
+  <div class="card">
+    <h2>Troubleshooting</h2>
+    <ul>
+      <li>Make sure you are logged in to the SenseBy CBD application.</li>
+      <li>If you've made yourself an admin but still can't access admin pages, try signing out and signing back in.</li>
+      <li>Check the browser console (F12) for any errors.</li>
+      <li>Clear your browser cache and cookies if you're still having issues.</li>
+    </ul>
+  </div>
+  
+  <a href="/debug-admin" class="back-link">Go to Debug Admin Page</a>
+  <a href="/admin" class="back-link" style="margin-left: 20px;">Go to Admin Dashboard</a>
+  
+  <script>
+    // Initialize Supabase client
+    const SUPABASE_URL = window.location.origin;
+    const supabase = window.supabase;
+    
+    // DOM elements
+    const checkStatusBtn = document.getElementById('checkStatusBtn');
+    const makeAdminBtn = document.getElementById('makeAdminBtn');
+    const loading = document.getElementById('loading');
+    const userInfo = document.getElementById('userInfo');
+    const userId = document.getElementById('userId');
+    const userEmail = document.getElementById('userEmail');
+    const userName = document.getElementById('userName');
+    const adminStatus = document.getElementById('adminStatus');
+    const successMessage = document.getElementById('successMessage');
+    const errorMessage = document.getElementById('errorMessage');
+    const successText = document.getElementById('successText');
+    const errorText = document.getElementById('errorText');
+    
+    // Show loading indicator
+    function showLoading() {
+      loading.style.display = 'inline-block';
+      checkStatusBtn.disabled = true;
+      makeAdminBtn.disabled = true;
+    }
+    
+    // Hide loading indicator
+    function hideLoading() {
+      loading.style.display = 'none';
+      checkStatusBtn.disabled = false;
+      makeAdminBtn.disabled = false;
+    }
+    
+    // Show success message
+    function showSuccess(message) {
+      successMessage.style.display = 'block';
+      successText.textContent = message;
+      errorMessage.style.display = 'none';
+    }
+    
+    // Show error message
+    function showError(message) {
+      errorMessage.style.display = 'block';
+      errorText.textContent = message;
+      successMessage.style.display = 'none';
+    }
+    
+    // Check if the current user is an admin
+    async function checkAdminStatus() {
+      showLoading();
+      
+      try {
+        // Get the current session
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) {
+          showError('No active session. Please log in first.');
+          hideLoading();
+          return;
+        }
+        
+        const user = session.user;
+        
+        // Check if user exists in the users table
+        const { data: userData, error: userError } = await supabase
+          .from('users')
+          .select('*')
+          .eq('id', user.id)
+          .single();
+        
+        if (userError) {
+          showError(`Error fetching user data: ${userError.message}`);
+          hideLoading();
+          return;
+        }
+        
+        if (!userData) {
+          showError('User not found in the users table.');
+          hideLoading();
+          return;
+        }
+        
+        // Display user information
+        userId.textContent = userData.id;
+        userEmail.textContent = userData.email;
+        userName.textContent = userData.full_name || 'Not set';
+        
+        if (userData.is_admin) {
+          adminStatus.innerHTML = '<span class="admin-badge yes">Yes</span>';
+          makeAdminBtn.disabled = true;
+        } else {
+          adminStatus.innerHTML = '<span class="admin-badge no">No</span>';
+          makeAdminBtn.disabled = false;
+        }
+        
+        userInfo.style.display = 'block';
+        
+        showSuccess('User information retrieved successfully.');
+        
+        return userData;
+      } catch (error) {
+        showError(`Error checking admin status: ${error.message}`);
+      } finally {
+        hideLoading();
+      }
+    }
+    
+    // Make the current user an admin
+    async function makeAdmin() {
+      showLoading();
+      
+      try {
+        // Get the current session
+        const { data: { session } } = await supabase.auth.getSession();
+        
+        if (!session) {
+          showError('No active session. Please log in first.');
+          hideLoading();
+          return;
+        }
+        
+        const userId = session.user.id;
+        
+        // Update the user's admin status
+        const { error } = await supabase
+          .from('users')
+          .update({ is_admin: true })
+          .eq('id', userId);
+        
+        if (error) {
+          showError(`Error updating admin status: ${error.message}`);
+          hideLoading();
+          return;
+        }
+        
+        showSuccess('Admin status updated successfully! Please refresh the page or sign out and sign back in to apply the changes.');
+        
+        // Refresh user information
+        await checkAdminStatus();
+        
+        return true;
+      } catch (error) {
+        showError(`Error making user admin: ${error.message}`);
+      } finally {
+        hideLoading();
+      }
+    }
+    
+    // Event listeners
+    checkStatusBtn.addEventListener('click', checkAdminStatus);
+    makeAdminBtn.addEventListener('click', makeAdmin);
+    
+    // Check admin status on page load
+    document.addEventListener('DOMContentLoaded', async () => {
+      // Check if Supabase is available
+      if (typeof supabase === 'undefined') {
+        showError('Supabase client not found. Make sure you are on a page that initializes Supabase.');
+        checkStatusBtn.disabled = true;
+        makeAdminBtn.disabled = true;
+      } else {
+        // Check admin status automatically
+        await checkAdminStatus();
+      }
+    });
+  </script>
+  <script src="/admin-helper.js"></script>
+</body>
+</html>

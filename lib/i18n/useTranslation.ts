@@ -14,6 +14,33 @@ const translations = {
 
 // Define the type for the translations
 export type Translations = typeof en & {
+  product?: {
+    addToCart: string;
+    addedToCart: string;
+    viewCart: string;
+    quantity: string;
+    inStock: string;
+    lowStock: string;
+    outOfStock: string;
+    description: string;
+    specifications: string;
+    reviews: string;
+    relatedProducts: string;
+    strength: string;
+    volume: string;
+    count: string;
+    ingredients: string;
+    usage: string;
+    benefits: string;
+    writeReview: string;
+    submitReview: string;
+    reviewPlaceholder: string;
+    rating: string;
+    noReviews: string;
+    loginToReview: string;
+    thankYouReview: string;
+    productDetails: string;
+  };
   blog?: {
     title: string;
     readMore: string;
@@ -38,6 +65,73 @@ export type Translations = typeof en & {
     backToBlog: string;
     publishedOn: string;
     share: string;
+  };
+  testimonials?: {
+    title: string;
+    readMore: string;
+    badge: string;
+    subtitle: string;
+    verifiedPurchases: string;
+    averageRating: string;
+    happyCustomers: string;
+  };
+  faq?: {
+    title: string;
+    subtitle: string;
+    badge: string;
+    searchPlaceholder: string;
+    noResults: string;
+    categories: {
+      all: string;
+      general: string;
+      usage: string;
+      effects: string;
+      shipping: string;
+    };
+    questions: {
+      whatIsCbd: {
+        question: string;
+        answer: string;
+      };
+      isLegal: {
+        question: string;
+        answer: string;
+      };
+      howToUseOils: {
+        question: string;
+        answer: string;
+      };
+      howToUseTopicals: {
+        question: string;
+        answer: string;
+      };
+      feelHigh: {
+        question: string;
+        answer: string;
+      };
+      howLong: {
+        question: string;
+        answer: string;
+      };
+      sideEffects: {
+        question: string;
+        answer: string;
+      };
+      shipping: {
+        question: string;
+        answer: string;
+      };
+      international: {
+        question: string;
+        answer: string;
+      };
+    };
+    recommendedProducts: string;
+    fullSpectrumOil: string;
+    topicalCream: string;
+    stillHaveQuestions: string;
+    supportText: string;
+    contactSupport: string;
   };
 };
 

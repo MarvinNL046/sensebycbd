@@ -25,6 +25,17 @@ export const TestimonialsSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   
+  // Create a local translations object with fallbacks
+  const testimonialTranslations = {
+    title: (t.testimonials as any)?.title || "What Our Customers Say",
+    readMore: (t.testimonials as any)?.readMore || "Read More",
+    badge: (t.testimonials as any)?.badge || "Customer Stories",
+    subtitle: (t.testimonials as any)?.subtitle || "Hear from our satisfied customers about how our CBD products have improved their lives",
+    verifiedPurchases: (t.testimonials as any)?.verifiedPurchases || "Verified Purchases",
+    averageRating: (t.testimonials as any)?.averageRating || "4.8/5 Average Rating",
+    happyCustomers: (t.testimonials as any)?.happyCustomers || "1000+ Happy Customers"
+  };
+  
   // Intersection observer to trigger animation when section is visible
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -116,12 +127,12 @@ export const TestimonialsSection = () => {
       
       <div className="container-custom">
         <div className="flex flex-col items-center mb-16">
-          <Badge variant="outline" className="mb-4">Customer Stories</Badge>
+          <Badge variant="outline" className="mb-4">{testimonialTranslations.badge}</Badge>
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-center text-primary">
-            {t.testimonials.title}
+            {testimonialTranslations.title}
           </h2>
           <p className="mt-4 text-center text-gray-600 max-w-2xl">
-            Hear from our satisfied customers about how our CBD products have improved their lives
+            {testimonialTranslations.subtitle}
           </p>
         </div>
         
@@ -227,15 +238,15 @@ export const TestimonialsSection = () => {
         <div className="mt-16 flex flex-wrap justify-center gap-6">
           <div className="bg-white/80 backdrop-blur-sm shadow-sm rounded-full py-2 px-4 flex items-center border border-accent">
             <span className="material-icons text-primary text-sm mr-1">verified_user</span>
-            <span className="text-sm">Verified Purchases</span>
+            <span className="text-sm">{testimonialTranslations.verifiedPurchases}</span>
           </div>
           <div className="bg-white/80 backdrop-blur-sm shadow-sm rounded-full py-2 px-4 flex items-center border border-accent">
             <span className="material-icons text-primary text-sm mr-1">star</span>
-            <span className="text-sm">4.8/5 Average Rating</span>
+            <span className="text-sm">{testimonialTranslations.averageRating}</span>
           </div>
           <div className="bg-white/80 backdrop-blur-sm shadow-sm rounded-full py-2 px-4 flex items-center border border-accent">
             <span className="material-icons text-primary text-sm mr-1">people</span>
-            <span className="text-sm">1000+ Happy Customers</span>
+            <span className="text-sm">{testimonialTranslations.happyCustomers}</span>
           </div>
         </div>
       </div>

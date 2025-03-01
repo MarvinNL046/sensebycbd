@@ -1,7 +1,6 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import { Product } from '../../../types/product';
-import { LazyImage } from '../../ui/LazyImage';
 
 interface ProductGalleryProps {
   product: Product;
@@ -12,7 +11,21 @@ interface ProductGalleryProps {
  */
 export const ProductGallery = ({ product }: ProductGalleryProps) => {
   const [activeImage, setActiveImage] = useState<string>(product.image_url);
-  const allImages = [product.image_url, ...(product.additional_images || [])];
+  const [allImages, setAllImages] = useState<string[]>([product.image_url]);
+  
+  // Initialize all images when the component mounts or product changes
+  useEffect(() => {
+    // Ensure additional_images is an array
+    const additionalImages = Array.isArray(product.additional_images) 
+      ? product.additional_images 
+      : [];
+    
+    // Combine main image with additional images
+    setAllImages([product.image_url, ...additionalImages]);
+    
+    // Log for debugging
+    console.log('Product Gallery Images:', [product.image_url, ...additionalImages]);
+  }, [product]);
 
   return (
     <div className="w-full">
@@ -42,16 +55,15 @@ export const ProductGallery = ({ product }: ProductGalleryProps) => {
               }`}
               aria-label={`View image ${index + 1} of ${product.name}`}
             >
-              <LazyImage
-                src={image}
-                alt={`${product.name} - Image ${index + 1}`}
-                fill
-                sizes="80px"
-                className="object-cover"
-                useBlur={true}
-                threshold={0.1}
-                rootMargin="50px"
-              />
+              <div className="relative w-full h-full">
+                <Image
+                  src={image}
+                  alt={`${product.name} - Image ${index + 1}`}
+                  fill
+                  sizes="80px"
+                  className="object-cover"
+                />
+              </div>
             </button>
           ))}
         </div>

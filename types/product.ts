@@ -13,6 +13,12 @@ export interface Product {
   is_featured: boolean;
   created_at: string;
   categories?: Category;
+  translations?: {
+    [locale: string]: {
+      name?: string;
+      description?: string;
+    }
+  };
 }
 
 export interface ProductSpecifications {
@@ -30,6 +36,12 @@ export interface Category {
   slug: string;
   description: string | null;
   image_url: string | null;
+  translations?: {
+    [locale: string]: {
+      name?: string;
+      description?: string;
+    }
+  };
 }
 
 export interface Review {

@@ -53,7 +53,12 @@
   },
   "testimonials": {
     "title": "What Our Customers Say",
-    "readMore": "Read More"
+    "readMore": "Read More",
+    "badge": "Customer Stories",
+    "subtitle": "Hear from our satisfied customers about how our CBD products have improved their lives",
+    "verifiedPurchases": "Verified Purchases",
+    "averageRating": "4.8/5 Average Rating",
+    "happyCustomers": "1000+ Happy Customers"
   },
   "newsletter": {
     "title": "Stay Updated",
@@ -109,6 +114,8 @@
   },
   "product": {
     "addToCart": "Add to Cart",
+    "addedToCart": "Added to Cart",
+    "viewCart": "View Cart",
     "quantity": "Quantity",
     "inStock": "In Stock",
     "lowStock": "Low Stock",
@@ -167,5 +174,63 @@
     "backToBlog": "Back to Blog",
     "publishedOn": "Published on",
     "share": "Share"
+  },
+  "faq": {
+    "title": "Frequently Asked Questions",
+    "subtitle": "Find answers to common questions about CBD, our products, and how they can benefit your wellness journey",
+    "badge": "Knowledge Base",
+    "searchPlaceholder": "Search for answers...",
+    "noResults": "No questions found matching your search.",
+    "categories": {
+      "all": "All Questions",
+      "general": "General",
+      "usage": "Usage & Dosage",
+      "effects": "Effects & Benefits",
+      "shipping": "Shipping & Delivery"
+    },
+    "questions": {
+      "whatIsCbd": {
+        "question": "What is CBD?",
+        "answer": "CBD (cannabidiol) is a naturally occurring compound found in the cannabis plant. Unlike THC, CBD is non-psychoactive, meaning it doesn't cause a \"high.\" It's known for its potential therapeutic benefits, including pain relief, anxiety reduction, and improved sleep."
+      },
+      "isLegal": {
+        "question": "Is CBD legal?",
+        "answer": "CBD derived from hemp (containing less than 0.3% THC) is legal at the federal level in many countries, including the United States. However, regulations vary by country and state/province, so it's important to check your local laws."
+      },
+      "howToUseOils": {
+        "question": "How do I use CBD oils?",
+        "answer": "CBD oils are typically placed under the tongue (sublingual) for 60-90 seconds before swallowing. This method allows for faster absorption into the bloodstream. Start with a low dose (5-10mg) and gradually increase until you find your optimal dose."
+      },
+      "howToUseTopicals": {
+        "question": "How do I apply CBD topicals?",
+        "answer": "Apply CBD topicals directly to the affected area and massage gently until absorbed. They can be used as needed throughout the day. For best results, apply to clean, dry skin and wash hands after application unless treating hand areas."
+      },
+      "feelHigh": {
+        "question": "Will CBD make me feel high?",
+        "answer": "No, CBD does not produce the psychoactive effects associated with THC. Our products contain less than 0.3% THC, which is not enough to cause intoxication. You may feel relaxed or experience pain relief, but you won't feel \"high.\""
+      },
+      "howLong": {
+        "question": "How long does it take for CBD to work?",
+        "answer": "The onset time varies by product and individual. Sublingual oils typically take effect within 15-30 minutes. Topicals may work within minutes for localized relief. Edibles and capsules can take 1-2 hours as they pass through the digestive system."
+      },
+      "sideEffects": {
+        "question": "Are there any side effects?",
+        "answer": "CBD is generally well-tolerated, but some people may experience mild side effects such as drowsiness, dry mouth, or changes in appetite. CBD can also interact with certain medications, so consult with a healthcare professional if you're taking prescription drugs."
+      },
+      "shipping": {
+        "question": "How do you ship your products?",
+        "answer": "We ship all orders via tracked courier services to ensure safe and timely delivery. Orders are processed within 24-48 hours and typically arrive within 3-5 business days depending on your location."
+      },
+      "international": {
+        "question": "Do you ship internationally?",
+        "answer": "Yes, we ship to most countries where CBD is legal. International shipping typically takes 7-14 business days. Please note that customers are responsible for any customs fees or import duties that may apply."
+      }
+    },
+    "recommendedProducts": "Recommended products:",
+    "fullSpectrumOil": "Full Spectrum CBD Oil",
+    "topicalCream": "CBD Topical Cream",
+    "stillHaveQuestions": "Still have questions?",
+    "supportText": "Our customer support team is here to help. Reach out to us and we'll get back to you as soon as possible.",
+    "contactSupport": "Contact Support"
   }
 }

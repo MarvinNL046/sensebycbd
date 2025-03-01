@@ -1,12 +1,68 @@
+
 import { supabase } from './supabase';
 import { CartItem } from '../types/cart';
-import { ProductFilter } from '../types/product';
+import { ProductFilter, Product, Category } from '../types/product';
 import { BlogFilter } from '../types/blog';
+
+/**
+ * Helper function to localize a product based on the current locale
+ * @param product The product to localize
+ * @param locale The current locale
+ * @returns The localized product
+ */
+function localizeProduct(product: Product, locale: string = 'en'): Product {
+  if (locale === 'en' || !product.translations || !product.translations[locale]) {
+    return product;
+  }
+  
+  const localizedProduct = { ...product };
+  const translations = product.translations[locale];
+  
+  if (translations.name) {
+    localizedProduct.name = translations.name;
+  }
+  
+  if (translations.description) {
+    localizedProduct.description = translations.description;
+  }
+  
+  // Localize the category if available
+  if (product.categories) {
+    localizedProduct.categories = localizeCategory(product.categories, locale);
+  }
+  
+  return localizedProduct;
+}
+
+/**
+ * Helper function to localize a category based on the current locale
+ * @param category The category to localize
+ * @param locale The current locale
+ * @returns The localized category
+ */
+function localizeCategory(category: Category, locale: string = 'en'): Category {
+  if (locale === 'en' || !category.translations || !category.translations[locale]) {
+    return category;
+  }
+  
+  const localizedCategory = { ...category };
+  const translations = category.translations[locale];
+  
+  if (translations.name) {
+    localizedCategory.name = translations.name;
+  }
+  
+  if (translations.description) {
+    localizedCategory.description = translations.description;
+  }
+  
+  return localizedCategory;
+}
 
 /**
  * Product related database functions
  */
-export async function getProducts(filters?: ProductFilter) {
+export async function getProducts(filters?: ProductFilter, locale: string = 'en') {
   let query = supabase
     .from('products')
     .select('*, categories(*)');
@@ -61,32 +117,69 @@ export async function getProducts(filters?: ProductFilter) {
     }
   }
   
-  return query;
+  const result = await query;
+  
+  // Localize products if we have data and a non-English locale
+  if (result.data && locale !== 'en') {
+    result.data = result.data.map(product => localizeProduct(product, locale));
+  }
+  
+  return result;
 }
 
-export async function getProductBySlug(slug: string) {
-  return supabase
+export async function getProductBySlug(slug: string, locale: string = 'en') {
+  // Use the wildcard selector to get all fields
+  const result = await supabase
     .from('products')
     .select('*, categories(*)')
     .eq('slug', slug)
     .single();
+  
+  // Localize product if we have data and a non-English locale
+  if (result.data && locale !== 'en') {
+    result.data = localizeProduct(result.data, locale);
+  }
+  
+  // Ensure additional_images is always an array
+  if (result.data && !result.data.additional_images) {
+    result.data.additional_images = [];
+  }
+  
+  // Log the product data to help debug
+  console.log('Product data:', JSON.stringify(result.data, null, 2));
+  
+  return result;
 }
 
-export async function getFeaturedProducts() {
-  return supabase
+export async function getFeaturedProducts(locale: string = 'en') {
+  const result = await supabase
     .from('products')
     .select('*, categories(*)')
     .eq('is_featured', true)
     .limit(6);
+  
+  // Localize products if we have data and a non-English locale
+  if (result.data && locale !== 'en') {
+    result.data = result.data.map(product => localizeProduct(product, locale));
+  }
+  
+  return result;
 }
 
-export async function getRelatedProducts(productId: string, categoryId: string, limit: number = 4) {
-  return supabase
+export async function getRelatedProducts(productId: string, categoryId: string, limit: number = 4, locale: string = 'en') {
+  const result = await supabase
     .from('products')
     .select('*, categories(*)')
     .eq('category_id', categoryId)
     .neq('id', productId)
     .limit(limit);
+  
+  // Localize products if we have data and a non-English locale
+  if (result.data && locale !== 'en') {
+    result.data = result.data.map(product => localizeProduct(product, locale));
+  }
+  
+  return result;
 }
 
 export async function extractCbdPercentages() {
@@ -120,18 +213,32 @@ export async function extractCbdPercentages() {
 /**
  * Category related database functions
  */
-export async function getCategories() {
-  return supabase
+export async function getCategories(locale: string = 'en') {
+  const result = await supabase
     .from('categories')
     .select('*');
+  
+  // Localize categories if we have data and a non-English locale
+  if (result.data && locale !== 'en') {
+    result.data = result.data.map(category => localizeCategory(category, locale));
+  }
+  
+  return result;
 }
 
-export async function getCategoryBySlug(slug: string) {
-  return supabase
+export async function getCategoryBySlug(slug: string, locale: string = 'en') {
+  const result = await supabase
     .from('categories')
     .select('*')
     .eq('slug', slug)
     .single();
+  
+  // Localize category if we have data and a non-English locale
+  if (result.data && locale !== 'en') {
+    result.data = localizeCategory(result.data, locale);
+  }
+  
+  return result;
 }
 
 /**

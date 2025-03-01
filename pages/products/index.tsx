@@ -505,16 +505,16 @@ export default function ProductsPage({
 /**
  * Get static props for the products page
  */
-export const getStaticProps: GetStaticProps<ProductsPageProps> = async () => {
-  // Fetch all products
-  const { data: products, error: productsError } = await getProducts();
+export const getStaticProps: GetStaticProps<ProductsPageProps> = async ({ locale = 'en' }) => {
+  // Fetch all products with locale for translations
+  const { data: products, error: productsError } = await getProducts(undefined, locale);
   
   if (productsError) {
     return { notFound: true };
   }
   
-  // Fetch all categories
-  const { data: categories, error: categoriesError } = await getCategories();
+  // Fetch all categories with locale for translations
+  const { data: categories, error: categoriesError } = await getCategories(locale);
   
   if (categoriesError) {
     return { notFound: true };

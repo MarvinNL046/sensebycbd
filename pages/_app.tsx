@@ -10,7 +10,10 @@ import '../styles/globals.css';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const { locale } = router;
+  const { locale, pathname } = router;
+  
+  // Check if the current page is an admin page or admin-related page
+  const isAdminPage = pathname.startsWith('/admin') || pathname === '/debug-admin';
   
   // Initialize web vitals tracking
   useEffect(() => {
@@ -25,9 +28,15 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       <AuthProvider>
         <CartProvider>
-          <Layout>
+          {isAdminPage ? (
+            // Admin pages don't need the main layout
             <Component {...pageProps} />
-          </Layout>
+          ) : (
+            // Non-admin pages use the main layout
+            <Layout>
+              <Component {...pageProps} />
+            </Layout>
+          )}
         </CartProvider>
       </AuthProvider>
     </>

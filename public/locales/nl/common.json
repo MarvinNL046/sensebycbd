@@ -53,7 +53,12 @@
   },
   "testimonials": {
     "title": "Wat Onze Klanten Zeggen",
-    "readMore": "Lees Meer"
+    "readMore": "Lees Meer",
+    "badge": "Klantenverhalen",
+    "subtitle": "Hoor van onze tevreden klanten hoe onze CBD-producten hun leven hebben verbeterd",
+    "verifiedPurchases": "Geverifieerde Aankopen",
+    "averageRating": "4.8/5 Gemiddelde Beoordeling",
+    "happyCustomers": "1000+ Tevreden Klanten"
   },
   "newsletter": {
     "title": "Blijf op de Hoogte",
@@ -109,6 +114,8 @@
   },
   "product": {
     "addToCart": "In Winkelwagen",
+    "addedToCart": "Toegevoegd aan Winkelwagen",
+    "viewCart": "Bekijk Winkelwagen",
     "quantity": "Aantal",
     "inStock": "Op Voorraad",
     "lowStock": "Bijna Uitverkocht",
@@ -167,5 +174,63 @@
     "backToBlog": "Terug naar Blog",
     "publishedOn": "Gepubliceerd op",
     "share": "Delen"
+  },
+  "faq": {
+    "title": "Veelgestelde Vragen",
+    "subtitle": "Vind antwoorden op veelvoorkomende vragen over CBD, onze producten en hoe ze uw welzijn kunnen bevorderen",
+    "badge": "Kennisbank",
+    "searchPlaceholder": "Zoek naar antwoorden...",
+    "noResults": "Geen vragen gevonden die overeenkomen met uw zoekopdracht.",
+    "categories": {
+      "all": "Alle Vragen",
+      "general": "Algemeen",
+      "usage": "Gebruik & Dosering",
+      "effects": "Effecten & Voordelen",
+      "shipping": "Verzending & Levering"
+    },
+    "questions": {
+      "whatIsCbd": {
+        "question": "Wat is CBD?",
+        "answer": "CBD (cannabidiol) is een natuurlijk voorkomende verbinding in de cannabisplant. In tegenstelling tot THC is CBD niet psychoactief, wat betekent dat het geen 'high' veroorzaakt. Het staat bekend om zijn potentiële therapeutische voordelen, waaronder pijnverlichting, angstvermindering en verbeterde slaap."
+      },
+      "isLegal": {
+        "question": "Is CBD legaal?",
+        "answer": "CBD afkomstig van hennep (met minder dan 0,3% THC) is op federaal niveau legaal in veel landen, waaronder de Verenigde Staten. Regelgeving verschilt echter per land en staat/provincie, dus het is belangrijk om uw lokale wetgeving te controleren."
+      },
+      "howToUseOils": {
+        "question": "Hoe gebruik ik CBD-oliën?",
+        "answer": "CBD-oliën worden meestal onder de tong (sublinguaal) geplaatst gedurende 60-90 seconden voordat ze worden doorgeslikt. Deze methode zorgt voor snellere opname in de bloedbaan. Begin met een lage dosis (5-10mg) en verhoog geleidelijk totdat u uw optimale dosis vindt."
+      },
+      "howToUseTopicals": {
+        "question": "Hoe breng ik CBD-topicals aan?",
+        "answer": "Breng CBD-topicals rechtstreeks aan op het getroffen gebied en masseer zachtjes tot het is opgenomen. Ze kunnen naar behoefte gedurende de dag worden gebruikt. Voor de beste resultaten, breng aan op schone, droge huid en was uw handen na het aanbrengen, tenzij u handgebieden behandelt."
+      },
+      "feelHigh": {
+        "question": "Zal CBD me high maken?",
+        "answer": "Nee, CBD produceert niet de psychoactieve effecten die geassocieerd worden met THC. Onze producten bevatten minder dan 0,3% THC, wat niet genoeg is om intoxicatie te veroorzaken. U kunt zich ontspannen voelen of pijnverlichting ervaren, maar u zult zich niet 'high' voelen."
+      },
+      "howLong": {
+        "question": "Hoe lang duurt het voordat CBD werkt?",
+        "answer": "De aanvangstijd varieert per product en individu. Sublinguale oliën werken meestal binnen 15-30 minuten. Topicals kunnen binnen minuten werken voor lokale verlichting. Eetbare producten en capsules kunnen 1-2 uur duren omdat ze door het spijsverteringsstelsel gaan."
+      },
+      "sideEffects": {
+        "question": "Zijn er bijwerkingen?",
+        "answer": "CBD wordt over het algemeen goed verdragen, maar sommige mensen kunnen milde bijwerkingen ervaren zoals slaperigheid, droge mond of veranderingen in eetlust. CBD kan ook interactie hebben met bepaalde medicijnen, dus raadpleeg een zorgprofessional als u voorgeschreven medicijnen gebruikt."
+      },
+      "shipping": {
+        "question": "Hoe verzendt u uw producten?",
+        "answer": "We verzenden alle bestellingen via getraceerde koeriersdiensten om veilige en tijdige levering te garanderen. Bestellingen worden binnen 24-48 uur verwerkt en komen meestal binnen 3-5 werkdagen aan, afhankelijk van uw locatie."
+      },
+      "international": {
+        "question": "Verzendt u internationaal?",
+        "answer": "Ja, we verzenden naar de meeste landen waar CBD legaal is. Internationale verzending duurt meestal 7-14 werkdagen. Houd er rekening mee dat klanten verantwoordelijk zijn voor eventuele douanekosten of invoerrechten die van toepassing kunnen zijn."
+      }
+    },
+    "recommendedProducts": "Aanbevolen producten:",
+    "fullSpectrumOil": "Volledig Spectrum CBD Olie",
+    "topicalCream": "CBD Topische Crème",
+    "stillHaveQuestions": "Nog vragen?",
+    "supportText": "Ons klantenserviceteam staat klaar om te helpen. Neem contact met ons op en we komen zo snel mogelijk bij u terug.",
+    "contactSupport": "Contact Klantenservice"
   }
 }

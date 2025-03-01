@@ -17,17 +17,17 @@ export const ProductInfo = ({ product }: ProductInfoProps) => {
   const { t, locale } = useTranslation();
   const { addItem, openCart } = useCart();
   
-  // Create a local translation object with the necessary properties
-  // This is a workaround for TypeScript errors with the translation object
+  // Create a local translations object with fallbacks
   const translations = {
-    outOfStock: "Out of Stock",
-    lowStock: "Low Stock",
-    inStock: "In Stock",
-    quantity: "Quantity",
-    addToCart: "Add to Cart",
-    addedToCart: "Added to Cart",
-    viewCart: "View Cart"
+    outOfStock: (t.product as any)?.outOfStock || "Out of Stock",
+    lowStock: (t.product as any)?.lowStock || "Low Stock",
+    inStock: (t.product as any)?.inStock || "In Stock",
+    quantity: (t.product as any)?.quantity || "Quantity",
+    addToCart: (t.product as any)?.addToCart || "Add to Cart",
+    addedToCart: (t.product as any)?.addedToCart || "Added to Cart",
+    viewCart: (t.product as any)?.viewCart || "View Cart"
   };
+  
   const [quantity, setQuantity] = useState(1);
   const [added, setAdded] = useState(false);
 

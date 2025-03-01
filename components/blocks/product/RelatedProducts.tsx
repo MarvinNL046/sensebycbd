@@ -16,7 +16,7 @@ interface RelatedProductsProps {
  * Related products component that displays products from the same category
  */
 export const RelatedProducts = ({ product }: RelatedProductsProps) => {
-  const { t } = useTranslation();
+  const { t, locale } = useTranslation();
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   
@@ -41,7 +41,13 @@ export const RelatedProducts = ({ product }: RelatedProductsProps) => {
       
       try {
         setLoading(true);
-        const { data, error } = await getRelatedProducts(product.id, product.category_id);
+        // Pass the current locale to get translated products
+        const { data, error } = await getRelatedProducts(
+          product.id, 
+          product.category_id,
+          4, // limit
+          locale // current locale from useTranslation
+        );
         
         if (error) throw error;
         
@@ -54,7 +60,7 @@ export const RelatedProducts = ({ product }: RelatedProductsProps) => {
     };
 
     fetchRelatedProducts();
-  }, [product.id, product.category_id]);
+  }, [product.id, product.category_id, locale]);
 
   if (loading) {
     return (

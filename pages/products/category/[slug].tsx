@@ -170,7 +170,7 @@ export default function CategoryPage({ category, products: initialProducts }: Ca
  * This function is used by the App Router to generate static pages at build time
  */
 export async function generateStaticParams() {
-  const { data: categories } = await getCategories();
+  const { data: categories } = await getCategories('en');
   
   if (!categories || categories.length === 0) return [];
   
@@ -188,7 +188,7 @@ export async function generateStaticParams() {
  * Get static paths for all categories (Next.js Pages Router)
  */
 export const getStaticPaths: GetStaticPaths = async ({ locales = ['en'] }) => {
-  const { data: categories } = await getCategories();
+  const { data: categories } = await getCategories('en');
   
   // Generate paths for all categories in all locales
   const paths = categories && categories.length > 0
@@ -222,8 +222,8 @@ export const getStaticProps: GetStaticProps<CategoryPageProps> = async ({ params
   // Convert translated slug to base slug if needed
   const baseSlug = getBaseCategorySlug(params.slug, locale);
   
-  // Fetch category data
-  const { data, error: categoryError } = await getCategoryBySlug(baseSlug);
+  // Fetch category data with locale for translations
+  const { data, error: categoryError } = await getCategoryBySlug(baseSlug, locale);
   
   if (categoryError || !data) {
     return { notFound: true };
@@ -234,7 +234,8 @@ export const getStaticProps: GetStaticProps<CategoryPageProps> = async ({ params
     category: data.slug,
   };
   
-  const { data: products, error: productsError } = await getProducts(filter);
+  // Pass locale to get translated products
+  const { data: products, error: productsError } = await getProducts(filter, locale);
   
   if (productsError) {
     return { notFound: true };
