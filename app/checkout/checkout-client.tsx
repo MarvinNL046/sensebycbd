@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { SEO } from '../components/SEO';
 import { useTranslation } from '../lib/useTranslation';
 import { useCart } from '../../lib/cart-context';
 import { useAuth } from '../../lib/auth-context';
@@ -174,12 +173,6 @@ export default function CheckoutClient() {
   if (items.length === 0 && currentStep !== 'confirmation' && !orderComplete) {
     return (
       <div className="container-custom py-12">
-        <SEO 
-          title="Checkout | SenseBy CBD"
-          description="Complete your purchase"
-          keywords="checkout, payment, order"
-          canonicalPath="/checkout"
-        />
         
         <div className="text-center py-12 max-w-md mx-auto">
           <div className="text-6xl mb-4">🛒</div>
@@ -197,12 +190,6 @@ export default function CheckoutClient() {
   
   return (
     <div className="container-custom py-12">
-      <SEO 
-        title="Checkout | SenseBy CBD"
-        description="Complete your purchase"
-        keywords="checkout, payment, order"
-        canonicalPath="/checkout"
-      />
       
       {/* Checkout header */}
       <div className="mb-8 text-center">
