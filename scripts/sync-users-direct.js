@@ -1,4 +1,4 @@
-// Script to synchronize users from auth to public.users table with direct credentials
+SUPABASE_SERVICE_ROLE_KEY// Script to synchronize users from auth to public.users table with direct credentials
 const { createClient } = require('@supabase/supabase-js');
 
 // Get credentials from command line arguments
