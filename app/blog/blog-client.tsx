@@ -19,7 +19,6 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
   
   return (
     <>
-      
       <div className="container-custom py-12">
         <div className="flex flex-col md:flex-row gap-8">
           {/* Main content */}

@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { SEO } from '../../../components/SEO';
 import { useTranslation } from '../../../lib/useTranslation';
 import { BlogPost, BlogCategory } from '../../../../types/blog';
 import { formatDate } from '../../../../lib/utils/formatDate';
@@ -21,12 +20,6 @@ export default function BlogCategoryClient({ category, posts, categories }: Blog
   
   return (
     <>
-      <SEO 
-        title={(t.seo?.blogCategoryTitle || 'Category: {categoryName}').replace('{categoryName}', category.name)}
-        description={(t.seo?.blogCategoryDescription || 'Browse all CBD articles in the {categoryName} category').replace('{categoryName}', category.name.toLowerCase())}
-        keywords={t.seo?.blogKeywords || 'CBD blog, CBD articles, CBD research, CBD benefits, CBD guides'}
-        canonicalPath={`/blog/category/${category.slug}`}
-      />
       
       <div className="container-custom py-12">
         <div className="flex flex-col md:flex-row gap-8">

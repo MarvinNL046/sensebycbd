@@ -1,6 +1,5 @@
 'use client';
 
-import { SEO } from '../../../components/SEO';
 import { Category, Product } from '../../../../types/product';
 import { useTranslation } from '../../../lib/useTranslation';
 import { Card, CardContent, CardFooter } from '../../../../components/ui/card';
@@ -36,13 +35,6 @@ export default function CategoryClient({ category, products }: CategoryClientPro
   
   return (
     <>
-      <SEO 
-        title={`${category.name} | SenseBy CBD Products`}
-        description={`Browse our selection of premium ${category.name} products. High-quality, lab-tested CBD for natural relief and wellness.`}
-        keywords={`CBD, ${category.name}, buy CBD, CBD products`}
-        canonicalPath={`/products/category/${getTranslatedCategorySlug(category.slug, locale)}`}
-        ogImage={category.image_url || ''}
-      />
       
       <div className="container-custom py-12">
         {/* Category Header */}

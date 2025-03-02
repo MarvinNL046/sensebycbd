@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { SEO } from '../../components/SEO';
 import { useTranslation } from '../../lib/useTranslation';
 import { BlogPost, BlogComment } from '../../../types/blog';
 import { formatDate } from '../../../lib/utils/formatDate';
@@ -47,13 +46,6 @@ export default function BlogPostClient({ post, comments, recentPosts }: BlogPost
   
   return (
     <>
-      <SEO 
-        title={(t.seo?.blogPostTitle || '{postTitle} | SenseBy CBD Blog').replace('{postTitle}', post.title)}
-        description={(t.seo?.blogPostDescription || 'Read about {postTitle} in our CBD educational blog').replace('{postTitle}', post.title)}
-        keywords={t.seo?.blogKeywords || 'CBD blog, CBD articles, CBD research, CBD benefits, CBD guides'}
-        canonicalPath={`/blog/${post.slug}`}
-        ogImage={post.featured_image || ''}
-      />
       
       <div className="container-custom py-12">
         <div className="flex flex-col md:flex-row gap-8">

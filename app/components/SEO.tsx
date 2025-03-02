@@ -1,6 +1,6 @@
-'use client';
+// Note: This component is no longer needed in App Router
+// Use the generateMetadata function instead for SEO
 
-import { useParams } from 'next/navigation';
 import { Metadata } from 'next';
 
 interface SEOProps {
@@ -10,45 +10,6 @@ interface SEOProps {
   ogImage?: string;
   canonicalPath?: string;
 }
-
-/**
- * SEO component for managing meta tags in App Router
- */
-export const SEO = ({
-  title,
-  description,
-  keywords,
-  ogImage = '/images/og-image.jpg',
-  canonicalPath = '',
-}: SEOProps) => {
-  const params = useParams();
-  const locale = params?.locale || 'en';
-  
-  // Create the canonical URL
-  const siteUrl = 'https://sensebycbd.com';
-  const localizedCanonical = `${siteUrl}/${locale}${canonicalPath}`;
-  
-  // Create alternate links for each language
-  const alternateLinks = ['en', 'nl', 'de', 'fr'].map(lang => ({
-    hrefLang: lang,
-    href: `${siteUrl}/${lang}${canonicalPath}`,
-  }));
-
-  return (
-    <>
-      {/* Canonical and alternate links */}
-      <link rel="canonical" href={localizedCanonical} />
-      {alternateLinks.map(link => (
-        <link
-          key={link.hrefLang}
-          rel="alternate"
-          hrefLang={link.hrefLang}
-          href={link.href}
-        />
-      ))}
-    </>
-  );
-};
 
 /**
  * Generate metadata for App Router pages

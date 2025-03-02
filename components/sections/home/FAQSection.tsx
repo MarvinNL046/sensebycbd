@@ -32,7 +32,7 @@ export const FAQSection = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   
   // Create a local translations object with fallbacks
-  const faqTranslations = {
+  const faqTranslations = useMemo(() => ({
     title: (t as any).faq?.title || "Frequently Asked Questions",
     subtitle: (t as any).faq?.subtitle || "Find answers to common questions about CBD, our products, and how they can benefit your wellness journey",
     badge: (t as any).faq?.badge || "Knowledge Base",
@@ -89,7 +89,7 @@ export const FAQSection = () => {
     stillHaveQuestions: (t as any).faq?.stillHaveQuestions || "Still have questions?",
     supportText: (t as any).faq?.supportText || "Our customer support team is here to help. Reach out to us and we'll get back to you as soon as possible.",
     contactSupport: (t as any).faq?.contactSupport || "Contact Support"
-  };
+  }), [t]);
   
   // Intersection observer to trigger animation when section is visible
   useEffect(() => {

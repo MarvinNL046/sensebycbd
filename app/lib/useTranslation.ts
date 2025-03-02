@@ -143,6 +143,8 @@ export type Translations = typeof en & {
  */
 export const useTranslation = () => {
   const params = useParams();
+  // In App Router, locale is typically part of the URL path or can be stored in a context
+  // For now, we'll default to 'en' as we migrate
   const locale = (params?.locale as string) || 'en';
   
   // Get the translations for the current locale or fallback to English

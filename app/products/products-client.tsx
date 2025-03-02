@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react';
 import { Product, Category, ProductFilter } from '../../types/product';
-import { SEO } from '../components/SEO';
 import { useTranslation } from '../lib/useTranslation';
 import { Card, CardContent, CardFooter } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
@@ -196,12 +195,6 @@ export default function ProductsClient({
   
   return (
     <>
-      <SEO 
-        title="Shop CBD Products | SenseBy CBD"
-        description="Browse our selection of premium CBD products including oils, topicals, edibles, and more. Lab-tested, high-quality CBD for wellness and relief."
-        keywords="CBD, hemp, wellness, oils, edibles, topicals, relaxation, premium CBD"
-        canonicalPath="/products"
-      />
       
       <div className="container-custom py-12">
         {/* Page Header */}
