@@ -1,105 +1,70 @@
 # Guest Checkout Fix
 
-Dit document legt uit hoe je het probleem kunt oplossen waarbij gasten (niet-ingelogde gebruikers) niet kunnen afrekenen.
+Dit document legt uit hoe het probleem is opgelost waarbij gastbestellingen een foutmelding gaven.
 
 ## Het Probleem
 
-Het probleem is dat wanneer een gast probeert af te rekenen, de volgende foutmelding verschijnt:
+Bij het plaatsen van een gastbestelling werd de volgende foutmelding weergegeven:
 
 ```
-Error processing order: new row violates row-level security policy for table "orders"
+Error processing order: Could not find the 'shipping_address' column of 'orders' in the schema cache
 ```
 
-Dit komt door twee problemen in de database structuur:
+Dit probleem werd veroorzaakt door een mismatch tussen de code en de database structuur:
 
-1. De `orders` tabel vereist een `user_id` die niet null mag zijn en moet verwijzen naar een bestaande gebruiker in de `users` tabel
-2. De Row Level Security (RLS) policies staan alleen toe dat ingelogde gebruikers orders kunnen aanmaken
+1. In de `createOrder` functie in `lib/db.ts` probeerden we de verzendgegevens op te slaan in een kolom genaamd `shipping_address`:
+   ```javascript
+   const { data: order, error: orderError } = await supabase
+     .from('orders')
+     .insert({
+       user_id: userId,
+       status: 'pending',
+       total_amount: totalAmount,
+       shipping_address: JSON.stringify(shippingInfo), // Hier was het probleem
+       payment_info: paymentInfo,
+       loyalty_points_earned: loyaltyPointsToAward,
+     })
+   ```
+
+2. Maar in de database bestond deze kolom niet. In plaats daarvan gebruikte de database een kolom genaamd `shipping_info`.
 
 ## De Oplossing
 
-We hebben een SQL-migratie gemaakt die dit probleem oplost door:
+We hebben de `createOrder` functie in `lib/db.ts` aangepast om `shipping_info` te gebruiken in plaats van `shipping_address`:
 
-1. De `user_id` kolom nullable te maken, zodat gastbestellingen geen gebruiker hoeven te hebben
-2. De RLS-policies aan te passen om gastbestellingen toe te staan
-
-### Stap 1: Voer de SQL-migratie uit
-
-1. Ga naar het [Supabase Dashboard](https://app.supabase.com/)
-2. Selecteer je project
-3. Ga naar de SQL Editor (in de linker zijbalk)
-4. Maak een nieuwe query
-5. Kopieer en plak de volgende SQL:
-
-```sql
--- Migration to allow guest orders by making user_id nullable and updating RLS policies
-
--- First, drop the existing foreign key constraint
-ALTER TABLE public.orders DROP CONSTRAINT IF EXISTS orders_user_id_fkey;
-
--- Make user_id column nullable
-ALTER TABLE public.orders ALTER COLUMN user_id DROP NOT NULL;
-
--- Add the foreign key constraint back, but allow NULL values
-ALTER TABLE public.orders
-  ADD CONSTRAINT orders_user_id_fkey
-  FOREIGN KEY (user_id)
-  REFERENCES public.users(id);
-
--- Add a new RLS policy to allow guest orders (where user_id is NULL)
-CREATE POLICY "Guests can create orders"
-  ON public.orders
-  FOR INSERT
-  WITH CHECK (user_id IS NULL);
-
--- Add a policy to allow guests to view their own orders
-CREATE POLICY "Guests can view their own orders"
-  ON public.orders
-  FOR SELECT
-  USING (user_id IS NULL);
-
--- Update the order_items policies to allow guest orders
-CREATE POLICY "Guests can create order items"
-  ON public.order_items
-  FOR INSERT
-  WITH CHECK (order_id IN (SELECT id FROM public.orders WHERE user_id IS NULL));
-
-CREATE POLICY "Guests can view their own order items"
-  ON public.order_items
-  FOR SELECT
-  USING (order_id IN (SELECT id FROM public.orders WHERE user_id IS NULL));
+```javascript
+const { data: order, error: orderError } = await supabase
+  .from('orders')
+  .insert({
+    user_id: userId,
+    status: 'pending',
+    total_amount: totalAmount,
+    shipping_info: shippingInfo, // Aangepast naar shipping_info
+    payment_info: paymentInfo,
+    loyalty_points_earned: loyaltyPointsToAward,
+  })
 ```
 
-6. Voer de query uit
+Merk op dat we ook de `JSON.stringify()` hebben verwijderd, omdat `shipping_info` al een JSON object verwacht.
 
-### Stap 2: Verifieer de oplossing
+## Waarom Deze Aanpak?
 
-1. Ga naar je webshop en probeer als gast af te rekenen
-2. Controleer of het afrekenen nu succesvol is zonder foutmeldingen
+We hebben gekozen voor deze aanpak omdat:
 
-## Technische Details
+1. Het een minimale wijziging is die het probleem direct oplost
+2. Het geen database migraties vereist
+3. Het compatibel is met de bestaande code die `shipping_info` gebruikt
 
-### Database Wijzigingen
+## Gerelateerde Problemen
 
-1. **Nullable user_id**: De `user_id` kolom in de `orders` tabel is nu nullable, wat betekent dat orders kunnen worden aangemaakt zonder een gebruiker.
-
-2. **RLS Policies**: We hebben nieuwe RLS policies toegevoegd die specifiek gastbestellingen toestaan:
-   - `Guests can create orders`: Staat toe dat orders worden aangemaakt met een null `user_id`
-   - `Guests can view their own orders`: Staat toe dat orders met een null `user_id` worden bekeken
-   - `Guests can create order items`: Staat toe dat order items worden aangemaakt voor orders met een null `user_id`
-   - `Guests can view their own order items`: Staat toe dat order items worden bekeken voor orders met een null `user_id`
-
-### Overwegingen
-
-Deze oplossing maakt het mogelijk voor gasten om af te rekenen zonder een account aan te maken. Er zijn echter enkele overwegingen:
-
-1. **Ordergeschiedenis**: Gastbestellingen zijn niet gekoppeld aan een gebruiker, dus er is geen ordergeschiedenis voor gasten.
-2. **Identificatie**: Gastbestellingen worden geïdentificeerd door hun e-mailadres en verzendgegevens, maar er is geen authenticatie.
-3. **Conversie**: Het is nog steeds aan te raden om gebruikers aan te moedigen een account aan te maken voor een betere gebruikerservaring en om de conversie te verhogen.
+Dit probleem is gerelateerd aan het probleem waarbij verzendadresgegevens niet werden weergegeven in de admin omgeving bij orders. Zie `docs/order-shipping-address-fix.md` voor meer informatie over dat probleem.
 
 ## Toekomstige Verbeteringen
 
-In de toekomst kunnen we overwegen om:
+Voor een meer robuuste oplossing op lange termijn, zouden we kunnen overwegen:
 
-1. Een mechanisme toe te voegen om gastbestellingen te koppelen aan een gebruiker als ze later een account aanmaken
-2. Een sessie-gebaseerd systeem te implementeren om gastbestellingen beter te kunnen volgen
-3. Een "checkout als gast" optie toe te voegen naast de "maak een account aan" optie tijdens het afrekenen
+1. De database schema te standaardiseren zodat het consistent is met de code
+2. Een migratie uit te voeren om beide velden (`shipping_address` en `shipping_info`) te ondersteunen
+3. De code aan te passen om beide velden te controleren bij het ophalen van orders
+
+Voor nu is de huidige oplossing voldoende om gastbestellingen correct te laten werken.
