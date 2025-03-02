@@ -340,7 +340,7 @@ export async function createOrder(
       user_id: userId,
       status: 'pending',
       total_amount: totalAmount,
-      shipping_address: JSON.stringify(shippingInfo),
+      shipping_info: shippingInfo,
       payment_info: paymentInfo,
       loyalty_points_earned: loyaltyPointsToAward,
     })
