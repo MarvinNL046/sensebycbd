@@ -3,7 +3,7 @@
 import { useState, FormEvent, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { createClient } from '../utils/supabase-client';
+import { createClient } from '../../utils/supabase/client';
 
 // Loading fallback for Suspense
 function LoginSkeleton() {

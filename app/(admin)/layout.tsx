@@ -11,8 +11,8 @@ import {
   LogOut,
   ChevronRight
 } from 'lucide-react';
-import { checkAdminAuth } from '../utils/supabase-server';
-import { createClient } from '../utils/supabase-client';
+import { checkAdminAuth } from '../../utils/supabase/server';
+import { createClient } from '../../utils/supabase/client';
 
 // Navigation items
 const navItems = [
