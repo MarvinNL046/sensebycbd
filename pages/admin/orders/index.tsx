@@ -170,25 +170,29 @@ export default function OrdersAdmin() {
       
       // If the calculated total doesn't match the stored total, update the order
       if (calculatedTotal > 0 && calculatedTotal !== order.total_amount) {
-        // Update the order in the database
-        const { error: updateError } = await supabase
-          .from('orders')
-          .update({ total_amount: calculatedTotal })
-          .eq('id', order.id);
-        
-        if (updateError) {
-          console.error('Error updating order total:', updateError);
-        } else {
-          // Update the local order object
-          setSelectedOrder({
-            ...order,
-            total_amount: calculatedTotal
-          });
+        try {
+          // Update the order in the database - only update the total_amount field
+          const { error: updateError } = await supabase
+            .from('orders')
+            .update({ total_amount: calculatedTotal })
+            .eq('id', order.id);
           
-          // Update the order in the orders list
-          setOrders(orders.map(o => 
-            o.id === order.id ? { ...o, total_amount: calculatedTotal } : o
-          ));
+          if (updateError) {
+            console.error('Error updating order total:', updateError);
+          } else {
+            // Update the local order object
+            setSelectedOrder({
+              ...order,
+              total_amount: calculatedTotal
+            });
+            
+            // Update the order in the orders list
+            setOrders(orders.map(o => 
+              o.id === order.id ? { ...o, total_amount: calculatedTotal } : o
+            ));
+          }
+        } catch (error) {
+          console.error('Exception updating order total:', error);
         }
       }
       

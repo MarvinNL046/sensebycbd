@@ -99,7 +99,8 @@ export default function AdminDashboard() {
               if (calculatedTotal > 0 && calculatedTotal !== order.total_amount) {
                 console.log(`Dashboard - Updating order ${order.id} total from ${order.total_amount} to ${calculatedTotal}`);
                 
-                // Update order in database
+              try {
+                // Update order in database - only update the total_amount field
                 const { error: updateError } = await supabase
                   .from('orders')
                   .update({ total_amount: calculatedTotal })
@@ -111,6 +112,9 @@ export default function AdminDashboard() {
                   // Use calculated total
                   orderTotal = calculatedTotal;
                 }
+              } catch (error) {
+                console.error('Exception updating order total:', error);
+              }
               }
             }
             
@@ -155,13 +159,18 @@ export default function AdminDashboard() {
                 if (calculatedTotal !== order.total_amount) {
                   console.log(`Dashboard - Updating recent order ${order.id} total from ${order.total_amount} to ${calculatedTotal}`);
                   
-                  const { error: updateError } = await supabase
-                    .from('orders')
-                    .update({ total_amount: calculatedTotal })
-                    .eq('id', order.id);
-                  
-                  if (updateError) {
-                    console.error('Error updating recent order total:', updateError);
+                  try {
+                    // Update order in database - only update the total_amount field
+                    const { error: updateError } = await supabase
+                      .from('orders')
+                      .update({ total_amount: calculatedTotal })
+                      .eq('id', order.id);
+                    
+                    if (updateError) {
+                      console.error('Error updating recent order total:', updateError);
+                    }
+                  } catch (error) {
+                    console.error('Exception updating recent order total:', error);
                   }
                 }
                 
