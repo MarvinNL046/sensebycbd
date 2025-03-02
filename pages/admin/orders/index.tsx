@@ -457,7 +457,11 @@ export default function OrdersAdmin() {
                     
                     <div className="text-sm text-gray-500">Shipping Address:</div>
                     <div className="text-sm whitespace-pre-line">
-                      {selectedOrder.shipping_address || 
+                      {(selectedOrder.shipping_address && typeof selectedOrder.shipping_address === 'object'
+                        ? Object.entries(selectedOrder.shipping_address)
+                            .map(([key, value]) => `${key}: ${value}`)
+                            .join('\n')
+                        : selectedOrder.shipping_address) || 
                        (selectedOrder.shipping_info && typeof selectedOrder.shipping_info === 'object' 
                          ? Object.entries(selectedOrder.shipping_info)
                              .map(([key, value]) => `${key}: ${value}`)
