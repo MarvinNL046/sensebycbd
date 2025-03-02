@@ -10,29 +10,40 @@
  * 
  * Zie de Auth0 Next.js SDK documentatie voor meer informatie:
  * https://auth0.github.io/nextjs-auth0/
+ * 
+ * NOTE: This file is temporarily disabled until Auth0 is installed
+ * To enable, install @auth0/nextjs-auth0
  */
 
+import { NextApiRequest, NextApiResponse } from 'next';
+
+/**
+ * Tijdelijke placeholder voor Auth0 API routes
+ * Deze implementatie zal worden vervangen door de echte Auth0 implementatie
+ * wanneer de Auth0 package is geïnstalleerd.
+ */
+export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  const { auth0 } = req.query;
+  
+  // Stuur een bericht dat Auth0 nog niet is geïnstalleerd
+  res.status(200).json({
+    message: 'Auth0 is nog niet geïnstalleerd. Installeer @auth0/nextjs-auth0 om deze functionaliteit te gebruiken.',
+    requestedRoute: auth0
+  });
+}
+
+/* Original implementation:
 import { handleAuth, handleLogin, handleLogout, handleCallback, handleProfile, Session } from '@auth0/nextjs-auth0';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { syncAuth0UserToSupabase } from '../../../lib/auth0-sync';
 
-/**
- * Aangepaste callback handler die de Auth0 gebruiker synchroniseert met Supabase
- * 
- * @param req De API request
- * @param res De API response
- */
 async function handleCallbackWithSync(req: NextApiRequest, res: NextApiResponse) {
   try {
-    // Gebruik de standaard Auth0 callback handler
     await handleCallback(req, res, {
       afterCallback: async (req, res, session: Session) => {
-        // Synchroniseer de Auth0 gebruiker met Supabase
         if (session.user) {
           await syncAuth0UserToSupabase(session.user);
         }
-        
-        // Geef de sessie terug
         return session;
       }
     });
@@ -42,26 +53,13 @@ async function handleCallbackWithSync(req: NextApiRequest, res: NextApiResponse)
   }
 }
 
-/**
- * Aangepaste login handler met extra opties
- * 
- * @param req De API request
- * @param res De API response
- */
 async function handleLoginWithOptions(req: NextApiRequest, res: NextApiResponse) {
   try {
-    // Haal de redirect URL uit de query parameters
     const returnTo = req.query.returnTo as string;
-    
-    // Gebruik de standaard Auth0 login handler met extra opties
     await handleLogin(req, res, {
       returnTo: returnTo || '/',
       authorizationParams: {
-        // Voeg extra parameters toe aan de Auth0 login URL
-        // Bijvoorbeeld: scope, prompt, etc.
         scope: 'openid profile email',
-        // Voeg een prompt toe om de gebruiker te dwingen opnieuw in te loggen
-        // prompt: 'login',
       }
     });
   } catch (error) {
@@ -70,18 +68,9 @@ async function handleLoginWithOptions(req: NextApiRequest, res: NextApiResponse)
   }
 }
 
-/**
- * Aangepaste logout handler met extra opties
- * 
- * @param req De API request
- * @param res De API response
- */
 async function handleLogoutWithOptions(req: NextApiRequest, res: NextApiResponse) {
   try {
-    // Haal de redirect URL uit de query parameters
     const returnTo = req.query.returnTo as string;
-    
-    // Gebruik de standaard Auth0 logout handler met extra opties
     await handleLogout(req, res, {
       returnTo: returnTo || '/'
     });
@@ -91,9 +80,6 @@ async function handleLogoutWithOptions(req: NextApiRequest, res: NextApiResponse
   }
 }
 
-/**
- * Exporteer de Auth0 API routes
- */
 export default handleAuth({
   async login(req, res) {
     await handleLoginWithOptions(req, res);
@@ -108,3 +94,4 @@ export default handleAuth({
     await handleProfile(req, res);
   }
 });
+*/

@@ -1,6 +1,9 @@
 import { supabase } from './supabase';
 import logger from './utils/logger';
 
+// NOTE: This file is temporarily disabled until Auth0 is installed
+// To enable, install @auth0/nextjs-auth0
+
 /**
  * Interface voor Auth0 gebruiker
  */

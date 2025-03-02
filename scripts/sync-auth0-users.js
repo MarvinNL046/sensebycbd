@@ -8,11 +8,14 @@
  * Gebruik:
  * node scripts/sync-auth0-users.js --mode=sync-to-supabase
  * node scripts/sync-auth0-users.js --mode=migrate-to-auth0
+ * 
+ * NOTE: This script is temporarily disabled until Auth0 is installed
+ * To enable, install @auth0/nextjs-auth0 and auth0
  */
 
 require('dotenv').config({ path: '.env.local' });
 const { createClient } = require('@supabase/supabase-js');
-const { ManagementClient } = require('auth0');
+// const { ManagementClient } = require('auth0');
 const fs = require('fs');
 const path = require('path');
 
@@ -27,11 +30,12 @@ const AUTH0_CLIENT_SECRET = process.env.AUTH0_CLIENT_SECRET;
 
 // Initialiseer clients
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
-const auth0 = new ManagementClient({
-  domain: AUTH0_DOMAIN,
-  clientId: AUTH0_CLIENT_ID,
-  clientSecret: AUTH0_CLIENT_SECRET,
-});
+// Tijdelijk uitgeschakeld tot Auth0 is geïnstalleerd
+// const auth0 = new ManagementClient({
+//   domain: AUTH0_DOMAIN,
+//   clientId: AUTH0_CLIENT_ID,
+//   clientSecret: AUTH0_CLIENT_SECRET,
+// });
 
 // Hulpfuncties
 function logMessage(message) {
@@ -282,11 +286,18 @@ async function migrateSupabaseUsersToAuth0() {
 // Hoofdfunctie
 async function main() {
   try {
+    logMessage('Dit script is tijdelijk uitgeschakeld tot Auth0 is geïnstalleerd.');
+    logMessage('Installeer @auth0/nextjs-auth0 en auth0 om dit script te gebruiken.');
+    
     // Parse command line arguments
     const args = process.argv.slice(2);
     const modeArg = args.find(arg => arg.startsWith('--mode='));
     const mode = modeArg ? modeArg.split('=')[1] : 'sync-to-supabase';
     
+    logMessage(`Gevraagde modus: ${mode}`);
+    logMessage('Script beëindigd zonder acties uit te voeren.');
+    
+    /* Original implementation:
     if (mode === 'sync-to-supabase') {
       await syncAuth0UsersToSupabase();
     } else if (mode === 'migrate-to-auth0') {
@@ -295,6 +306,7 @@ async function main() {
       logError(`Onbekende modus: ${mode}. Gebruik 'sync-to-supabase' of 'migrate-to-auth0'.`);
       process.exit(1);
     }
+    */
     
     process.exit(0);
   } catch (error) {

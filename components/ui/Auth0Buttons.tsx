@@ -1,7 +1,10 @@
 import React from 'react';
-import { useUser } from '@auth0/nextjs-auth0/client';
+// import { useUser } from '@auth0/nextjs-auth0/client';
 import Link from 'next/link';
 import { User, LogOut, LogIn } from 'lucide-react';
+
+// NOTE: This file is temporarily disabled until Auth0 is installed
+// To enable, uncomment the import above and install @auth0/nextjs-auth0
 
 /**
  * Login knop component voor Auth0 authenticatie
@@ -38,6 +41,10 @@ export const LogoutButton: React.FC<{ className?: string }> = ({ className = '' 
  * Toont de profielfoto en naam van de ingelogde gebruiker
  */
 export const ProfileButton: React.FC<{ className?: string }> = ({ className = '' }) => {
+  // Temporarily disabled until Auth0 is installed
+  return null;
+  
+  /* Original implementation:
   const { user } = useUser();
   
   if (!user) return null;
@@ -61,6 +68,7 @@ export const ProfileButton: React.FC<{ className?: string }> = ({ className = ''
       <span className="hidden md:inline">{user.name || user.email}</span>
     </Link>
   );
+  */
 };
 
 /**
@@ -68,7 +76,9 @@ export const ProfileButton: React.FC<{ className?: string }> = ({ className = ''
  * Toont de juiste knoppen op basis van de authenticatiestatus
  */
 export const Auth0ButtonsContainer: React.FC = () => {
-  const { user, isLoading } = useUser();
+  // const { user, isLoading } = useUser();
+  const user = null;
+  const isLoading = false;
   
   if (isLoading) {
     return (

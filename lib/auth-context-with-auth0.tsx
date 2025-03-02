@@ -1,8 +1,11 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { User } from '@supabase/supabase-js';
-import { useUser as useAuth0User } from '@auth0/nextjs-auth0/client';
+// import { useUser as useAuth0User } from '@auth0/nextjs-auth0/client';
 import { syncAuth0UserToSupabase, getSupabaseUserFromAuth0 } from './auth0-sync';
 import logger from './utils/logger';
+
+// NOTE: This file is temporarily disabled until Auth0 is installed
+// To enable, uncomment the import above and install @auth0/nextjs-auth0
 
 /**
  * Type definitie voor de authenticatie context
@@ -38,6 +41,23 @@ const AuthContext = createContext<AuthContextType>({
  * @param children De child componenten
  */
 export function AuthProvider({ children }: { children: ReactNode }) {
+  // Temporarily disabled until Auth0 is installed
+  const contextValue: AuthContextType = {
+    user: null,
+    supabaseUser: null,
+    loading: false,
+    error: null,
+    isAdmin: false,
+    loyaltyPoints: 0
+  };
+
+  return (
+    <AuthContext.Provider value={contextValue}>
+      {children}
+    </AuthContext.Provider>
+  );
+  
+  /* Original implementation:
   // Auth0 gebruiker en status
   const { user: auth0User, isLoading: auth0Loading, error: auth0Error } = useAuth0User();
   
@@ -121,6 +141,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       {children}
     </AuthContext.Provider>
   );
+  */
 }
 
 /**

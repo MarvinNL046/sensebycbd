@@ -1,7 +1,10 @@
-import { useUser } from '@auth0/nextjs-auth0/client';
+// import { useUser } from '@auth0/nextjs-auth0/client';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import React from 'react';
+
+// NOTE: This file is temporarily disabled until Auth0 is installed
+// To enable, uncomment the import above and install @auth0/nextjs-auth0
 
 /**
  * Higher Order Component (HOC) om pagina's te beveiligen met Auth0 authenticatie
@@ -36,6 +39,13 @@ export function withAuth<P extends object>(
   } = options;
 
   function AuthenticatedComponent(props: P) {
+    // Temporarily disabled until Auth0 is installed
+    const router = useRouter();
+    
+    // Return the component without authentication for now
+    return <Component {...props} />;
+    
+    /* Original implementation:
     const { user, isLoading, error } = useUser();
     const router = useRouter();
 
@@ -69,6 +79,7 @@ export function withAuth<P extends object>(
 
     // Toon de beveiligde component als de gebruiker is ingelogd
     return <Component {...props} />;
+    */
   }
 
   // Kopieer displayName, defaultProps, etc.
