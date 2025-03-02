@@ -20,9 +20,12 @@ interface Order {
   user_id: string;
   status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
   total_amount: number;
-  shipping_address: string;
-  payment_id: string | null;
+  shipping_address?: string;
+  shipping_info?: any;
+  payment_info?: any;
+  payment_id?: string | null;
   created_at: string;
+  loyalty_points_earned?: number;
   user?: {
     full_name: string;
     email: string;
@@ -449,7 +452,14 @@ export default function OrdersAdmin() {
                     <div className="text-sm">{selectedOrder.user?.email || '-'}</div>
                     
                     <div className="text-sm text-gray-500">Shipping Address:</div>
-                    <div className="text-sm whitespace-pre-line">{selectedOrder.shipping_address}</div>
+                    <div className="text-sm whitespace-pre-line">
+                      {selectedOrder.shipping_address || 
+                       (selectedOrder.shipping_info && typeof selectedOrder.shipping_info === 'object' 
+                         ? Object.entries(selectedOrder.shipping_info)
+                             .map(([key, value]) => `${key}: ${value}`)
+                             .join('\n')
+                         : selectedOrder.shipping_info)}
+                    </div>
                   </div>
                 </div>
               </div>
