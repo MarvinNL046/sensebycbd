@@ -4,6 +4,10 @@ Dit document beschrijft het probleem met de `shipping_address` kolom in de order
 
 ## Het Probleem
 
+Er waren twee gerelateerde problemen:
+
+### Probleem 1: Database Mismatch
+
 Er is een mismatch tussen de code en de database structuur:
 
 1. De code verwacht een kolom genaamd `shipping_address` in de `orders` tabel
@@ -13,6 +17,19 @@ Dit veroorzaakt de volgende foutmelding:
 ```
 Error updating order total: {code: '42703', details: null, hint: null, message: 'record "new" has no field "shipping_address"'}
 ```
+
+### Probleem 2: React Rendering Fout
+
+Na het toevoegen van de `shipping_address` kolom aan de database, ontstond er een React foutmelding:
+
+```
+Error: Minified React error #31; visit https://reactjs.org/docs/error-decoder.html?invariant=31&args[]=object%20with%20keys%20%7Bcity%2C%20email%2C%20phone%2C%20address%2C%20country%2C%20lastName%2C%20firstName%2C%20postalCode%7D
+```
+
+Dit gebeurde omdat:
+1. De `shipping_address` kolom werd toegevoegd als een JSONB object in de database
+2. De code in `pages/admin/orders/index.tsx` probeerde dit object direct te renderen in JSX
+3. React kan geen objecten direct renderen, wat de foutmelding veroorzaakte
 
 ## Oplossing 1: Code Aanpassen (Reeds Geïmplementeerd)
 
