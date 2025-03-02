@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { useAuth } from '../../lib/auth-context';
 import { supabase } from '../../lib/supabase';
+import logger from '../../lib/utils/logger';
 import { 
   LayoutGrid, 
   Package, 
@@ -17,9 +18,18 @@ import {
 interface AdminLayoutProps {
   children: ReactNode;
   title: string;
+  serverSideAuthFailed?: boolean;
+  isAdminByEmail?: boolean;
+  isAdmin?: boolean;
 }
 
-export default function AdminLayout({ children, title }: AdminLayoutProps) {
+export default function AdminLayout({ 
+  children, 
+  title, 
+  serverSideAuthFailed, 
+  isAdminByEmail,
+  isAdmin
+}: AdminLayoutProps) {
   const router = useRouter();
   const { user, loading } = useAuth();
   
@@ -29,36 +39,54 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
       if (loading) return;
       
       if (!user) {
+        logger.log('No user logged in, redirecting to login');
         router.push('/login?redirect=' + router.asPath);
         return;
       }
       
-      // Check if user is admin
-      const { data: userData, error } = await supabase
-        .from('users')
-        .select('is_admin')
-        .eq('id', user.id)
-        .single();
-      
-      console.log('Client-side admin check:', { userData, error, userId: user.id });
-      
-      if (error) {
-        console.error('Error checking admin status:', error);
-        router.push('/');
+      // If the user is already verified as admin by email or server-side check, skip client-side check
+      if (isAdminByEmail || isAdmin) {
+        logger.log('User already verified as admin, skipping client-side check');
         return;
       }
       
-      if (!userData?.is_admin) {
-        console.log('User is not an admin, redirecting to homepage');
-        router.push('/');
-      } else {
-        console.log('User is an admin, allowing access');
+      // If server-side auth failed, we need to check on the client side
+      if (serverSideAuthFailed) {
+        logger.log('Server-side auth failed, checking on client side');
+        
+        // Check if user's email is in the admin list
+        if (user.email && ['marvinsmit1988@gmail.com'].includes(user.email)) {
+          logger.log('User is in admin email list, allowing access');
+          return;
+        }
+        
+        // Check if user is admin in the database
+        const { data: userData, error } = await supabase
+          .from('users')
+          .select('is_admin')
+          .eq('id', user.id)
+          .single();
+        
+        logger.log('Client-side admin check:', { userData, error, userId: user.id });
+        
+        if (error) {
+          logger.error('Error checking admin status:', error);
+          router.push('/');
+          return;
+        }
+        
+        if (!userData?.is_admin) {
+          logger.log('User is not an admin, redirecting to homepage');
+          router.push('/');
+        } else {
+          logger.log('User is an admin, allowing access');
+        }
       }
     };
     
     // This client-side check is now a backup to the server-side check in getServerSideProps
     checkAuth();
-  }, [user, loading, router]);
+  }, [user, loading, router, serverSideAuthFailed, isAdminByEmail, isAdmin]);
   
   // Handle sign out
   const handleSignOut = async () => {

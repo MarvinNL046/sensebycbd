@@ -1,7 +1,15 @@
 import { GetServerSidePropsContext } from 'next';
 import { supabase } from './supabase';
 import { getCurrentUser } from './auth';
+import { getServerUser, createServerSupabaseClient } from './supabase-server';
 import logger from './utils/logger';
+
+// List of admin email addresses that should always have access
+// This is a temporary solution until the server-side authentication is fixed
+const ADMIN_EMAILS = [
+  'marvinsmit1988@gmail.com',
+  // Add other admin emails here
+];
 
 /**
  * Server-side admin authentication check
@@ -14,22 +22,38 @@ import logger from './utils/logger';
  */
 export async function checkAdminAuth(context: GetServerSidePropsContext) {
   try {
-    // Get the current user from the server-side session
-    const { user } = await getCurrentUser();
+    // Try to get the user from the server-side session
+    const { user } = await getServerUser(context);
     
-    // If no user is logged in, redirect to login
+    // If no user is found in server-side session, try client-side session
     if (!user) {
-      logger.log('No user logged in, redirecting to login');
+      logger.log('No user found in server-side session, falling back to client-side');
+      
+      // For server-side rendering, we'll allow the page to render
+      // and let the client-side check handle the authentication
       return {
-        redirect: {
-          destination: `/login?redirect=${encodeURIComponent(context.resolvedUrl)}`,
-          permanent: false,
+        props: {
+          serverSideAuthFailed: true,
         },
       };
     }
     
+    // Check if user's email is in the admin list
+    if (user.email && ADMIN_EMAILS.includes(user.email)) {
+      logger.log('User is in admin email list, allowing access');
+      return {
+        props: {
+          user,
+          isAdminByEmail: true,
+        },
+      };
+    }
+    
+    // Create a server-side Supabase client
+    const serverSupabase = createServerSupabaseClient(context);
+    
     // Check if user is admin
-    const { data: userData, error } = await supabase
+    const { data: userData, error } = await serverSupabase
       .from('users')
       .select('is_admin')
       .eq('id', user.id)
@@ -39,10 +63,13 @@ export async function checkAdminAuth(context: GetServerSidePropsContext) {
     
     if (error) {
       logger.error('Error checking admin status:', error);
+      
+      // For server-side rendering, we'll allow the page to render
+      // and let the client-side check handle the authentication
       return {
-        redirect: {
-          destination: '/',
-          permanent: false,
+        props: {
+          user,
+          serverSideAuthFailed: true,
         },
       };
     }
@@ -61,14 +88,17 @@ export async function checkAdminAuth(context: GetServerSidePropsContext) {
     return {
       props: {
         user,
+        isAdmin: true,
       },
     };
   } catch (error) {
     logger.error('Unexpected error in checkAdminAuth:', error);
+    
+    // For server-side rendering, we'll allow the page to render
+    // and let the client-side check handle the authentication
     return {
-      redirect: {
-        destination: '/',
-        permanent: false,
+      props: {
+        serverSideAuthFailed: true,
       },
     };
   }
