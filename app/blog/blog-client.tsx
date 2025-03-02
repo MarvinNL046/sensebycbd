@@ -2,7 +2,6 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
-import { SEO } from '../components/SEO';
 import { useTranslation } from '../lib/useTranslation';
 import { BlogPost, BlogCategory } from '../../types/blog';
 import { formatDate } from '../../lib/utils/formatDate';
@@ -20,12 +19,6 @@ export default function BlogClient({ posts, categories }: BlogClientProps) {
   
   return (
     <>
-      <SEO 
-        title={t.seo?.blogTitle || 'Blog | SenseBy CBD'}
-        description={t.seo?.blogDescription || 'Read the latest articles about CBD benefits, research, and product guides.'}
-        keywords={t.seo?.blogKeywords || 'CBD blog, CBD articles, CBD research, CBD benefits, CBD guides'}
-        canonicalPath="/blog"
-      />
       
       <div className="container-custom py-12">
         <div className="flex flex-col md:flex-row gap-8">
