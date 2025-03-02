@@ -15,6 +15,9 @@ import {
   ChevronRight
 } from 'lucide-react';
 
+// List of admin email addresses that should always have access
+const ADMIN_EMAILS = ['marvinsmit1988@gmail.com'];
+
 interface AdminLayoutProps {
   children: ReactNode;
   title: string;
@@ -44,49 +47,60 @@ export default function AdminLayout({
         return;
       }
       
-      // If the user is already verified as admin by email or server-side check, skip client-side check
+      // If the user is already verified as admin by email or server-side check, we can trust it
+      // but we'll still do a quick verification for extra security
       if (isAdminByEmail || isAdmin) {
-        logger.log('User already verified as admin, skipping client-side check');
+        logger.log('User already verified as admin by server-side check');
+        
+        // Double-check if user's email is in the admin list
+        if (user.email && ADMIN_EMAILS.includes(user.email)) {
+          logger.log('User is in admin email list, confirmed');
+          return;
+        }
+        
+        // If not in admin email list but server-side verified as admin, we can trust it
+        if (isAdmin) {
+          logger.log('User is verified as admin by server-side check, confirmed');
+          return;
+        }
+      }
+      
+      // Always perform a client-side check as an extra security measure
+      logger.log('Performing client-side admin check');
+      
+      // Check if user's email is in the admin list
+      if (user.email && ADMIN_EMAILS.includes(user.email)) {
+        logger.log('User is in admin email list, allowing access');
         return;
       }
       
-      // If server-side auth failed, we need to check on the client side
-      if (serverSideAuthFailed) {
-        logger.log('Server-side auth failed, checking on client side');
-        
-        // Check if user's email is in the admin list
-        if (user.email && ['marvinsmit1988@gmail.com'].includes(user.email)) {
-          logger.log('User is in admin email list, allowing access');
-          return;
-        }
-        
-        // Check if user is admin in the database
-        const { data: userData, error } = await supabase
-          .from('users')
-          .select('is_admin')
-          .eq('id', user.id)
-          .single();
-        
-        logger.log('Client-side admin check:', { userData, error, userId: user.id });
-        
-        if (error) {
-          logger.error('Error checking admin status:', error);
-          router.push('/');
-          return;
-        }
-        
-        if (!userData?.is_admin) {
-          logger.log('User is not an admin, redirecting to homepage');
-          router.push('/');
-        } else {
-          logger.log('User is an admin, allowing access');
-        }
+      // Check if user is admin in the database
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single();
+      
+      logger.log('Client-side admin check:', { userData, error, userId: user.id });
+      
+      if (error) {
+        logger.error('Error checking admin status:', error);
+        router.push('/');
+        return;
+      }
+      
+      if (!userData?.is_admin) {
+        logger.log('User is not an admin, redirecting to homepage');
+        router.push('/');
+      } else {
+        logger.log('User is an admin, allowing access');
       }
     };
     
-    // This client-side check is now a backup to the server-side check in getServerSideProps
+    // This client-side check is a backup to the server-side check in getServerSideProps
+    // but also provides an extra layer of security
     checkAuth();
-  }, [user, loading, router, serverSideAuthFailed, isAdminByEmail, isAdmin]);
+  }, [user, loading, router, isAdminByEmail, isAdmin]);
   
   // Handle sign out
   const handleSignOut = async () => {

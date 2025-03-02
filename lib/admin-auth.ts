@@ -25,15 +25,13 @@ export async function checkAdminAuth(context: GetServerSidePropsContext) {
     // Try to get the user from the server-side session
     const { user } = await getServerUser(context);
     
-    // If no user is found in server-side session, try client-side session
+    // If no user is found in server-side session, redirect to login
     if (!user) {
-      logger.log('No user found in server-side session, falling back to client-side');
-      
-      // For server-side rendering, we'll allow the page to render
-      // and let the client-side check handle the authentication
+      logger.log('No user found in server-side session, redirecting to login');
       return {
-        props: {
-          serverSideAuthFailed: true,
+        redirect: {
+          destination: `/login?redirect=${encodeURIComponent(context.resolvedUrl)}`,
+          permanent: false,
         },
       };
     }
@@ -61,19 +59,40 @@ export async function checkAdminAuth(context: GetServerSidePropsContext) {
     
     logger.log('Server-side admin check:', { userData, error, userId: user.id });
     
+    // If there's an error checking admin status, try with the regular client
     if (error) {
-      logger.error('Error checking admin status:', error);
+      logger.error('Error checking admin status with server client, trying regular client:', error);
       
-      // For server-side rendering, we'll allow the page to render
-      // and let the client-side check handle the authentication
+      // Try with the regular Supabase client
+      const { data: regularUserData, error: regularError } = await supabase
+        .from('users')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single();
+      
+      logger.log('Regular client admin check:', { regularUserData, regularError, userId: user.id });
+      
+      // If there's still an error or user is not admin, redirect to homepage
+      if (regularError || !regularUserData?.is_admin) {
+        logger.log('User is not an admin or error occurred, redirecting to homepage');
+        return {
+          redirect: {
+            destination: '/',
+            permanent: false,
+          },
+        };
+      }
+      
+      // User is an admin according to regular client
       return {
         props: {
           user,
-          serverSideAuthFailed: true,
+          isAdmin: true,
         },
       };
     }
     
+    // If user is not admin according to server client, redirect to homepage
     if (!userData?.is_admin) {
       logger.log('User is not an admin, redirecting to homepage');
       return {
@@ -94,11 +113,11 @@ export async function checkAdminAuth(context: GetServerSidePropsContext) {
   } catch (error) {
     logger.error('Unexpected error in checkAdminAuth:', error);
     
-    // For server-side rendering, we'll allow the page to render
-    // and let the client-side check handle the authentication
+    // For unexpected errors, redirect to homepage for safety
     return {
-      props: {
-        serverSideAuthFailed: true,
+      redirect: {
+        destination: '/',
+        permanent: false,
       },
     };
   }
