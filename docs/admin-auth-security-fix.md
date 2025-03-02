@@ -1,16 +1,18 @@
-# Admin Authentication Security Fix (Verbeterde Versie)
+# Admin Authentication Security Fix (Kritieke Update)
 
-Dit document beschrijft de verbeterde implementatie van een server-side authenticatie check voor admin pagina's om te voorkomen dat niet-geautoriseerde gebruikers toegang krijgen tot het admin panel.
+Dit document beschrijft de implementatie van een server-side authenticatie check voor admin pagina's om te voorkomen dat niet-geautoriseerde gebruikers toegang krijgen tot het admin panel, inclusief een kritieke beveiligingsupdate.
 
-## Het Probleem
+## De Problemen
 
-Er was een beveiligingsprobleem waarbij niet-admin gebruikers kort het admin panel konden zien voordat ze werden doorgestuurd naar de homepage. Dit gebeurde omdat de admin check client-side werd uitgevoerd in de `AdminLayout` component, wat betekent dat de pagina eerst werd gerenderd en pas daarna werd gecontroleerd of de gebruiker een admin is.
+Er waren twee beveiligingsproblemen met de admin authenticatie:
 
-Na de eerste implementatie van de server-side check ontstond er een nieuw probleem: admin gebruikers konden niet meer inloggen op het admin panel. Dit kwam doordat de server-side authenticatie niet correct werkte met de Supabase sessie cookies.
+1. **Oorspronkelijk probleem**: Niet-admin gebruikers konden kort het admin panel zien voordat ze werden doorgestuurd naar de homepage. Dit gebeurde omdat de admin check client-side werd uitgevoerd in de `AdminLayout` component, wat betekent dat de pagina eerst werd gerenderd en pas daarna werd gecontroleerd of de gebruiker een admin is.
 
-## De Verbeterde Oplossing
+2. **Kritiek beveiligingsprobleem**: Na de eerste implementatie van de server-side check ontstond er een ernstig beveiligingsprobleem waarbij niet-admin gebruikers volledige toegang kregen tot het admin panel. Dit kwam doordat het fallback mechanisme iedereen toeliet als de server-side check faalde.
 
-We hebben de server-side authenticatie check verbeterd met de volgende aanpassingen:
+## De Definitieve Oplossing
+
+We hebben de authenticatie check volledig herzien om beide problemen op te lossen:
 
 ### 1. Server-side Supabase Client
 
@@ -48,9 +50,9 @@ export function createServerSupabaseClient(context: GetServerSidePropsContext) {
 }
 ```
 
-### 2. Verbeterde Admin Check met Fallback
+### 2. Veilige Admin Check zonder Onveilige Fallbacks
 
-We hebben de `checkAdminAuth` functie verbeterd om een fallback mechanisme te bieden als de server-side check faalt:
+We hebben de `checkAdminAuth` functie verbeterd om altijd naar de homepage te redirecten als de gebruiker geen admin is, zelfs als de server-side check faalt:
 
 ```typescript
 // lib/admin-auth.ts
@@ -59,11 +61,12 @@ export async function checkAdminAuth(context: GetServerSidePropsContext) {
     // Try to get the user from the server-side session
     const { user } = await getServerUser(context);
     
-    // If no user is found in server-side session, fall back to client-side
+    // If no user is found in server-side session, redirect to login
     if (!user) {
       return {
-        props: {
-          serverSideAuthFailed: true,
+        redirect: {
+          destination: `/login?redirect=${encodeURIComponent(context.resolvedUrl)}`,
+          permanent: false,
         },
       };
     }
@@ -78,25 +81,33 @@ export async function checkAdminAuth(context: GetServerSidePropsContext) {
       };
     }
     
-    // Check if user is admin in the database
+    // Try with both server-side and regular client
+    const serverSupabase = createServerSupabaseClient(context);
     const { data: userData, error } = await serverSupabase
       .from('users')
       .select('is_admin')
       .eq('id', user.id)
       .single();
     
-    if (error || !userData?.is_admin) {
-      // If there's an error or user is not admin, redirect to homepage
-      // But for server-side errors, we'll fall back to client-side check
-      if (error) {
+    // If there's an error, try with regular client
+    if (error) {
+      const { data: regularUserData, error: regularError } = await supabase
+        .from('users')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single();
+      
+      // If still error or not admin, redirect
+      if (regularError || !regularUserData?.is_admin) {
         return {
-          props: {
-            user,
-            serverSideAuthFailed: true,
+          redirect: {
+            destination: '/',
+            permanent: false,
           },
         };
       }
-      
+    } else if (!userData?.is_admin) {
+      // If not admin according to server client, redirect
       return {
         redirect: {
           destination: '/',
@@ -113,46 +124,29 @@ export async function checkAdminAuth(context: GetServerSidePropsContext) {
       },
     };
   } catch (error) {
-    // For unexpected errors, fall back to client-side check
+    // For unexpected errors, redirect to homepage for safety
     return {
-      props: {
-        serverSideAuthFailed: true,
+      redirect: {
+        destination: '/',
+        permanent: false,
       },
     };
   }
 }
 ```
 
-### 3. Tijdelijke Admin Email Bypass
+### 3. Dubbele Beveiliging in AdminLayout Component
 
-We hebben een lijst van admin e-mailadressen toegevoegd die altijd toegang krijgen tot het admin panel, zelfs als de server-side check faalt:
-
-```typescript
-// lib/admin-auth.ts
-const ADMIN_EMAILS = [
-  'marvinsmit1988@gmail.com',
-  // Add other admin emails here
-];
-```
-
-### 4. Verbeterde AdminLayout Component
-
-We hebben de `AdminLayout` component aangepast om rekening te houden met de nieuwe props die worden doorgegeven vanuit de server-side check:
+We hebben de `AdminLayout` component aangepast om altijd een client-side check uit te voeren, ongeacht of de server-side check is geslaagd of niet:
 
 ```typescript
 // components/admin/AdminLayout.tsx
-interface AdminLayoutProps {
-  children: ReactNode;
-  title: string;
-  serverSideAuthFailed?: boolean;
-  isAdminByEmail?: boolean;
-  isAdmin?: boolean;
-}
+// List of admin email addresses that should always have access
+const ADMIN_EMAILS = ['marvinsmit1988@gmail.com'];
 
 export default function AdminLayout({ 
   children, 
   title, 
-  serverSideAuthFailed, 
   isAdminByEmail,
   isAdmin
 }: AdminLayoutProps) {
@@ -162,50 +156,47 @@ export default function AdminLayout({
     const checkAuth = async () => {
       // ...
       
-      // If the user is already verified as admin by email or server-side check, skip client-side check
-      if (isAdminByEmail || isAdmin) {
+      // Always perform a client-side check as an extra security measure
+      if (user.email && ADMIN_EMAILS.includes(user.email)) {
         return;
       }
       
-      // If server-side auth failed, we need to check on the client side
-      if (serverSideAuthFailed) {
-        // Check if user's email is in the admin list
-        if (user.email && ['marvinsmit1988@gmail.com'].includes(user.email)) {
-          return;
-        }
-        
-        // Check if user is admin in the database
-        const { data: userData, error } = await supabase
-          .from('users')
-          .select('is_admin')
-          .eq('id', user.id)
-          .single();
-        
-        // ...
+      // Check if user is admin in the database
+      const { data: userData, error } = await supabase
+        .from('users')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single();
+      
+      if (error || !userData?.is_admin) {
+        router.push('/');
       }
     };
     
+    // This client-side check is a backup to the server-side check
+    // but also provides an extra layer of security
     checkAuth();
-  }, [user, loading, router, serverSideAuthFailed, isAdminByEmail, isAdmin]);
+  }, [user, loading, router, isAdminByEmail, isAdmin]);
   
   // ...
 }
 ```
 
-## Voordelen van deze Verbeterde Oplossing
+## Voordelen van deze Definitieve Oplossing
 
-1. **Robuuste Authenticatie**: De oplossing werkt nu zowel server-side als client-side.
-2. **Fallback Mechanisme**: Als de server-side check faalt, valt het systeem terug op de client-side check.
-3. **Admin Email Bypass**: Admin gebruikers kunnen altijd inloggen, zelfs als er problemen zijn met de database.
+1. **Maximale Beveiliging**: Niet-admin gebruikers worden altijd doorgestuurd naar de homepage, zelfs als de server-side check faalt.
+2. **Dubbele Beveiliging**: Zowel server-side als client-side checks worden uitgevoerd.
+3. **Admin Email Whitelist**: Admin gebruikers met specifieke e-mailadressen krijgen altijd toegang.
 4. **Betere Foutafhandeling**: Meer logging en betere foutafhandeling voor debugging.
+5. **Geen Onveilige Fallbacks**: Geen fallback mechanisme dat iedereen toelaat als de check faalt.
 
 ## Implementatie
 
 De volgende bestanden zijn gewijzigd:
 
 1. Nieuw bestand: `lib/supabase-server.ts` - Server-side Supabase client
-2. Gewijzigd: `lib/admin-auth.ts` - Verbeterde server-side admin authenticatie check
-3. Gewijzigd: `components/admin/AdminLayout.tsx` - Verbeterde client-side check met fallback
+2. Gewijzigd: `lib/admin-auth.ts` - Veilige server-side admin authenticatie check
+3. Gewijzigd: `components/admin/AdminLayout.tsx` - Verbeterde client-side check met dubbele beveiliging
 4. Gewijzigd: `pages/admin/index.tsx` - Toegevoegd getServerSideProps met withAdminAuth
 5. Gewijzigd: `pages/admin/orders/index.tsx` - Toegevoegd getServerSideProps met withAdminAuth
 
@@ -215,3 +206,4 @@ De volgende bestanden zijn gewijzigd:
 2. Implementeer een betere manier om de Supabase sessie door te geven aan de server-side client.
 3. Voeg caching toe aan de admin check om het aantal database queries te verminderen.
 4. Implementeer een meer gedetailleerd permissiesysteem voor verschillende admin rollen.
+5. Voeg een audit log toe om alle toegangspogingen tot het admin panel te registreren.
