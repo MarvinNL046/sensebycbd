@@ -47,9 +47,21 @@ Als alternatief kunnen we de database aanpassen om een `shipping_address` kolom 
    - Een `shipping_address` kolom toevoegt aan de `orders` tabel
    - Bestaande data kopieert van `shipping_info` naar `shipping_address`
 
-2. Deze migratie kan worden toegepast met het volgende script:
+2. Deze migratie kan worden toegepast op verschillende manieren:
+
+   **Optie A: Gebruik het originele script (vereist pgmigrate RPC functie)**
    ```bash
    node scripts/apply-shipping-address-hotfix.js
+   ```
+
+   **Optie B: Gebruik het directe script (gebruikt pg_query RPC functie)**
+   ```bash
+   node scripts/apply-shipping-address-hotfix-direct.js
+   ```
+
+   **Optie C: Gebruik het REST API script (geen RPC functies nodig)**
+   ```bash
+   node scripts/execute-shipping-address-sql.js
    ```
 
 3. Of handmatig via de Supabase SQL Editor:
@@ -57,7 +69,20 @@ Als alternatief kunnen we de database aanpassen om een `shipping_address` kolom 
    - Selecteer je project
    - Ga naar de SQL Editor
    - Maak een nieuwe query
-   - Plak de inhoud van `supabase/migrations/20250302_add_shipping_address_column.sql`
+   - Plak de inhoud van `supabase/migrations/20250302_add_shipping_address_column_simplified.sql`:
+   ```sql
+   -- Add shipping_address column if it doesn't exist
+   ALTER TABLE orders
+   ADD COLUMN IF NOT EXISTS shipping_address JSONB;
+
+   -- Copy data from shipping_info to shipping_address
+   UPDATE orders
+   SET shipping_address = shipping_info
+   WHERE shipping_info IS NOT NULL AND shipping_address IS NULL;
+
+   -- Add a comment to the column
+   COMMENT ON COLUMN orders.shipping_address IS 'Shipping address information as a JSON object. Added as a hotfix to prevent errors with code that expects this column.';
+   ```
    - Voer de query uit
 
 ## Aanbevolen Aanpak
