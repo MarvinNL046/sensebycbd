@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import AdminLayout from '../../../components/admin/AdminLayout';
@@ -6,6 +7,7 @@ import { supabase } from '../../../lib/supabase';
 import { Card } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
 import logger from '../../../lib/utils/logger';
+import { withAdminAuth } from '../../../lib/admin-auth';
 import { 
   Search, 
   Filter, 
@@ -44,6 +46,8 @@ interface OrderItem {
     slug: string;
   };
 }
+
+export const getServerSideProps: GetServerSideProps = withAdminAuth();
 
 export default function OrdersAdmin() {
   const router = useRouter();

@@ -23,7 +23,7 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
   const router = useRouter();
   const { user, loading } = useAuth();
   
-  // Check if user is authenticated and is admin
+  // Client-side check as an extra security layer
   useEffect(() => {
     const checkAuth = async () => {
       if (loading) return;
@@ -40,7 +40,7 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
         .eq('id', user.id)
         .single();
       
-      console.log('Admin check:', { userData, error, userId: user.id });
+      console.log('Client-side admin check:', { userData, error, userId: user.id });
       
       if (error) {
         console.error('Error checking admin status:', error);
@@ -56,6 +56,7 @@ export default function AdminLayout({ children, title }: AdminLayoutProps) {
       }
     };
     
+    // This client-side check is now a backup to the server-side check in getServerSideProps
     checkAuth();
   }, [user, loading, router]);
   

@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
+import { GetServerSideProps } from 'next';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { supabase } from '../../lib/supabase';
 import Link from 'next/link';
 import logger from '../../lib/utils/logger';
+import { withAdminAuth } from '../../lib/admin-auth';
 import { 
   Package, 
   ShoppingCart, 
@@ -31,6 +33,8 @@ interface RecentOrder {
     email: string;
   };
 }
+
+export const getServerSideProps: GetServerSideProps = withAdminAuth();
 
 export default function AdminDashboard() {
   const [stats, setStats] = useState<DashboardStats>({
