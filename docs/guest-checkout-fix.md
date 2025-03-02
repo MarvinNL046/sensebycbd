@@ -28,7 +28,14 @@ Dit probleem werd veroorzaakt door een mismatch tussen de code en de database st
 
 2. Maar in de database bestond deze kolom niet. In plaats daarvan gebruikte de database een kolom genaamd `shipping_info`.
 
+3. Daarnaast was er een vergelijkbaar probleem in de admin pagina's waar orders werden bijgewerkt:
+   ```
+   Error updating order total: {code: '42703', details: null, hint: null, message: 'record "new" has no field "shipping_address"'}
+   ```
+
 ## De Oplossing
+
+### Deel 1: Aanpassing createOrder functie
 
 We hebben de `createOrder` functie in `lib/db.ts` aangepast om `shipping_info` te gebruiken in plaats van `shipping_address`:
 
@@ -46,6 +53,16 @@ const { data: order, error: orderError } = await supabase
 ```
 
 Merk op dat we ook de `JSON.stringify()` hebben verwijderd, omdat `shipping_info` al een JSON object verwacht.
+
+### Deel 2: Aanpassing admin pagina's
+
+We hebben ook de admin pagina's aangepast om fouten bij het bijwerken van orders te voorkomen:
+
+1. In `pages/admin/orders/index.tsx` hebben we de code aangepast die orders bijwerkt om alleen het `total_amount` veld bij te werken, zonder `shipping_address` te gebruiken.
+
+2. In `pages/admin/index.tsx` hebben we vergelijkbare aanpassingen gedaan voor de code die orders bijwerkt in het dashboard.
+
+3. We hebben try-catch blokken toegevoegd om eventuele fouten beter af te handelen.
 
 ## Waarom Deze Aanpak?
 
@@ -67,4 +84,4 @@ Voor een meer robuuste oplossing op lange termijn, zouden we kunnen overwegen:
 2. Een migratie uit te voeren om beide velden (`shipping_address` en `shipping_info`) te ondersteunen
 3. De code aan te passen om beide velden te controleren bij het ophalen van orders
 
-Voor nu is de huidige oplossing voldoende om gastbestellingen correct te laten werken.
+Voor nu is de huidige oplossing voldoende om gastbestellingen correct te laten werken en om fouten in de admin omgeving te voorkomen.
