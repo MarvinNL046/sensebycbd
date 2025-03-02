@@ -1,7 +1,7 @@
 'use client';
 
 import { Category, Product } from '../../../../types/product';
-import { useTranslation } from '../../../lib/useTranslation';
+import { useTranslation } from '../../../../lib/useTranslation';
 import { Card, CardContent, CardFooter } from '../../../../components/ui/card';
 import { Button } from '../../../../components/ui/button';
 import Link from 'next/link';

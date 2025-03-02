@@ -1,8 +1,10 @@
 /** @type {import('tailwindcss').Config} */
 module.exports = {
+  darkMode: ["class"],
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {
@@ -47,6 +49,26 @@ module.exports = {
         border: '#E9ECEF',
         input: '#CED4DA',
         ring: '#2D6A4F',
+        
+        // Dark mode colors
+        "dark-primary": {
+          DEFAULT: '#52B788',
+          light: '#74C69D',
+          dark: '#2D6A4F',
+          foreground: '#FFFFFF',
+        },
+        "dark-background": '#1A1A1A',
+        "dark-foreground": '#E9ECEF',
+        "dark-card": {
+          DEFAULT: '#2A2A2A',
+          foreground: '#E9ECEF',
+        },
+        "dark-muted": {
+          DEFAULT: '#3A3A3A',
+          foreground: '#ADB5BD',
+        },
+        "dark-border": '#3A3A3A',
+        "dark-input": '#3A3A3A',
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],

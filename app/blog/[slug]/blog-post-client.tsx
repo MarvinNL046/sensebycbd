@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useTranslation } from '../../lib/useTranslation';
+import { useTranslation } from '../../../lib/useTranslation';
 import { BlogPost, BlogComment } from '../../../types/blog';
 import { formatDate } from '../../../lib/utils/formatDate';
 import { useAuth } from '../../../lib/auth-context';

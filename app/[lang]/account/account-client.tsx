@@ -1,17 +1,48 @@
+'use client';
+
 import { useEffect, useState, useCallback } from 'react';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image from 'next/image';
-import { SEO } from '../../lib/seo/SEO';
-import { useAuth } from '../../lib/auth-context';
-import { signOut } from '../../lib/auth';
-import { getUserProfile, updateUserProfile, getUserOrders, getLoyaltyPoints } from '../../lib/db';
-import { useTranslation } from '../../lib/i18n/useTranslation';
-import { AuthForm } from '../../components/ui/AuthForm';
-import { Button } from '../../components/ui/button';
-import { Badge } from '../../components/ui/badge';
-import { FormInput, FormTextarea } from '../../components/ui/FormInput';
-import { UserIcon, HomeIcon, PhoneIcon, CheckIcon, LoadingIcon, AlertIcon } from '../../components/ui/Icons';
+import { useRouter } from 'next/navigation';
+import { useAuth } from '../../../lib/auth-context';
+import { signOut } from '../../../lib/auth';
+import { getUserProfile, updateUserProfile, getUserOrders, getLoyaltyPoints } from '../../../lib/db';
+import { useTranslation } from '../../../app/lib/useTranslation';
+import { Button } from '../../../components/ui/button';
+import { Badge } from '../../../components/ui/badge';
+import { FormInput, FormTextarea } from '../../../components/ui/FormInput';
+
+// Icons components
+const UserIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+  </svg>
+);
+
+const PhoneIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+  </svg>
+);
+
+const CheckIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+  </svg>
+);
+
+const AlertIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+  </svg>
+);
+
+const LoadingIcon = ({ size = 20, className = "" }) => (
+  <svg className={`animate-spin ${className}`} width={size} height={size} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+  </svg>
+);
 
 type UserProfile = {
   id: string;
@@ -44,10 +75,47 @@ type Order = {
   }>;
 };
 
-export default function AccountPage() {
-  const { t } = useTranslation();
+interface AccountClientProps {
+  translations: {
+    account: {
+      title: string;
+      profile: string;
+      orders: string;
+      loyaltyPoints: string;
+      signOut: string;
+      profileInfo: string;
+      updateSuccess: string;
+      fullName: string;
+      address: string;
+      phone: string;
+      updateProfile: string;
+      orderHistory: string;
+      noOrders: string;
+      orderNumber: string;
+      orderDate: string;
+      orderStatus: string;
+      orderTotal: string;
+      viewOrder: string;
+      pointsInfo: string;
+      pointsBalance: string;
+      pointsEarned: string;
+      pointsUsed: string;
+      howToEarn: string;
+      earnRule1: string;
+      earnRule2: string;
+      earnRule3: string;
+      howToUse: string;
+      useRule1: string;
+      useRule2: string;
+      useRule3: string;
+    };
+  };
+}
+
+export default function AccountClient({ translations }: AccountClientProps) {
   const { user, loading } = useAuth();
   const router = useRouter();
+  const { locale } = useTranslation();
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [orders, setOrders] = useState<Order[]>([]);
   const [loadingProfile, setLoadingProfile] = useState(false);
@@ -59,42 +127,6 @@ export default function AccountPage() {
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<'profile' | 'orders' | 'points'>('profile');
   const [loyaltyPoints, setLoyaltyPoints] = useState(0);
-
-  // Create a local translation object with the necessary properties
-  const translations = {
-    account: {
-      title: "My Account",
-      profile: "Profile",
-      orders: "Orders",
-      loyaltyPoints: "Loyalty Points",
-      signOut: "Sign Out",
-      profileInfo: "Profile Information",
-      updateSuccess: "Profile updated successfully!",
-      fullName: "Full Name",
-      address: "Address",
-      phone: "Phone",
-      updateProfile: "Update Profile",
-      orderHistory: "Order History",
-      noOrders: "You haven't placed any orders yet.",
-      orderNumber: "Order Number",
-      orderDate: "Order Date",
-      orderStatus: "Status",
-      orderTotal: "Total",
-      viewOrder: "View Order",
-      pointsInfo: "Loyalty Points Information",
-      pointsBalance: "Current Balance",
-      pointsEarned: "Points Earned",
-      pointsUsed: "Points Used",
-      howToEarn: "How to Earn Points",
-      earnRule1: "Earn 1 point for every €20 spent",
-      earnRule2: "Earn 5 points for creating an account",
-      earnRule3: "Earn 2 points for writing a product review",
-      howToUse: "How to Use Points",
-      useRule1: "1 point = €1 discount on your next order",
-      useRule2: "Minimum 5 points required to redeem",
-      useRule3: "Points can be redeemed at checkout"
-    }
-  };
 
   // Format price with currency
   const formatPrice = (price: number) => {
@@ -174,33 +206,6 @@ export default function AccountPage() {
     }
   }, [user, fetchUserProfile, fetchUserOrders]);
   
-  // Refresh data when the page is focused (e.g., after navigating back from checkout)
-  useEffect(() => {
-    const handleFocus = () => {
-      if (user) {
-        console.log('Window focused, refreshing account data');
-        fetchUserProfile();
-        fetchUserOrders();
-      }
-    };
-    
-    window.addEventListener('focus', handleFocus);
-    
-    // Also refresh on route change (when navigating back to account page)
-    router.events.on('routeChangeComplete', (url) => {
-      if (url.startsWith('/account') && user) {
-        console.log('Navigated to account page, refreshing data');
-        fetchUserProfile();
-        fetchUserOrders();
-      }
-    });
-    
-    return () => {
-      window.removeEventListener('focus', handleFocus);
-      router.events.off('routeChangeComplete', handleFocus);
-    };
-  }, [user, router, fetchUserProfile, fetchUserOrders]);
-
   // Update form fields when profile is loaded
   useEffect(() => {
     if (profile) {
@@ -304,14 +309,13 @@ export default function AccountPage() {
   if (!user) {
     return (
       <div className="container-custom py-10">
-        <SEO 
-          title="Account | SenseBy CBD"
-          description="Sign in to your SenseBy CBD account"
-          keywords="account, sign in, login, register"
-          canonicalPath="/account"
-        />
         <h1 className="text-center text-primary mb-8">Account</h1>
-        <AuthForm />
+        <div className="max-w-md mx-auto bg-white p-8 rounded-lg shadow-md">
+          <p className="text-center mb-6">Please log in to access your account</p>
+          <Link href={`/${locale}/login`} className="block w-full">
+            <Button className="w-full">Log In</Button>
+          </Link>
+        </div>
       </div>
     );
   }
@@ -319,13 +323,6 @@ export default function AccountPage() {
   // If authenticated, show account page
   return (
     <div className="container-custom py-10">
-      <SEO 
-        title="My Account | SenseBy CBD"
-        description="Manage your SenseBy CBD account"
-        keywords="account, profile, orders, loyalty points"
-        canonicalPath="/account"
-      />
-      
       <h1 className="text-center text-primary mb-8">{translations.account.title}</h1>
       
       <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -401,15 +398,15 @@ export default function AccountPage() {
               
               {updateSuccess && (
                 <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 flex items-center">
-                  <CheckIcon className="mr-2 text-green-500" />
-                  {translations.account.updateSuccess}
+                  <CheckIcon />
+                  <span className="ml-2">{translations.account.updateSuccess}</span>
                 </div>
               )}
               
               {updateError && (
                 <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4 flex items-center">
-                  <AlertIcon className="mr-2 text-red-500" />
-                  {updateError}
+                  <AlertIcon />
+                  <span className="ml-2">{updateError}</span>
                 </div>
               )}
               
@@ -495,7 +492,7 @@ export default function AccountPage() {
                   <p className="text-gray-600 mb-6">
                     {translations.account.noOrders}
                   </p>
-                  <Link href="/products">
+                  <Link href={`/${locale}/products`}>
                     <Button>
                       Shop Now
                     </Button>
@@ -564,8 +561,8 @@ export default function AccountPage() {
                         {/* Loyalty points earned */}
                         {order.loyalty_points_earned > 0 && (
                           <div className="mt-4 text-sm text-green-600 flex items-center">
-                            <CheckIcon className="mr-1 text-green-500" />
-                            {order.loyalty_points_earned} loyalty points verdiend met deze bestelling
+                            <CheckIcon />
+                            <span className="ml-1">{order.loyalty_points_earned} loyalty points verdiend met deze bestelling</span>
                           </div>
                         )}
                       </div>
@@ -603,16 +600,16 @@ export default function AccountPage() {
                   </h3>
                   <ul className="space-y-3 text-sm">
                     <li className="flex items-start bg-white p-3 rounded-md shadow-sm">
-                      <CheckIcon className="text-green-500 mr-2 flex-shrink-0" />
-                      <span>{translations.account.earnRule1}</span>
+                      <CheckIcon />
+                      <span className="ml-2">{translations.account.earnRule1}</span>
                     </li>
                     <li className="flex items-start bg-white p-3 rounded-md shadow-sm">
-                      <CheckIcon className="text-green-500 mr-2 flex-shrink-0" />
-                      <span>{translations.account.earnRule2}</span>
+                      <CheckIcon />
+                      <span className="ml-2">{translations.account.earnRule2}</span>
                     </li>
                     <li className="flex items-start bg-white p-3 rounded-md shadow-sm">
-                      <CheckIcon className="text-green-500 mr-2 flex-shrink-0" />
-                      <span>{translations.account.earnRule3}</span>
+                      <CheckIcon />
+                      <span className="ml-2">{translations.account.earnRule3}</span>
                     </li>
                   </ul>
                 </div>
@@ -626,23 +623,23 @@ export default function AccountPage() {
                   </h3>
                   <ul className="space-y-3 text-sm">
                     <li className="flex items-start bg-white p-3 rounded-md shadow-sm">
-                      <CheckIcon className="text-green-500 mr-2 flex-shrink-0" />
-                      <span>{translations.account.useRule1}</span>
+                      <CheckIcon />
+                      <span className="ml-2">{translations.account.useRule1}</span>
                     </li>
                     <li className="flex items-start bg-white p-3 rounded-md shadow-sm">
-                      <CheckIcon className="text-green-500 mr-2 flex-shrink-0" />
-                      <span>{translations.account.useRule2}</span>
+                      <CheckIcon />
+                      <span className="ml-2">{translations.account.useRule2}</span>
                     </li>
                     <li className="flex items-start bg-white p-3 rounded-md shadow-sm">
-                      <CheckIcon className="text-green-500 mr-2 flex-shrink-0" />
-                      <span>{translations.account.useRule3}</span>
+                      <CheckIcon />
+                      <span className="ml-2">{translations.account.useRule3}</span>
                     </li>
                   </ul>
                 </div>
               </div>
               
               <div className="text-center">
-                <Link href="/products">
+                <Link href={`/${locale}/products`}>
                   <Button size="lg" className="px-8">
                     Shop Now
                   </Button>

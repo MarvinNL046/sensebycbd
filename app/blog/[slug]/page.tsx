@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-import { generateMetadata as genMeta } from '../../components/SEO';
+import { generateMetadata as seoMetadata } from '../../components/SEO';
 import { getBlogPostBySlug, getBlogPosts, getBlogComments, getRecentBlogPosts } from '../../../lib/mockDb';
 import BlogPostClient from './blog-post-client';
 import BlogPostNotFound from './not-found';
@@ -81,7 +81,7 @@ function BlogPostLoading() {
 // Generate metadata for the page
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   if (!params?.slug) {
-    return genMeta({
+    return seoMetadata({
       title: 'Blog Post Not Found | SenseBy CBD',
       description: 'The requested blog post could not be found.',
       keywords: 'CBD blog, blog post not found',
@@ -92,7 +92,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const { data: post, error } = await getBlogPostBySlug(params.slug);
   
   if (error || !post) {
-    return genMeta({
+    return seoMetadata({
       title: 'Blog Post Not Found | SenseBy CBD',
       description: 'The requested blog post could not be found.',
       keywords: 'CBD blog, blog post not found',
@@ -100,7 +100,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     });
   }
   
-  return genMeta({
+  return seoMetadata({
     title: `${post.title} | SenseBy CBD Blog`,
     description: `Read about ${post.title} in our CBD educational blog`,
     keywords: `CBD blog, ${post.title}, ${post.category?.name || ''}, CBD articles`,

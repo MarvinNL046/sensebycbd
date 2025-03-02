@@ -1,4 +1,3 @@
-import { useTranslation } from '../../../lib/i18n/useTranslation';
 import { Product } from '../../../types/product';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '../../ui/tabs';
 
@@ -10,10 +9,7 @@ interface ProductSpecificationsProps {
  * Product specifications component that displays product details in a tabbed interface
  */
 export const ProductSpecifications = ({ product }: ProductSpecificationsProps) => {
-  const { t } = useTranslation();
-  
-  // Create a local translation object with the necessary properties
-  // This is a workaround for TypeScript errors with the translation object
+  // Use hardcoded translations
   const translations = {
     description: "Description",
     specifications: "Specifications",

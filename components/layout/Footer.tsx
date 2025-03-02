@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { useTranslation } from '../../lib/i18n/useTranslation';
+import { useTranslation } from '../../lib/useTranslation';
 
 /**
  * Footer component with links and copyright

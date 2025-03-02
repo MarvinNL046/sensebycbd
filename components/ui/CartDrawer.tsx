@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '../../lib/cart-context';
 import { Button } from './button';
-import { useTranslation } from '../../lib/i18n/useTranslation';
+import { useTranslation } from '../../lib/useTranslation';
 
 /**
  * Cart drawer component that slides in from the right

@@ -3,7 +3,6 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useTranslation } from '../../../lib/i18n/useTranslation';
 import { Product } from '../../../types/product';
 import { getRelatedProducts } from '../../../lib/db';
 import { Card, CardContent, CardFooter } from '../../ui/card';
@@ -18,11 +17,10 @@ interface RelatedProductsProps {
  * Related products component that displays products from the same category
  */
 export const RelatedProducts = ({ product }: RelatedProductsProps) => {
-  const { t, locale } = useTranslation();
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   
-  // Create a local translation object with the necessary properties
+  // Use hardcoded translations
   const translations = {
     relatedProducts: "You May Also Like",
     viewDetails: "View Details"
@@ -43,12 +41,12 @@ export const RelatedProducts = ({ product }: RelatedProductsProps) => {
       
       try {
         setLoading(true);
-        // Pass the current locale to get translated products
+        // Use default locale 'en'
         const { data, error } = await getRelatedProducts(
           product.id, 
           product.category_id,
           4, // limit
-          locale // current locale from useTranslation
+          'en' // default locale
         );
         
         if (error) throw error;
@@ -62,7 +60,7 @@ export const RelatedProducts = ({ product }: RelatedProductsProps) => {
     };
 
     fetchRelatedProducts();
-  }, [product.id, product.category_id, locale]);
+  }, [product.id, product.category_id]);
 
   if (loading) {
     return (

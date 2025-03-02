@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect, useMemo } from 'react';
-import { useTranslation } from '../../../lib/i18n/useTranslation';
+import { useTranslation } from '../../../app/lib/useTranslation';
 import { Badge } from '../../../components/ui/badge';
 import { Button } from '../../../components/ui/button';
 import { Card } from '../../../components/ui/card';
@@ -31,65 +31,105 @@ export const FAQSection = () => {
   const [isVisible, setIsVisible] = useState(false);
   const sectionRef = useRef<HTMLDivElement>(null);
   
+  // Create a memoized translation getter function to avoid recreating the object on each render
+  const getTranslation = useMemo(() => {
+    return {
+      getFaqTitle: () => (t as any).faq?.title || "Frequently Asked Questions",
+      getFaqSubtitle: () => (t as any).faq?.subtitle || "Find answers to common questions about CBD, our products, and how they can benefit your wellness journey",
+      getFaqBadge: () => (t as any).faq?.badge || "Knowledge Base",
+      getSearchPlaceholder: () => (t as any).faq?.searchPlaceholder || "Search for answers...",
+      getNoResults: () => (t as any).faq?.noResults || "No questions found matching your search.",
+      getCategoryAll: () => (t as any).faq?.categories?.all || "All Questions",
+      getCategoryGeneral: () => (t as any).faq?.categories?.general || "General",
+      getCategoryUsage: () => (t as any).faq?.categories?.usage || "Usage & Dosage",
+      getCategoryEffects: () => (t as any).faq?.categories?.effects || "Effects & Benefits",
+      getCategoryShipping: () => (t as any).faq?.categories?.shipping || "Shipping & Delivery",
+      getQuestionWhatIsCbd: () => (t as any).faq?.questions?.whatIsCbd?.question || "What is CBD?",
+      getAnswerWhatIsCbd: () => (t as any).faq?.questions?.whatIsCbd?.answer || "CBD (cannabidiol) is a naturally occurring compound found in the cannabis plant. Unlike THC, CBD is non-psychoactive, meaning it doesn't cause a \"high.\" It's known for its potential therapeutic benefits, including pain relief, anxiety reduction, and improved sleep.",
+      getQuestionIsLegal: () => (t as any).faq?.questions?.isLegal?.question || "Is CBD legal?",
+      getAnswerIsLegal: () => (t as any).faq?.questions?.isLegal?.answer || "CBD derived from hemp (containing less than 0.3% THC) is legal at the federal level in many countries, including the United States. However, regulations vary by country and state/province, so it's important to check your local laws.",
+      getQuestionHowToUseOils: () => (t as any).faq?.questions?.howToUseOils?.question || "How do I use CBD oils?",
+      getAnswerHowToUseOils: () => (t as any).faq?.questions?.howToUseOils?.answer || "CBD oils are typically placed under the tongue (sublingual) for 60-90 seconds before swallowing. This method allows for faster absorption into the bloodstream. Start with a low dose (5-10mg) and gradually increase until you find your optimal dose.",
+      getQuestionHowToUseTopicals: () => (t as any).faq?.questions?.howToUseTopicals?.question || "How do I apply CBD topicals?",
+      getAnswerHowToUseTopicals: () => (t as any).faq?.questions?.howToUseTopicals?.answer || "Apply CBD topicals directly to the affected area and massage gently until absorbed. They can be used as needed throughout the day. For best results, apply to clean, dry skin and wash hands after application unless treating hand areas.",
+      getQuestionFeelHigh: () => (t as any).faq?.questions?.feelHigh?.question || "Will CBD make me feel high?",
+      getAnswerFeelHigh: () => (t as any).faq?.questions?.feelHigh?.answer || "No, CBD does not produce the psychoactive effects associated with THC. Our products contain less than 0.3% THC, which is not enough to cause intoxication. You may feel relaxed or experience pain relief, but you won't feel \"high.\"",
+      getQuestionHowLong: () => (t as any).faq?.questions?.howLong?.question || "How long does it take for CBD to work?",
+      getAnswerHowLong: () => (t as any).faq?.questions?.howLong?.answer || "The onset time varies by product and individual. Sublingual oils typically take effect within 15-30 minutes. Topicals may work within minutes for localized relief. Edibles and capsules can take 1-2 hours as they pass through the digestive system.",
+      getQuestionSideEffects: () => (t as any).faq?.questions?.sideEffects?.question || "Are there any side effects?",
+      getAnswerSideEffects: () => (t as any).faq?.questions?.sideEffects?.answer || "CBD is generally well-tolerated, but some people may experience mild side effects such as drowsiness, dry mouth, or changes in appetite. CBD can also interact with certain medications, so consult with a healthcare professional if you're taking prescription drugs.",
+      getQuestionShipping: () => (t as any).faq?.questions?.shipping?.question || "How do you ship your products?",
+      getAnswerShipping: () => (t as any).faq?.questions?.shipping?.answer || "We ship all orders via tracked courier services to ensure safe and timely delivery. Orders are processed within 24-48 hours and typically arrive within 3-5 business days depending on your location.",
+      getQuestionInternational: () => (t as any).faq?.questions?.international?.question || "Do you ship internationally?",
+      getAnswerInternational: () => (t as any).faq?.questions?.international?.answer || "Yes, we ship to most countries where CBD is legal. International shipping typically takes 7-14 business days. Please note that customers are responsible for any customs fees or import duties that may apply.",
+      getRecommendedProducts: () => (t as any).faq?.recommendedProducts || "Recommended products:",
+      getFullSpectrumOil: () => (t as any).faq?.fullSpectrumOil || "Full Spectrum CBD Oil",
+      getTopicalCream: () => (t as any).faq?.topicalCream || "CBD Topical Cream",
+      getStillHaveQuestions: () => (t as any).faq?.stillHaveQuestions || "Still have questions?",
+      getSupportText: () => (t as any).faq?.supportText || "Our customer support team is here to help. Reach out to us and we'll get back to you as soon as possible.",
+      getContactSupport: () => (t as any).faq?.contactSupport || "Contact Support"
+    };
+  }, [t]);
+  
   // Create a local translations object with fallbacks
   const faqTranslations = useMemo(() => ({
-    title: (t as any).faq?.title || "Frequently Asked Questions",
-    subtitle: (t as any).faq?.subtitle || "Find answers to common questions about CBD, our products, and how they can benefit your wellness journey",
-    badge: (t as any).faq?.badge || "Knowledge Base",
-    searchPlaceholder: (t as any).faq?.searchPlaceholder || "Search for answers...",
-    noResults: (t as any).faq?.noResults || "No questions found matching your search.",
+    title: getTranslation.getFaqTitle(),
+    subtitle: getTranslation.getFaqSubtitle(),
+    badge: getTranslation.getFaqBadge(),
+    searchPlaceholder: getTranslation.getSearchPlaceholder(),
+    noResults: getTranslation.getNoResults(),
     categories: {
-      all: (t as any).faq?.categories?.all || "All Questions",
-      general: (t as any).faq?.categories?.general || "General",
-      usage: (t as any).faq?.categories?.usage || "Usage & Dosage",
-      effects: (t as any).faq?.categories?.effects || "Effects & Benefits",
-      shipping: (t as any).faq?.categories?.shipping || "Shipping & Delivery"
+      all: getTranslation.getCategoryAll(),
+      general: getTranslation.getCategoryGeneral(),
+      usage: getTranslation.getCategoryUsage(),
+      effects: getTranslation.getCategoryEffects(),
+      shipping: getTranslation.getCategoryShipping()
     },
     questions: {
       whatIsCbd: {
-        question: (t as any).faq?.questions?.whatIsCbd?.question || "What is CBD?",
-        answer: (t as any).faq?.questions?.whatIsCbd?.answer || "CBD (cannabidiol) is a naturally occurring compound found in the cannabis plant. Unlike THC, CBD is non-psychoactive, meaning it doesn't cause a \"high.\" It's known for its potential therapeutic benefits, including pain relief, anxiety reduction, and improved sleep."
+        question: getTranslation.getQuestionWhatIsCbd(),
+        answer: getTranslation.getAnswerWhatIsCbd()
       },
       isLegal: {
-        question: (t as any).faq?.questions?.isLegal?.question || "Is CBD legal?",
-        answer: (t as any).faq?.questions?.isLegal?.answer || "CBD derived from hemp (containing less than 0.3% THC) is legal at the federal level in many countries, including the United States. However, regulations vary by country and state/province, so it's important to check your local laws."
+        question: getTranslation.getQuestionIsLegal(),
+        answer: getTranslation.getAnswerIsLegal()
       },
       howToUseOils: {
-        question: (t as any).faq?.questions?.howToUseOils?.question || "How do I use CBD oils?",
-        answer: (t as any).faq?.questions?.howToUseOils?.answer || "CBD oils are typically placed under the tongue (sublingual) for 60-90 seconds before swallowing. This method allows for faster absorption into the bloodstream. Start with a low dose (5-10mg) and gradually increase until you find your optimal dose."
+        question: getTranslation.getQuestionHowToUseOils(),
+        answer: getTranslation.getAnswerHowToUseOils()
       },
       howToUseTopicals: {
-        question: (t as any).faq?.questions?.howToUseTopicals?.question || "How do I apply CBD topicals?",
-        answer: (t as any).faq?.questions?.howToUseTopicals?.answer || "Apply CBD topicals directly to the affected area and massage gently until absorbed. They can be used as needed throughout the day. For best results, apply to clean, dry skin and wash hands after application unless treating hand areas."
+        question: getTranslation.getQuestionHowToUseTopicals(),
+        answer: getTranslation.getAnswerHowToUseTopicals()
       },
       feelHigh: {
-        question: (t as any).faq?.questions?.feelHigh?.question || "Will CBD make me feel high?",
-        answer: (t as any).faq?.questions?.feelHigh?.answer || "No, CBD does not produce the psychoactive effects associated with THC. Our products contain less than 0.3% THC, which is not enough to cause intoxication. You may feel relaxed or experience pain relief, but you won't feel \"high.\""
+        question: getTranslation.getQuestionFeelHigh(),
+        answer: getTranslation.getAnswerFeelHigh()
       },
       howLong: {
-        question: (t as any).faq?.questions?.howLong?.question || "How long does it take for CBD to work?",
-        answer: (t as any).faq?.questions?.howLong?.answer || "The onset time varies by product and individual. Sublingual oils typically take effect within 15-30 minutes. Topicals may work within minutes for localized relief. Edibles and capsules can take 1-2 hours as they pass through the digestive system."
+        question: getTranslation.getQuestionHowLong(),
+        answer: getTranslation.getAnswerHowLong()
       },
       sideEffects: {
-        question: (t as any).faq?.questions?.sideEffects?.question || "Are there any side effects?",
-        answer: (t as any).faq?.questions?.sideEffects?.answer || "CBD is generally well-tolerated, but some people may experience mild side effects such as drowsiness, dry mouth, or changes in appetite. CBD can also interact with certain medications, so consult with a healthcare professional if you're taking prescription drugs."
+        question: getTranslation.getQuestionSideEffects(),
+        answer: getTranslation.getAnswerSideEffects()
       },
       shipping: {
-        question: (t as any).faq?.questions?.shipping?.question || "How do you ship your products?",
-        answer: (t as any).faq?.questions?.shipping?.answer || "We ship all orders via tracked courier services to ensure safe and timely delivery. Orders are processed within 24-48 hours and typically arrive within 3-5 business days depending on your location."
+        question: getTranslation.getQuestionShipping(),
+        answer: getTranslation.getAnswerShipping()
       },
       international: {
-        question: (t as any).faq?.questions?.international?.question || "Do you ship internationally?",
-        answer: (t as any).faq?.questions?.international?.answer || "Yes, we ship to most countries where CBD is legal. International shipping typically takes 7-14 business days. Please note that customers are responsible for any customs fees or import duties that may apply."
+        question: getTranslation.getQuestionInternational(),
+        answer: getTranslation.getAnswerInternational()
       }
     },
-    recommendedProducts: (t as any).faq?.recommendedProducts || "Recommended products:",
-    fullSpectrumOil: (t as any).faq?.fullSpectrumOil || "Full Spectrum CBD Oil",
-    topicalCream: (t as any).faq?.topicalCream || "CBD Topical Cream",
-    stillHaveQuestions: (t as any).faq?.stillHaveQuestions || "Still have questions?",
-    supportText: (t as any).faq?.supportText || "Our customer support team is here to help. Reach out to us and we'll get back to you as soon as possible.",
-    contactSupport: (t as any).faq?.contactSupport || "Contact Support"
-  }), [t]);
+    recommendedProducts: getTranslation.getRecommendedProducts(),
+    fullSpectrumOil: getTranslation.getFullSpectrumOil(),
+    topicalCream: getTranslation.getTopicalCream(),
+    stillHaveQuestions: getTranslation.getStillHaveQuestions(),
+    supportText: getTranslation.getSupportText(),
+    contactSupport: getTranslation.getContactSupport()
+  }), [getTranslation]);
   
   // Intersection observer to trigger animation when section is visible
   useEffect(() => {
@@ -244,22 +284,42 @@ export const FAQSection = () => {
         <Card className={`max-w-4xl mx-auto bg-white/80 backdrop-blur-sm border-0 shadow-lg transition-all duration-700 ${
           isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0'
         }`}>
-          <Tabs defaultValue="all" className="w-full" onValueChange={setActiveCategory}>
+          <Tabs defaultValue="all" className="w-full">
             <div className="px-6 pt-6">
               <TabsList className="w-full grid grid-cols-2 md:grid-cols-5 gap-2">
-                <TabsTrigger value="all" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+                <TabsTrigger 
+                  value="all" 
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white"
+                  onClick={() => setActiveCategory('all')}
+                >
                   {faqTranslations.categories.all}
                 </TabsTrigger>
-                <TabsTrigger value="general" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+                <TabsTrigger 
+                  value="general" 
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white"
+                  onClick={() => setActiveCategory('general')}
+                >
                   {faqTranslations.categories.general}
                 </TabsTrigger>
-                <TabsTrigger value="usage" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+                <TabsTrigger 
+                  value="usage" 
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white"
+                  onClick={() => setActiveCategory('usage')}
+                >
                   {faqTranslations.categories.usage}
                 </TabsTrigger>
-                <TabsTrigger value="effects" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+                <TabsTrigger 
+                  value="effects" 
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white"
+                  onClick={() => setActiveCategory('effects')}
+                >
                   {faqTranslations.categories.effects}
                 </TabsTrigger>
-                <TabsTrigger value="shipping" className="data-[state=active]:bg-primary data-[state=active]:text-white">
+                <TabsTrigger 
+                  value="shipping" 
+                  className="data-[state=active]:bg-primary data-[state=active]:text-white"
+                  onClick={() => setActiveCategory('shipping')}
+                >
                   {faqTranslations.categories.shipping}
                 </TabsTrigger>
               </TabsList>

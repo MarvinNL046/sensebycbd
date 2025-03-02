@@ -1,6 +1,6 @@
 'use client';
 
-import { useTranslation } from '../../../lib/i18n/useTranslation';
+import { useTranslation } from '../../../app/lib/useTranslation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { Button } from '../../../components/ui/button';

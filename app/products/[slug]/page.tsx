@@ -2,7 +2,7 @@ import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { getProductBySlug, getProducts, getProductReviews } from '../../../lib/db';
 import { getBaseProductSlug, getTranslatedProductSlug } from '../../../lib/utils/slugs';
-import { generateMetadata as genMeta } from '../../components/SEO';
+import { generateMetadata as seoMetadata } from '../../components/SEO';
 import { ProductSchema } from '../../../lib/schema/ProductSchema';
 import { ProductGallery } from '../../../components/blocks/product/ProductGallery';
 import { ProductInfo } from '../../../components/blocks/product/ProductInfo';
@@ -48,7 +48,7 @@ function ProductLoading() {
 // Generate metadata for the page
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   if (!params?.slug) {
-    return genMeta({
+    return seoMetadata({
       title: "Product Not Found | SenseBy CBD",
       description: "The requested product could not be found.",
       keywords: "CBD, product not found",
@@ -63,7 +63,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const { data: product, error } = await getProductBySlug(baseSlug, 'en');
   
   if (error || !product) {
-    return genMeta({
+    return seoMetadata({
       title: "Product Not Found | SenseBy CBD",
       description: "The requested product could not be found.",
       keywords: "CBD, product not found",
@@ -71,7 +71,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     });
   }
   
-  return genMeta({
+  return seoMetadata({
     title: `${product.name} | SenseBy CBD`,
     description: `Shop ${product.name} from SenseBy CBD. Premium quality, lab-tested CBD product for natural relief and wellness.`,
     keywords: `CBD, ${product.name}, ${product.categories?.name || ''}, buy CBD`,
@@ -80,21 +80,21 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   });
 }
 
-// Generate static params for all products
-export async function generateStaticParams() {
-  const { data: products } = await getProducts();
-  
-  if (!products || products.length === 0) return [];
-  
-  // For each product, generate params for each locale
-  return products.flatMap(product => {
-    if (!product || !product.slug) return [];
-    
-    return ['en', 'nl', 'de', 'fr'].map(locale => ({
-      slug: getTranslatedProductSlug(product.slug, locale)
-    }));
-  });
-}
+// Disable static generation for now to fix build issues
+// export async function generateStaticParams() {
+//   const { data: products } = await getProducts();
+//   
+//   if (!products || products.length === 0) return [];
+//   
+//   // For each product, generate params for each locale
+//   return products.flatMap(product => {
+//     if (!product || !product.slug) return [];
+//     
+//     return ['en', 'nl', 'de', 'fr'].map(locale => ({
+//       slug: getTranslatedProductSlug(product.slug, locale)
+//     }));
+//   });
+// }
 
 // Fetch product data
 async function getProductData(slug: string, locale = 'en') {

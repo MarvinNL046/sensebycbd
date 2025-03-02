@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useLanguage } from '../i18n';
 import en from '../../public/locales/en/common.json';
 import nl from '../../public/locales/nl/common.json';
 import de from '../../public/locales/de/common.json';
@@ -142,10 +142,8 @@ export type Translations = typeof en & {
  * @returns The translation object for the current locale
  */
 export const useTranslation = () => {
-  const params = useParams();
-  // In App Router, locale is typically part of the URL path or can be stored in a context
-  // For now, we'll default to 'en' as we migrate
-  const locale = (params?.locale as string) || 'en';
+  // Get the current language from the URL parameters
+  const locale = useLanguage();
   
   // Get the translations for the current locale or fallback to English
   const t = translations[locale as keyof typeof translations] || translations.en;

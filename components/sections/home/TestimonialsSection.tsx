@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { useTranslation } from '../../../lib/i18n/useTranslation';
+import { useTranslation } from '../../../app/lib/useTranslation';
 import Image from 'next/image';
 import { Badge } from '../../../components/ui/badge';
 import { Button } from '../../../components/ui/button';

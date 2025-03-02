@@ -1,6 +1,7 @@
 import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
 import logger from '../../lib/utils/logger';
+import { getAdminEmails } from '../admin-config';
 
 export async function createClient() {
   const cookieStore = cookies();
@@ -68,9 +69,9 @@ export async function checkAdminAuth() {
     // Log the user for debugging
     logger.log('User found in server-side session:', { email: user.email, id: user.id });
     
-    // Check if user's email is in the admin list
-    const ADMIN_EMAILS = ['marvinsmit1988@gmail.com'];
-    if (user.email && ADMIN_EMAILS.includes(user.email)) {
+    // Check if user's email is in the admin list from environment variables
+    const adminEmails = getAdminEmails();
+    if (user.email && adminEmails.includes(user.email)) {
       logger.log('User is in admin email list, allowing access');
       return { isAdmin: true, user, isAdminByEmail: true };
     }

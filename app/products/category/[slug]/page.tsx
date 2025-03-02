@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { getCategoryBySlug, getCategories, getProducts } from '../../../../lib/db';
 import { ProductFilter } from '../../../../types/product';
 import { getBaseCategorySlug, getTranslatedCategorySlug } from '../../../../lib/utils/slugs';
-import { generateMetadata as genMeta } from '../../../components/SEO';
+import { generateMetadata as seoMetadata } from '../../../components/SEO';
 import CategoryClient from './category-client';
 import CategoryNotFound from './not-found';
 
@@ -30,7 +30,7 @@ function CategoryLoading() {
 // Generate metadata for the page
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   if (!params?.slug) {
-    return genMeta({
+    return seoMetadata({
       title: "Category Not Found | SenseBy CBD",
       description: "The requested category could not be found.",
       keywords: "CBD, category not found",
@@ -45,7 +45,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   const { data: category, error } = await getCategoryBySlug(baseSlug, 'en');
   
   if (error || !category) {
-    return genMeta({
+    return seoMetadata({
       title: "Category Not Found | SenseBy CBD",
       description: "The requested category could not be found.",
       keywords: "CBD, category not found",
@@ -53,7 +53,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     });
   }
   
-  return genMeta({
+  return seoMetadata({
     title: `${category.name} | SenseBy CBD Products`,
     description: `Browse our selection of premium ${category.name} products. High-quality, lab-tested CBD for natural relief and wellness.`,
     keywords: `CBD, ${category.name}, buy CBD, CBD products`,
@@ -62,21 +62,21 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   });
 }
 
-// Generate static params for all categories
-export async function generateStaticParams() {
-  const { data: categories } = await getCategories('en');
-  
-  if (!categories || categories.length === 0) return [];
-  
-  // For each category, generate params for each locale
-  return categories.flatMap(category => {
-    if (!category || !category.slug) return [];
-    
-    return ['en', 'nl', 'de', 'fr'].map(locale => ({
-      slug: getTranslatedCategorySlug(category.slug, locale)
-    }));
-  });
-}
+// Disable static generation for now to fix build issues
+// export async function generateStaticParams() {
+//   const { data: categories } = await getCategories('en');
+//   
+//   if (!categories || categories.length === 0) return [];
+//   
+//   // For each category, generate params for each locale
+//   return categories.flatMap(category => {
+//     if (!category || !category.slug) return [];
+//     
+//     return ['en', 'nl', 'de', 'fr'].map(locale => ({
+//       slug: getTranslatedCategorySlug(category.slug, locale)
+//     }));
+//   });
+// }
 
 // Fetch category data
 async function getCategoryData(slug: string, locale = 'en') {

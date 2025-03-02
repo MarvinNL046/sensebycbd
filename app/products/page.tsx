@@ -2,11 +2,11 @@ import { Suspense } from 'react';
 import { getProducts, getCategories, extractCbdPercentages } from '../../lib/db';
 import { Product, Category } from '../../types/product';
 import { Metadata } from 'next';
-import { generateMetadata as genMeta } from '../components/SEO';
+import { generateMetadata } from '../components/SEO';
 import ProductsClient from './products-client';
 
 // Generate metadata for the page
-export const metadata: Metadata = genMeta({
+export const metadata: Metadata = generateMetadata({
   title: "Shop CBD Products | SenseBy CBD",
   description: "Browse our selection of premium CBD products including oils, topicals, edibles, and more. Lab-tested, high-quality CBD for wellness and relief.",
   keywords: "buy CBD, CBD shop, CBD products, CBD oil, CBD cream, CBD edibles, CBD capsules",

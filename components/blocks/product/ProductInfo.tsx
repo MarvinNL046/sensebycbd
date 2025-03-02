@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { useTranslation } from '../../../lib/i18n/useTranslation';
 import { Product } from '../../../types/product';
 import { Button } from '../../ui/button';
 import { Badge } from '../../ui/badge';
@@ -16,18 +15,17 @@ interface ProductInfoProps {
  * Product information component that displays product details and add to cart functionality
  */
 export const ProductInfo = ({ product }: ProductInfoProps) => {
-  const { t, locale } = useTranslation();
   const { addItem, openCart } = useCart();
   
-  // Create a local translations object with fallbacks
+  // Use hardcoded translations
   const translations = {
-    outOfStock: (t.product as any)?.outOfStock || "Out of Stock",
-    lowStock: (t.product as any)?.lowStock || "Low Stock",
-    inStock: (t.product as any)?.inStock || "In Stock",
-    quantity: (t.product as any)?.quantity || "Quantity",
-    addToCart: (t.product as any)?.addToCart || "Add to Cart",
-    addedToCart: (t.product as any)?.addedToCart || "Added to Cart",
-    viewCart: (t.product as any)?.viewCart || "View Cart"
+    outOfStock: "Out of Stock",
+    lowStock: "Low Stock",
+    inStock: "In Stock",
+    quantity: "Quantity",
+    addToCart: "Add to Cart",
+    addedToCart: "Added to Cart",
+    viewCart: "View Cart"
   };
   
   const [quantity, setQuantity] = useState(1);
