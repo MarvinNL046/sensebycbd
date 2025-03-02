@@ -24,6 +24,8 @@ interface AdminLayoutProps {
   serverSideAuthFailed?: boolean;
   isAdminByEmail?: boolean;
   isAdmin?: boolean;
+  debugMode?: boolean;
+  error?: string;
 }
 
 export default function AdminLayout({ 
@@ -31,7 +33,9 @@ export default function AdminLayout({
   title, 
   serverSideAuthFailed, 
   isAdminByEmail,
-  isAdmin
+  isAdmin,
+  debugMode,
+  error
 }: AdminLayoutProps) {
   const router = useRouter();
   const { user, loading } = useAuth();
@@ -258,6 +262,14 @@ export default function AdminLayout({
       
       {/* Main content */}
       <div className="md:pl-64 flex flex-col flex-1">
+        {/* Debug mode banner */}
+        {debugMode && (
+          <div className="bg-yellow-500 text-white p-2 text-center">
+            <strong>DEBUG MODE ENABLED</strong> - Authentication checks are bypassed
+            {error && <div className="text-sm mt-1">Error: {error}</div>}
+          </div>
+        )}
+        
         <main className="flex-1">
           <div className="py-6">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">

@@ -11,6 +11,10 @@ const ADMIN_EMAILS = [
   // Add other admin emails here
 ];
 
+// TEMPORARY DEBUG MODE - Set to true to enable debug mode
+// This will bypass all authentication checks and allow access to the admin panel
+const DEBUG_MODE = true;
+
 /**
  * Server-side admin authentication check
  * 
@@ -22,6 +26,24 @@ const ADMIN_EMAILS = [
  */
 export async function checkAdminAuth(context: GetServerSidePropsContext) {
   try {
+    // If debug mode is enabled, allow access to the admin panel
+    if (DEBUG_MODE) {
+      logger.log('DEBUG MODE ENABLED - Bypassing authentication checks');
+      return {
+        props: {
+          user: {
+            id: 'debug-user-id',
+            email: 'marvinsmit1988@gmail.com',
+            user_metadata: {
+              full_name: 'Debug Admin User',
+            },
+          },
+          isAdminByEmail: true,
+          debugMode: true,
+        },
+      };
+    }
+    
     // Try to get the user from the server-side session
     const { user } = await getServerUser(context);
     
@@ -35,6 +57,9 @@ export async function checkAdminAuth(context: GetServerSidePropsContext) {
         },
       };
     }
+    
+    // Log the user for debugging
+    logger.log('User found in server-side session:', { email: user.email, id: user.id });
     
     // Check if user's email is in the admin list
     if (user.email && ADMIN_EMAILS.includes(user.email)) {
@@ -113,7 +138,26 @@ export async function checkAdminAuth(context: GetServerSidePropsContext) {
   } catch (error) {
     logger.error('Unexpected error in checkAdminAuth:', error);
     
-    // For unexpected errors, redirect to homepage for safety
+    // For unexpected errors in production, redirect to homepage for safety
+    // In debug mode, allow access with a warning
+    if (DEBUG_MODE) {
+      logger.log('DEBUG MODE ENABLED - Allowing access despite error');
+      return {
+        props: {
+          user: {
+            id: 'debug-user-id',
+            email: 'marvinsmit1988@gmail.com',
+            user_metadata: {
+              full_name: 'Debug Admin User',
+            },
+          },
+          isAdminByEmail: true,
+          debugMode: true,
+          error: String(error),
+        },
+      };
+    }
+    
     return {
       redirect: {
         destination: '/',
