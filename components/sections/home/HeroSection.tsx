@@ -1,3 +1,5 @@
+'use client';
+
 import { useTranslation } from '../../../lib/i18n/useTranslation';
 import Link from 'next/link';
 import Image from 'next/image';
