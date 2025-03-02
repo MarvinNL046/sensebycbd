@@ -3,6 +3,7 @@ import { supabase } from './supabase';
 import { CartItem } from '../types/cart';
 import { ProductFilter, Product, Category } from '../types/product';
 import { BlogFilter } from '../types/blog';
+import logger from './utils/logger';
 
 /**
  * Helper function to localize a product based on the current locale
@@ -145,8 +146,8 @@ export async function getProductBySlug(slug: string, locale: string = 'en') {
     result.data.additional_images = [];
   }
   
-  // Log the product data to help debug
-  console.log('Product data:', JSON.stringify(result.data, null, 2));
+  // Log the product data to help debug (development only)
+  logger.log('Product data:', JSON.stringify(result.data, null, 2));
   
   return result;
 }

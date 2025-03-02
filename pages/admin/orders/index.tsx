@@ -5,6 +5,7 @@ import AdminLayout from '../../../components/admin/AdminLayout';
 import { supabase } from '../../../lib/supabase';
 import { Card } from '../../../components/ui/card';
 import { Button } from '../../../components/ui/button';
+import logger from '../../../lib/utils/logger';
 import { 
   Search, 
   Filter, 
@@ -111,7 +112,7 @@ export default function OrdersAdmin() {
         
         setOrders(ordersWithCorrectTotals);
       } catch (error) {
-        console.error('Error fetching orders:', error);
+        logger.error('Error fetching orders:', error);
       } finally {
         setLoading(false);
       }
@@ -178,7 +179,7 @@ export default function OrdersAdmin() {
             .eq('id', order.id);
           
           if (updateError) {
-            console.error('Error updating order total:', updateError);
+            logger.error('Error updating order total:', updateError);
           } else {
             // Update the local order object
             setSelectedOrder({
@@ -192,13 +193,13 @@ export default function OrdersAdmin() {
             ));
           }
         } catch (error) {
-          console.error('Exception updating order total:', error);
+          logger.error('Exception updating order total:', error);
         }
       }
       
       setShowOrderDetails(true);
     } catch (error) {
-      console.error('Error fetching order items:', error);
+      logger.error('Error fetching order items:', error);
     }
   };
 

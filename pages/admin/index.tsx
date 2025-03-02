@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import AdminLayout from '../../components/admin/AdminLayout';
 import { supabase } from '../../lib/supabase';
 import Link from 'next/link';
+import logger from '../../lib/utils/logger';
 import { 
   Package, 
   ShoppingCart, 
@@ -73,7 +74,7 @@ export default function AdminDashboard() {
           .from('orders')
           .select('id, total_amount');
         
-        console.log('Dashboard - Orders:', orders);
+        logger.log('Dashboard - Orders:', orders);
         
         // Calculate total revenue based on order items
         let totalRevenue = 0;
@@ -97,7 +98,7 @@ export default function AdminDashboard() {
               
               // If calculated total is valid and different from stored total, update the order
               if (calculatedTotal > 0 && calculatedTotal !== order.total_amount) {
-                console.log(`Dashboard - Updating order ${order.id} total from ${order.total_amount} to ${calculatedTotal}`);
+                logger.log(`Dashboard - Updating order ${order.id} total from ${order.total_amount} to ${calculatedTotal}`);
                 
               try {
                 // Update order in database - only update the total_amount field
@@ -107,24 +108,24 @@ export default function AdminDashboard() {
                   .eq('id', order.id);
                 
                 if (updateError) {
-                  console.error('Error updating order total:', updateError);
+                  logger.error('Error updating order total:', updateError);
                 } else {
                   // Use calculated total
                   orderTotal = calculatedTotal;
                 }
               } catch (error) {
-                console.error('Exception updating order total:', error);
+                logger.error('Exception updating order total:', error);
               }
               }
             }
             
             // Add to total revenue
             totalRevenue += orderTotal;
-            console.log(`Dashboard - Order ${order.id} total: ${orderTotal}, Running total: ${totalRevenue}`);
+            logger.log(`Dashboard - Order ${order.id} total: ${orderTotal}, Running total: ${totalRevenue}`);
           }
         }
         
-        console.log('Dashboard - Final total revenue:', totalRevenue);
+        logger.log('Dashboard - Final total revenue:', totalRevenue);
         
         // Fetch recent orders
         const { data: recentOrdersData } = await supabase
@@ -133,7 +134,7 @@ export default function AdminDashboard() {
           .order('created_at', { ascending: false })
           .limit(5);
         
-        console.log('Dashboard - Recent orders data:', recentOrdersData);
+        logger.log('Dashboard - Recent orders data:', recentOrdersData);
         
         // Fetch user data and calculate correct totals for each order
         const ordersWithUserData = await Promise.all(
@@ -153,11 +154,11 @@ export default function AdminDashboard() {
               }, 0);
               
               if (calculatedTotal > 0) {
-                console.log(`Dashboard - Recent order ${order.id} calculated total: ${calculatedTotal}`);
+                logger.log(`Dashboard - Recent order ${order.id} calculated total: ${calculatedTotal}`);
                 
                 // Update order in database if needed
                 if (calculatedTotal !== order.total_amount) {
-                  console.log(`Dashboard - Updating recent order ${order.id} total from ${order.total_amount} to ${calculatedTotal}`);
+                  logger.log(`Dashboard - Updating recent order ${order.id} total from ${order.total_amount} to ${calculatedTotal}`);
                   
                   try {
                     // Update order in database - only update the total_amount field
@@ -167,10 +168,10 @@ export default function AdminDashboard() {
                       .eq('id', order.id);
                     
                     if (updateError) {
-                      console.error('Error updating recent order total:', updateError);
+                      logger.error('Error updating recent order total:', updateError);
                     }
                   } catch (error) {
-                    console.error('Exception updating recent order total:', error);
+                    logger.error('Exception updating recent order total:', error);
                   }
                 }
                 
@@ -203,7 +204,7 @@ export default function AdminDashboard() {
           })
         );
         
-        console.log('Dashboard - Orders with user data:', ordersWithUserData);
+        logger.log('Dashboard - Orders with user data:', ordersWithUserData);
         
         setStats({
           totalProducts: totalProducts || 0,
@@ -215,7 +216,7 @@ export default function AdminDashboard() {
         
         setRecentOrders(ordersWithUserData);
       } catch (error) {
-        console.error('Error fetching dashboard data:', error);
+        logger.error('Error fetching dashboard data:', error);
       } finally {
         setLoading(false);
       }
