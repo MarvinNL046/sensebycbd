@@ -3,7 +3,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { SEO } from '../components/SEO';
 import { useTranslation } from '../lib/useTranslation';
 import { useCart } from '../../lib/cart-context';
 import { Button } from '../../components/ui/button';
@@ -66,12 +65,6 @@ export default function CartClient() {
   if (items.length === 0) {
     return (
       <div className="container-custom py-12">
-        <SEO 
-          title="Cart | SenseBy CBD"
-          description="Your shopping cart"
-          keywords="cart, shopping cart, checkout"
-          canonicalPath="/cart"
-        />
         
         <h1 className="text-3xl font-heading font-bold mb-8 text-center">
           {translations.cart.title}
@@ -92,12 +85,6 @@ export default function CartClient() {
   
   return (
     <div className="container-custom py-12">
-      <SEO 
-        title="Cart | SenseBy CBD"
-        description="Your shopping cart"
-        keywords="cart, shopping cart, checkout"
-        canonicalPath="/cart"
-      />
       
       <h1 className="text-3xl font-heading font-bold mb-8 text-center">
         {translations.cart.title}
