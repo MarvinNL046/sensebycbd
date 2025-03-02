@@ -1,3 +1,5 @@
+'use client';
+
 import { useTranslation } from '../../../lib/i18n/useTranslation';
 import { useEffect, useRef, useState } from 'react';
 import { Badge } from '../../../components/ui/badge';
