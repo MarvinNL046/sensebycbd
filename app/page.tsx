@@ -1,4 +1,4 @@
-import { SEO, generateMetadata } from './components/SEO';
+import { generateMetadata } from './components/SEO';
 import { Suspense } from 'react';
 import { Metadata } from 'next';
 
@@ -42,13 +42,6 @@ function SectionSkeleton() {
 export default function Home() {
   return (
     <div className="min-h-screen">
-      {/* SEO component */}
-      <SEO 
-        title="SenseBy CBD - Premium CBD Products for a Better Life"
-        description="Discover premium CBD products for wellness, relaxation, and a better life. Shop our range of oils, edibles, topicals, and more."
-        keywords="CBD, hemp, wellness, oils, edibles, topicals, relaxation, premium CBD"
-        canonicalPath="/"
-      />
 
       {/* Hero Section */}
       <Suspense fallback={<SectionSkeleton />}>
