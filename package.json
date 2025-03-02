@@ -19,6 +19,7 @@
     "db:check-status": "dotenv -e .env.local -- node scripts/check-supabase-status.js"
   },
   "dependencies": {
+    "@auth0/nextjs-auth0": "^4.0.2",
     "@radix-ui/react-accordion": "^1.2.3",
     "@radix-ui/react-dialog": "^1.1.6",
     "@radix-ui/react-select": "^2.1.6",
