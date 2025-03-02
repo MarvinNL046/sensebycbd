@@ -1,11 +1,11 @@
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-import { generateMetadata as genMeta } from '../components/SEO';
+import { generateMetadata } from '../components/SEO';
 import { getBlogPosts, getBlogCategories } from '../../lib/mockDb';
 import BlogClient from './blog-client';
 
 // Generate metadata for the page
-export const metadata: Metadata = genMeta({
+export const metadata: Metadata = generateMetadata({
   title: 'Blog | SenseBy CBD',
   description: 'Read the latest articles about CBD benefits, research, and product guides.',
   keywords: 'CBD blog, CBD articles, CBD research, CBD benefits, CBD guides',
