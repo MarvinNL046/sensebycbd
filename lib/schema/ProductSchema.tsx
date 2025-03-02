@@ -1,6 +1,8 @@
+'use client';
+
 import { Product } from '../../types/product';
-import { useRouter } from 'next/router';
-import Head from 'next/head';
+import { useParams } from 'next/navigation';
+import Script from 'next/script';
 import { 
   Product as SchemaProduct,
   WithContext,
@@ -23,8 +25,10 @@ interface ProductSchemaProps {
  * Component that generates JSON-LD structured data for product pages
  */
 export const ProductSchema = ({ product, reviews }: ProductSchemaProps) => {
-  const router = useRouter();
-  const { locale = 'en' } = router;
+  const params = useParams();
+  // In App Router, locale is typically part of the URL path or can be stored in a context
+  // For now, we'll default to 'en' as we migrate
+  const locale = 'en';
   
   // Base URL for the site
   const siteUrl = 'https://sensebycbd.com';
@@ -134,19 +138,13 @@ export const ProductSchema = ({ product, reviews }: ProductSchemaProps) => {
   }
   
   return (
-    <Head>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(productSchema)
-        }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify(breadcrumbList)
-        }}
-      />
-    </Head>
+    <div>
+      <Script id="product-schema" type="application/ld+json">
+        {JSON.stringify(productSchema)}
+      </Script>
+      <Script id="breadcrumb-schema" type="application/ld+json">
+        {JSON.stringify(breadcrumbList)}
+      </Script>
+    </div>
   );
 };
