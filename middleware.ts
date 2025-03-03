@@ -3,10 +3,9 @@ import { createServerClient } from '@supabase/ssr';
 import { updateSession } from './utils/supabase/middleware';
 import { getAdminEmails } from './utils/admin-config';
 
-// Define supported languages
-export const supportedLanguages = ['en', 'nl', 'de', 'fr'];
-export const defaultLanguage = 'en';
-
+/**
+ * Middleware function for handling authentication and admin access
+ */
 export async function middleware(request: NextRequest) {
   // Call updateSession to refresh the Supabase auth session
   const response = await updateSession(request);
@@ -14,52 +13,6 @@ export async function middleware(request: NextRequest) {
   // Get the pathname from the request
   const { pathname } = request.nextUrl;
   
-  // Skip language routing for certain paths
-  const shouldSkipLanguageRouting = 
-    pathname.startsWith('/api/') || 
-    pathname.startsWith('/_next/') || 
-    pathname.startsWith('/admin') ||  // Changed to also match '/admin' without trailing slash
-    pathname.includes('/static/') || 
-    pathname.includes('/images/') || 
-    pathname.includes('/locales/') ||
-    pathname === '/favicon.ico';
-  
-  if (shouldSkipLanguageRouting) {
-    return response;
-  }
-  
-  // Handle language routing
-  // Check if the pathname starts with a language prefix
-  const pathnameHasLang = supportedLanguages.some(
-    (lang) => pathname.startsWith(`/${lang}/`) || pathname === `/${lang}`
-  );
-  
-  // If the pathname doesn't have a language prefix and is not the root path,
-  // redirect to the path with the preferred language prefix
-  // The root path (/) is handled by app/page.tsx which redirects to the default language
-  if (!pathnameHasLang && pathname !== '/') {
-    // Get the user's preferred language from the Accept-Language header
-    const acceptLanguage = request.headers.get('accept-language') || '';
-    const preferredLanguage = acceptLanguage
-      .split(',')
-      .map(lang => lang.split(';')[0].trim().substring(0, 2))
-      .find(lang => supportedLanguages.includes(lang)) || defaultLanguage;
-    
-    // Create a new URL with the preferred language
-    const newUrl = new URL(
-      `/${preferredLanguage}${pathname}`,
-      request.url
-    );
-    
-    // Preserve the search params
-    const searchParams = request.nextUrl.searchParams;
-    searchParams.forEach((value, key) => {
-      newUrl.searchParams.set(key, value);
-    });
-    
-    return NextResponse.redirect(newUrl);
-  }
-
   // For admin routes, check if user is authenticated and has admin role
   if (pathname.startsWith('/admin')) {
     // Create a Supabase client for this specific middleware invocation
@@ -92,14 +45,8 @@ export async function middleware(request: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser();
     
     if (!user) {
-      // Redirect to language-specific login if not authenticated
-      const acceptLanguage = request.headers.get('accept-language') || '';
-      const preferredLanguage = acceptLanguage
-        .split(',')
-        .map(lang => lang.split(';')[0].trim().substring(0, 2))
-        .find(lang => supportedLanguages.includes(lang)) || defaultLanguage;
-      
-      const redirectUrl = new URL(`/${preferredLanguage}/login`, request.url);
+      // Redirect to login if not authenticated
+      const redirectUrl = new URL('/login', request.url);
       redirectUrl.searchParams.set('redirect', pathname);
       return NextResponse.redirect(redirectUrl);
     }
@@ -127,7 +74,7 @@ export async function middleware(request: NextRequest) {
 }
 
 // Only run middleware on specific paths
-// Exclude static assets, images, and other files that don't need language routing
+// Exclude static assets, images, and other files
 export const config = {
   matcher: [
     '/((?!_next/static|_next/image|favicon.ico|images|locales|robots.txt|sitemap.xml).*)',

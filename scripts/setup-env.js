@@ -1,94 +1,139 @@
-// Script to set up the .env.local file with the correct environment variables
 const fs = require('fs');
 const path = require('path');
-const readline = require('readline');
+const dotenv = require('dotenv');
 
-const rl = readline.createInterface({
-  input: process.stdin,
-  output: process.stdout
-});
-
-// Path to the .env.local file
-const envFilePath = path.join(process.cwd(), '.env.local');
-
-// Check if .env.local already exists
-const envFileExists = fs.existsSync(envFilePath);
-
-console.log('=== Setting up .env.local file ===\n');
-
-if (envFileExists) {
-  console.log('An .env.local file already exists. Do you want to overwrite it? (y/n)');
-  rl.question('> ', (answer) => {
-    if (answer.toLowerCase() === 'y' || answer.toLowerCase() === 'yes') {
-      promptForVariables();
-    } else {
-      console.log('Setup cancelled. Your .env.local file was not modified.');
-      rl.close();
-    }
-  });
-} else {
-  promptForVariables();
-}
-
-function promptForVariables() {
-  console.log('\nPlease enter the following environment variables from your Vercel configuration:');
-  
-  const variables = [
-    { name: 'NEXT_PUBLIC_SUPABASE_URL', description: 'Your Supabase URL (e.g., https://tkihdbdnowkpazahzfyp.supabase.co)' },
-    { name: 'NEXT_PUBLIC_SUPABASE_ANON_KEY', description: 'Your Supabase anon key' },
-    { name: 'SUPABASE_SERVICE_ROLE_KEY', description: 'Your Supabase service role key' },
-    { name: 'NEXT_PUBLIC_SITE_URL', description: 'Your site URL (e.g., http://localhost:3000 for local development)', defaultValue: 'http://localhost:3000' },
-    { name: 'REVALIDATION_TOKEN', description: 'Your revalidation token for ISR', defaultValue: 'your-secret-token-for-on-demand-revalidation' }
-  ];
-  
-  const envVars = {};
-  
-  function promptNextVariable(index) {
-    if (index >= variables.length) {
-      writeEnvFile(envVars);
-      return;
-    }
+async function main() {
+  try {
+    // Try to load site config from the database via API
+    let siteConfig;
     
-    const variable = variables[index];
-    const defaultPrompt = variable.defaultValue ? ` (default: ${variable.defaultValue})` : '';
-    
-    console.log(`\n${variable.name}: ${variable.description}${defaultPrompt}`);
-    rl.question('> ', (value) => {
-      // Use default value if empty
-      if (!value && variable.defaultValue) {
-        value = variable.defaultValue;
+    try {
+      // Check if we're in a Node.js environment with fetch
+      if (typeof fetch === 'undefined') {
+        // If running in older Node versions without fetch
+        const { default: nodeFetch } = await import('node-fetch');
+        global.fetch = nodeFetch;
       }
       
-      if (value) {
-        envVars[variable.name] = value;
-        promptNextVariable(index + 1);
+      // Try to get config from local API
+      const apiUrl = process.env.VERCEL_DEPLOYMENT_URL 
+        ? `${process.env.VERCEL_DEPLOYMENT_URL}/api/site-config`
+        : 'http://localhost:3000/api/site-config';
+      
+      const response = await fetch(apiUrl);
+      
+      if (response.ok) {
+        siteConfig = await response.json();
+        console.log('Loaded site config from API');
       } else {
-        console.log(`${variable.name} is required. Please enter a value.`);
-        promptNextVariable(index);
+        throw new Error('Failed to fetch from API');
       }
-    });
+    } catch (apiError) {
+      console.log('Could not load from API, falling back to local file:', apiError.message);
+      
+      // Fall back to the local config file
+      const configPath = path.join(__dirname, '../lib/site-config.ts');
+      
+      if (fs.existsSync(configPath)) {
+        // Read the file content
+        const fileContent = fs.readFileSync(configPath, 'utf8');
+        
+        // Extract the siteConfig object using regex
+        const configMatch = fileContent.match(/const siteConfig: SiteConfig = ({[\s\S]*?});/);
+        
+        if (configMatch && configMatch[1]) {
+          // Convert the matched string to a JavaScript object
+          // This is a simple approach and might not work for all cases
+          // For production, consider using a proper TypeScript parser
+          const configString = configMatch[1]
+            .replace(/\/\/.*$/gm, '') // Remove comments
+            .replace(/,(\s*[}\]])/g, '$1'); // Remove trailing commas
+          
+          try {
+            siteConfig = eval(`(${configString})`);
+            console.log('Loaded site config from local file');
+          } catch (evalError) {
+            console.error('Error parsing config from file:', evalError);
+            throw new Error('Could not parse config from file');
+          }
+        } else {
+          throw new Error('Could not extract config from file');
+        }
+      } else {
+        throw new Error('Config file not found');
+      }
+    }
+    
+    if (!siteConfig) {
+      throw new Error('Failed to load site configuration');
+    }
+    
+    // Load existing .env.local if it exists
+    const envPath = path.join(__dirname, '../.env.local');
+    let existingEnv = {};
+    
+    if (fs.existsSync(envPath)) {
+      existingEnv = dotenv.parse(fs.readFileSync(envPath));
+      console.log('Loaded existing .env.local file');
+    }
+    
+    // Merge with site config values
+    const updatedEnv = {
+      ...existingEnv,
+      SITE_NAME: siteConfig.name,
+      SITE_DOMAIN: siteConfig.domain,
+      SITE_DESCRIPTION: siteConfig.seo.defaultDescription,
+      VERCEL_DEPLOYMENT_URL: `https://${siteConfig.domain}`,
+      // Add any other environment variables that should be derived from site config
+    };
+    
+    // Convert to .env format
+    const envContent = Object.entries(updatedEnv)
+      .map(([key, value]) => `${key}=${value}`)
+      .join('\n');
+    
+    // Write to .env.local
+    fs.writeFileSync(envPath, envContent);
+    
+    console.log('.env.local file updated successfully!');
+    
+    // If this is a new installation, also create a template .env.local.example
+    const exampleEnvPath = path.join(__dirname, '../.env.local.example');
+    if (!fs.existsSync(exampleEnvPath)) {
+      const exampleEnvContent = `# Supabase configuration
+NEXT_PUBLIC_SUPABASE_URL=your-supabase-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-supabase-anon-key
+SUPABASE_SERVICE_KEY=your-supabase-service-key
+
+# Admin emails (comma-separated)
+ADMIN_EMAILS=admin@${siteConfig.domain}
+
+# Revalidation
+REVALIDATION_SECRET=your-revalidation-secret
+NEXT_PUBLIC_REVALIDATION_SECRET=your-revalidation-secret
+VERCEL_DEPLOYMENT_URL=https://${siteConfig.domain}
+
+# Authentication
+AUTH0_SECRET=your-auth0-secret
+AUTH0_BASE_URL=your-auth0-base-url
+AUTH0_ISSUER_BASE_URL=your-auth0-issuer-base-url
+AUTH0_CLIENT_ID=your-auth0-client-id
+AUTH0_CLIENT_SECRET=your-auth0-client-secret
+
+# Site Configuration
+SITE_NAME=${siteConfig.name}
+SITE_DOMAIN=${siteConfig.domain}
+SITE_DESCRIPTION=${siteConfig.seo.defaultDescription}
+`;
+      
+      fs.writeFileSync(exampleEnvPath, exampleEnvContent);
+      console.log('.env.local.example file created successfully!');
+    }
+  } catch (error) {
+    console.error('Error setting up environment variables:', error);
+    process.exit(1);
   }
-  
-  promptNextVariable(0);
 }
 
-function writeEnvFile(variables) {
-  let envContent = '# Supabase\n';
-  envContent += `NEXT_PUBLIC_SUPABASE_URL=${variables.NEXT_PUBLIC_SUPABASE_URL}\n`;
-  envContent += `NEXT_PUBLIC_SUPABASE_ANON_KEY=${variables.NEXT_PUBLIC_SUPABASE_ANON_KEY}\n`;
-  envContent += `SUPABASE_SERVICE_ROLE_KEY=${variables.SUPABASE_SERVICE_ROLE_KEY}\n`;
-  envContent += '\n# Site\n';
-  envContent += `NEXT_PUBLIC_SITE_URL=${variables.NEXT_PUBLIC_SITE_URL}\n`;
-  envContent += '\n# ISR (Incremental Static Regeneration)\n';
-  envContent += `REVALIDATION_TOKEN=${variables.REVALIDATION_TOKEN}\n`;
-  
-  fs.writeFileSync(envFilePath, envContent);
-  
-  console.log('\n✅ .env.local file has been created successfully!');
-  console.log(`File location: ${envFilePath}`);
-  console.log('\nYou can now run the following scripts:');
-  console.log('1. node scripts/check-users-sync.js - to check if users are in the public.users table');
-  console.log('2. node scripts/make-user-admin.js your-email@example.com - to make a user an admin');
-  
-  rl.close();
-}
+// Run the main function
+main();

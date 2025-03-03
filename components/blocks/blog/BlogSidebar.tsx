@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { BlogCategory, BlogPost } from '../../../types/blog';
-import { useTranslation } from '../../../lib/i18n/useTranslation';
+import { useTranslation } from '../../../lib/useTranslation';
 import { formatDate } from '../../../lib/utils/formatDate';
 
 interface BlogSidebarProps {

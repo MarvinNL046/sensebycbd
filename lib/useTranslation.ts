@@ -1,6 +1,6 @@
 'use client';
 
-import { useParams } from 'next/navigation';
+import { useSiteConfig } from './use-site-config';
 import en from '../public/locales/en/common.json';
 import nl from '../public/locales/nl/common.json';
 import de from '../public/locales/de/common.json';
@@ -142,9 +142,29 @@ export type Translations = typeof en & {
  * @returns The translation object for the current locale
  */
 export const useTranslation = () => {
-  const params = useParams();
-  // Get the language from the URL params (the [lang] folder)
-  const locale = (params?.lang as string) || 'en';
+  const { config } = useSiteConfig();
+  
+  // Get the language from the domain configuration or fallback to 'en'
+  let locale = 'en';
+  
+  if (config && config.domains) {
+    // Try to get the current hostname
+    const hostname = typeof window !== 'undefined' ? window.location.hostname : '';
+    
+    // Find the domain configuration that matches the hostname
+    const domainConfig = config.domains[hostname];
+    if (domainConfig && domainConfig.language) {
+      locale = domainConfig.language;
+    } else {
+      // Try to match without subdomain (e.g., www.example.com -> example.com)
+      const baseDomain = hostname.split('.').slice(-2).join('.');
+      const baseDomainConfig = config.domains[baseDomain];
+      
+      if (baseDomainConfig && baseDomainConfig.language) {
+        locale = baseDomainConfig.language;
+      }
+    }
+  }
   
   // Get the translations for the current locale or fallback to English
   const t = translations[locale as keyof typeof translations] || translations.en;

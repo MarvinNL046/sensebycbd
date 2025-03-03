@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { CartDrawer } from '../ui/CartDrawer';
 import { NotificationBar } from '../ui/NotificationBar';
+import { useSiteConfig } from '../../lib/use-site-config';
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,24 +12,28 @@ interface LayoutProps {
  * Main layout component that wraps all pages
  */
 export const Layout = ({ children }: LayoutProps) => {
+  const { config, loading } = useSiteConfig();
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <NotificationBar 
-        message="Deze website is nog in ontwikkeling. Sommige functies werken mogelijk nog niet correct."
-        bgColor="bg-amber-100"
-        textColor="text-amber-800"
-        position="top"
-      />
+      {!loading && config.notificationBars?.top && (
+        <NotificationBar 
+          message={config.notificationBars.top.message}
+          bgColor={config.notificationBars.top.bgColor}
+          textColor={config.notificationBars.top.textColor}
+          position="top"
+        />
+      )}
       <main className="flex-grow">{children}</main>
-      <NotificationBar 
-        message="SenseBy CBD - Website in ontwikkeling"
-        bgColor="bg-primary-100"
-        textColor="text-primary-800"
-        position="bottom"
-      />
+      {!loading && config.notificationBars?.bottom && (
+        <NotificationBar 
+          message={config.notificationBars.bottom.message}
+          bgColor={config.notificationBars.bottom.bgColor}
+          textColor={config.notificationBars.bottom.textColor}
+          position="bottom"
+        />
+      )}
       <Footer />
-      <CartDrawer />
     </div>
   );
 };

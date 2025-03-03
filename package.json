@@ -1,22 +1,22 @@
 {
-  "name": "sensebycbd",
+  "name": "sensebycbd-whitelabel",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/generate-tailwind-theme.js && next build",
     "postbuild": "next-sitemap",
     "start": "next start",
     "lint": "next lint",
-    "lighthouse": "node scripts/lighthouse.js",
-    "lighthouse:mobile": "node scripts/lighthouse.js --mobile",
-    "lighthouse:all": "npm run lighthouse && npm run lighthouse:mobile",
     "db:push": "dotenv -e .env.local -- supabase db push",
     "db:diff": "dotenv -e .env.local -- supabase db diff -f",
     "db:reset": "dotenv -e .env.local -- supabase db reset",
-    "db:new-migration": "dotenv -e .env.local -- supabase migration new",
-    "db:create-migration": "dotenv -e .env.local -- node scripts/create-migration.js",
-    "db:check-status": "dotenv -e .env.local -- node scripts/check-supabase-status.js"
+    "config:setup": "node scripts/setup-env.js",
+    "config:theme": "node scripts/generate-tailwind-theme.js",
+    "config:apply": "npm run config:setup && npm run config:theme",
+    "config:from-file": "node scripts/apply-config-from-file.js",
+    "whitelabel:setup": "npm run config:apply && npm run db:push",
+    "whitelabel:apply-example": "npm run config:from-file examples/dutch-seed-supply-config.ts"
   },
   "dependencies": {
     "@auth0/nextjs-auth0": "^4.0.2",

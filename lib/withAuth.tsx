@@ -1,28 +1,28 @@
 // import { useUser } from '@auth0/nextjs-auth0/client';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import React from 'react';
 
-// NOTE: This file is temporarily disabled until Auth0 is installed
-// To enable, uncomment the import above and install @auth0/nextjs-auth0
+// NOTE: This file is for App Router compatibility
+// Authentication is now handled by middleware.ts for admin routes
 
 /**
- * Higher Order Component (HOC) om pagina's te beveiligen met Auth0 authenticatie
+ * Higher Order Component (HOC) for page authentication
  * 
- * Gebruik:
+ * Usage:
  * ```
  * import { withAuth } from '../lib/withAuth';
  * 
  * function AccountPage() {
- *   // Pagina inhoud
+ *   // Page content
  * }
  * 
  * export default withAuth(AccountPage);
  * ```
  * 
- * @param Component De component die moet worden beveiligd
- * @param options Opties voor de beveiliging
- * @returns Een beveiligde component die alleen toegankelijk is voor ingelogde gebruikers
+ * @param Component The component to be secured
+ * @param options Security options
+ * @returns A secured component only accessible to logged-in users
  */
 export function withAuth<P extends object>(
   Component: React.ComponentType<P>,
@@ -39,50 +39,12 @@ export function withAuth<P extends object>(
   } = options;
 
   function AuthenticatedComponent(props: P) {
-    // Temporarily disabled until Auth0 is installed
-    const router = useRouter();
-    
-    // Return the component without authentication for now
+    // In App Router, authentication is handled by middleware
+    // This HOC is kept for backward compatibility
     return <Component {...props} />;
-    
-    /* Original implementation:
-    const { user, isLoading, error } = useUser();
-    const router = useRouter();
-
-    useEffect(() => {
-      // Als de gebruiker niet aan het laden is en niet is ingelogd, redirect naar login
-      if (!isLoading && !user) {
-        const redirectPath = `${redirectTo}?redirect=${encodeURIComponent(router.asPath)}`;
-        router.push(redirectPath);
-      }
-
-      // Als adminOnly is ingeschakeld en de gebruiker is geen admin, redirect naar homepage
-      if (adminOnly && user && !isAdmin(user)) {
-        router.push('/');
-      }
-    }, [user, isLoading, router]);
-
-    // Toon foutmelding als er een fout is opgetreden
-    if (error) {
-      return <ErrorComponent error={error} />;
-    }
-
-    // Toon laadcomponent tijdens het laden
-    if (isLoading || !user) {
-      return <>{loadingComponent}</>;
-    }
-
-    // Als adminOnly is ingeschakeld en de gebruiker is geen admin, toon niets
-    if (adminOnly && !isAdmin(user)) {
-      return null;
-    }
-
-    // Toon de beveiligde component als de gebruiker is ingelogd
-    return <Component {...props} />;
-    */
   }
 
-  // Kopieer displayName, defaultProps, etc.
+  // Copy displayName, defaultProps, etc.
   const componentName = Component.displayName || Component.name || 'Component';
   AuthenticatedComponent.displayName = `withAuth(${componentName})`;
 
@@ -90,23 +52,7 @@ export function withAuth<P extends object>(
 }
 
 /**
- * Controleert of een gebruiker een admin is
- * 
- * @param user De Auth0 gebruiker
- * @returns true als de gebruiker een admin is, anders false
- */
-function isAdmin(user: any): boolean {
-  // Controleer of de gebruiker een admin is op basis van Auth0 app_metadata
-  // Dit vereist dat je in Auth0 de app_metadata hebt ingesteld met een is_admin veld
-  return (
-    user &&
-    user.app_metadata &&
-    user.app_metadata.is_admin === true
-  );
-}
-
-/**
- * Standaard laadcomponent
+ * Default loading component
  */
 function DefaultLoadingComponent() {
   return (
@@ -117,26 +63,26 @@ function DefaultLoadingComponent() {
 }
 
 /**
- * Foutcomponent
+ * Error component
  */
 function ErrorComponent({ error }: { error: Error }) {
   return (
     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded my-4">
-      <p className="font-bold">Er is een fout opgetreden</p>
+      <p className="font-bold">An error occurred</p>
       <p>{error.message}</p>
     </div>
   );
 }
 
 /**
- * HOC om pagina's te beveiligen voor alleen admins
+ * HOC to secure pages for admins only
  * 
- * Gebruik:
+ * Usage:
  * ```
  * import { withAdminAuth } from '../lib/withAuth';
  * 
  * function AdminPage() {
- *   // Admin pagina inhoud
+ *   // Admin page content
  * }
  * 
  * export default withAdminAuth(AdminPage);
